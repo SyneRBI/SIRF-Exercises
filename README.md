@@ -20,9 +20,10 @@ Introduction
 
 We are using Python for the exercises. Python is an open-source interactive language, 
 a bit like MATLAB. We provide Python scripts for the exercises, so you should be fine.
-Nevertheless, it would be best to read a Python tutorial first, see the [Appendices](#appendices). We will use
-[Spyder](https://pythonhosted.org/spyder) as our Python environment, but are looking
-into Jupyter notebooks.
+Nevertheless, it would be best to read a Python tutorial first, see the [Appendices](#appendices).
+
+We use
+[Jupyter notebooks](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html).
 
 See the appendices at the end of this document for some information to get started.
 ***Please read this before the course.***
@@ -91,30 +92,32 @@ for z in range(0,image.shape[0]):
 # now do something else
 ```
 
-Spyder
-------
-We use Spyder as a nice Integrated Development Environment (IDE) for Python
-(or iPython which is a slightly friendlier version of Python). You need only
-minimal knowledge of Python for this course, but it would be good to read-up a bit (see below).
+Jupyter notebooks
+-----------------
+If you are trying this on your own and have never used Jupyter notebooks,
+you could [read the official documentation](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
+A useful introduction to the notebook interface [can be found here](http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html).
 
-You will normally work by loading an example script in Spyder in the editor, executing it
+In a nut-shell, you need to start the server
+
+   cd /wherever/it/is/SIRF-Exercises
+   jupyter notebook
+
+This will open a web-page that looks like a file browser
+(the *Jupyter Notebook dashboard*).
+Click on `notebooks`, and drill down until you find a file with the extension `.ipynb`
+that looks of interest, and click on that. This should open a new tab in your
+web browser with the notebook open, all ready to run.
+
+You will normally work by executing each *cell*
 bit by bit, and then editing it to do some more work. Useful 
-[shortcuts for in the editor](http://www.southampton.ac.uk/~fangohr/blog/spyder-the-python-ide.html)
-(these are in Windows-style, including the usual copy-paste shortcuts `Left-CTRL-C`
-and `Left-CTRL-V`):
+shortcuts:
 
--   `F9` executes the currently highlighted code.
--   `LEFT-CTRL + <RETURN>` executes the current cell (menu entry `Run -> Run cell`).
-     A cell is defined as the code between two lines which start with the agreed tag `#%%`.
+-   `LEFT-CTRL + <RETURN>` executes the current cell.
 -   `SHIFT + <RETURN>` executes the current cell and advances the cursor to the next
-     cell (menu entry `Run -> Run cell and advance`).
+     cell.
 -   `TAB` tries to complete the word/command you have just typed.
 
-The [Spyder Integrated Development Environment](https://pythonhosted.org/spyder/) 
-(IDE) has of course lots of parameters which you can tune to your liking. The main
-setting that you might want to change is if the graphics are generated "inline" in
-the iPython console, or as separate windows. Go to `Tools` > `Preferences` > `Console`>
-`Graphics` > `Graphics backend`. Change from "inline" to "automatic" if you prefer the separate windows.
 
 iPython
 -------
@@ -122,6 +125,22 @@ You might be able to convince spyder to run iPython.
 And here are some useful iPython "magic" commands that you can use in the iPython
 console on the right (but not in the scripts). Most of these are identical
 to what you would use in the terminal. (*Note*: these commands do not work in a Python console.)
+
+- change how figures appear
+    - separate figures
+    ```
+    %matplotlib
+    ```
+
+    - inline with other output
+    ```     
+    %matplotlib inline
+    ```
+
+    - inline in the notebook but with extra options for the figures (required for animations)
+    ```     
+     %matplotlib notebook
+    ```
 
 -   change to a new directory
 ```python
@@ -134,10 +153,6 @@ to what you would use in the terminal. (*Note*: these commands do not work in a 
 -   print current working directory
 ```python
     pwd
-```
--   edit a file
-```python
-    edit FBP.par
 ```
 -   list files in current directory
 ```python

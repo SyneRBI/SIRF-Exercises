@@ -17,23 +17,31 @@ The SIRF-exercises themselves don't need further installation. Just get them, pr
 
     git clone https://github.com/CCPPETMR/SIRF-Exercises
 
-Other utilities
---------------
-### Spyder
+You can then later-on get any updates via
 
-We recommend that you run the exercises from in an interactive Python
-IDE such as [Spyder](https://pythonhosted.org/spyder/), so you will need to install that.
-On Ubuntu, the following should work
-```
-sudo apt-get update
-sudo apt-get install spyder
-```
-We recommend to use iPython as it allows some "magic" commands making life easier. To get this
-into spyder, try
-```
-sudo apt-get install ipython ipython-qtconsole python-zmq
-```
-Or when using [Anaconda](https://www.anaconda.com/what-is-anaconda/), check
-[here for iPython](https://anaconda.org/anaconda/ipython) and
-[here for Spyder](https://anaconda.org/anaconda/spyder).
+    cd SIRF-Exercises
+    git pull
 
+Jupyter notebooks
+---------------
+The exercises use [Jupyter notebooks](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html).
+These provide a nice GUI interface to Python. You need 2 components:
+the jupyter notebook server and a web browser.
+
+Check first if your system comes with the jupyter server. The following
+should then work
+
+    cd SIRF-Exercises
+    jupyter notebook
+
+If you need to install it, we currently recommend using `pip`. The following command
+should work for you
+
+       $SIRF_PYTHON_EXECUTABLE -m pip install jupyter
+
+Note that we used an environment variable set when you install SIRF to make
+sure that you use a Python version which is compatible with how you compiled SIRF.
+
+Of course, if you've used (Ana)conda to install Python etc (and are sure
+SIRF was compiled with that Python version), you can use conda to install
+jupyter as well.
