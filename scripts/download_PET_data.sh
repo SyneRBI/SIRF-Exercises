@@ -48,12 +48,14 @@ filename=NEMA.tar.gz
 # (re)download md5 checksum
 rm -f ${filename}.md5
 # hard-wired md5 for now
-wget ${URL}${filename}.md5
+#wget ${URL}${filename}.md5
 echo "MD5 (NEMA.tar.gz) = 9e8efeeaa57bc613b4d8b5c4af091534" > ${filename}.md5
 
 download $filename
 
 # specific to PET data
+
+echo "Unpacking $filename"
 tar xzf ${filename}
 
 # make symbolic links in the normal demo directory
@@ -66,8 +68,9 @@ fi
 final_dest=$SIRF_PATH/data/examples/PET/mMR
 echo "Creating symbolic links in ${final_dest} "
 cd ${final_dest}
-ln -s ${destination}/20170809_NEMA_60min_UCL.l.hdr
-ln -s ${destination}/20170809_NEMA_60min_UCL.l
+rm -f 20170809_NEMA_60min_UCL.l*
+ln -s ${destination}/NEMA/20170809_NEMA_60min_UCL.l.hdr
+ln -s ${destination}/NEMA/20170809_NEMA_60min_UCL.l
 
 echo "All done!"
 
