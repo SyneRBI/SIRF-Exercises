@@ -48,8 +48,8 @@ filename=NEMA.tar.gz
 # (re)download md5 checksum
 rm -f ${filename}.md5
 # hard-wired md5 for now
-#wget ${URL}${filename}.md5
-echo "MD5 (NEMA.tar.gz) = 885680691f50c522dacff4584267c32b" > ${filename}.md5
+wget ${URL}${filename}.md5
+echo "MD5 (NEMA.tar.gz) = 9e8efeeaa57bc613b4d8b5c4af091534" > ${filename}.md5
 
 download $filename
 
