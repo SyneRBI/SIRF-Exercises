@@ -5,7 +5,7 @@
 #   /path/download_PET_data.sh optional_destination_directory
 # if no argument is used, the destination directory will be set to ~/data
 #
-# Author: Kris Thielemans
+# Author: Kris Thielemans, Richard Brown
 # Copyright (C) 2018 University College London
 
 # a function to download a file and check its md5
@@ -68,7 +68,7 @@ then
     exit 1
 fi
 
-final_dest=$SIRF_PATH/data/examples/PET/mMR
+final_dest=$SIRF_PATH/data/examples/MR
 echo "Creating symbolic links in ${final_dest} "
 cd ${final_dest}
 rm -f ${filename1}
