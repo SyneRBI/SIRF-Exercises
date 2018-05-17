@@ -22,6 +22,12 @@ You can then later-on get any updates via
     cd SIRF-Exercises
     git pull
 
+You will also need to get extra data for some of the exercises. Please execute
+
+    ~/devel/SIRF-Exercises/scripts/download_PET_data.sh
+
+adjusting the path to where you installed the SIRF-Exercises of course.
+
 Jupyter notebooks
 ---------------
 The exercises use [Jupyter notebooks](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html).
