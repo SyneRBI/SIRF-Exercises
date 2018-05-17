@@ -1,0 +1,62 @@
+
+# =========================
+# Operating System Files
+# =========================
+
+# OSX
+# =========================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+# =========================
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+
+# User-specific files
+
+# backup files
+~$*
+*~
+
+.ipynb_checkpoints
+
+# STIR output files
+info.txt
+warn.txt
+errr.txt
+
+*_out.txt
+
+# no data in this repo
+*.h5
+*.s
+*.l
+*.v
+*.dat
+*.hdr
