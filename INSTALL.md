@@ -17,16 +17,25 @@ The SIRF-exercises themselves don't need further installation. Just get them, pr
 
     git clone https://github.com/CCPPETMR/SIRF-Exercises
 
-You can then later-on get any updates via
-
-    cd SIRF-Exercises
-    git pull
-
 You will also need to get extra data for some of the exercises. Please execute
 
     ~/devel/SIRF-Exercises/scripts/download_PET_data.sh
 
 adjusting the path to where you installed the SIRF-Exercises of course.
+
+Updating the exercises
+----------------------
+You can repeat of course clone the repository again to get any updates. However, if you made any changes
+to the exercises, you might want to keep those. Merging your changes and any
+"upstream" ones is unfortunately a bit complicated
+due to the file format used by jupyter notebooks. The following should work
+
+    pip install --user nbstripout
+    cd SIRF-Exercises
+    nbstripout --install
+    git pull
+
+(You have to write the `nbstripout` lines only once).
 
 Jupyter notebooks
 ---------------
