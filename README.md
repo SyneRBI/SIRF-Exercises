@@ -4,7 +4,7 @@ This material is intended for practical demonstrations using
 [SIRF](https://github.com/CCPPETMR/SIRF/wiki/Software-Documentation) on PET and MR Image Reconstruction.
 
 This repository contains exercises to get you going
-with SIRF. Please check [INSTALL.md](INSTALL.md) first.
+with SIRF. Please check the [INSTALL.md](INSTALL.md) first.
 
 Authors:
 - Kris Thielemans (this document and PET exercises)
@@ -25,13 +25,13 @@ Nevertheless, it would be best to read a Python tutorial first, see the [Appendi
 We use
 [Jupyter notebooks](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html).
 
-See the appendices at the end of this document for some information to get started.
+The rest of this document contains some information to get started.
 ***Please read this before the course.***
 
 
 
-Appendices
-==========
+Information
+===========
 
 
 Jupyter notebooks
@@ -41,9 +41,10 @@ you could [read the official documentation](https://jupyter-notebook.readthedocs
 A useful introduction to the notebook interface [can be found here](http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html).
 
 In a nut-shell, you need to start the server
-
+```bash
    cd /wherever/it/is/SIRF-Exercises
    jupyter notebook
+```
 
 This will open a web-page that looks like a file browser
 (the *Jupyter Notebook dashboard*).
@@ -77,7 +78,7 @@ File extensions
 A note on keyboard short-cuts inside a VirtualBox VM
 ----------------------------------------------------
 
-On Windows and Linux, VirtualBox sets the "host-key" by default to `Right-CTRL`, so
+On Windows and Linux, VirtualBox sets the "host-key" by default to `Right-CTRL` on Windows/Linux, so
 unless you change this, you have to use `Left-CTRL` to "send" the `CTRL`-keystroke
 to the Virtual Machine. So, below we will always type `Left-CTRL`.
 
