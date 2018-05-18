@@ -10,7 +10,7 @@ The exercises use [Jupyter notebooks](http://jupyter-notebook-beginner-guide.rea
 These provide a nice GUI interface to Python. You need 2 components:
 the jupyter notebook server and a web browser.
 
-## Installation via  the SIRF Virtual Machine
+## Installation via the SIRF Virtual Machine
 
 We distribute a VM with SIRF and all its dependencies, please [check our wiki](https://github.com/CCPPETMR/CCPPETMR_VM/wiki).
 The VM also contains the source for the SIRF-Exercises. However, we do not include the data to restrict its file size.
@@ -29,11 +29,13 @@ Therefore, please install the VM as per the instructions, start it up, open a te
    
   This will be a ~2.5 GB download.
 
-- Start the jupyter server
+You have now everything ready. To actually start with the exercises, you need to start the jupyter server
   ```bash
     cd ~/devel/SIRF-Exercises
     jupyter notebook
   ```  
+Check our [README](README.md) for more information.
+
 ## Installing SIRF and the exercises yourself
 
 You will need SIRF of course. Please check the [instructions on our wiki](https://github.com/CCPPETMR/SIRF/wiki/How-to-obtain-SIRF).
