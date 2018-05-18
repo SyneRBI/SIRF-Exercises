@@ -17,18 +17,18 @@ function download {
         if md5sum -c ${filename}.md5
         then
             echo "File exists and its md5sum is ok"
+            return 0
         else
             echo "md5sum doesn't match. Redownloading."
             rm ${filename}
-            wget --show-progress  ${URL}${filename}
         fi
-    else
-        wget --show-progress  ${URL}${filename}
     fi
-    
+
+    wget --show-progress  ${URL}${filename}
+
     if md5sum -c ${filename}.md5
     then
-        echo "File exists and its md5sum is ok"
+        echo "Downloaded file's md5sum is ok"
     else
         echo "md5sum doesn't match. Re-execute this script for another attempt."
         exit 1
@@ -49,7 +49,7 @@ filename=NEMA.tar.gz
 rm -f ${filename}.md5
 # hard-wired md5 for now
 #wget ${URL}${filename}.md5
-echo "MD5 (NEMA.tar.gz) = 9e8efeeaa57bc613b4d8b5c4af091534" > ${filename}.md5
+echo "9e8efeeaa57bc613b4d8b5c4af091534 ${filename}" > ${filename}.md5
 
 download $filename
 
@@ -73,8 +73,3 @@ ln -s ${destination}/NEMA/20170809_NEMA_60min_UCL.l.hdr
 ln -s ${destination}/NEMA/20170809_NEMA_60min_UCL.l
 
 echo "All done!"
-
-
-
-        
-       
