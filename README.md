@@ -9,7 +9,8 @@ with SIRF. Please check the [INSTALL.md](INSTALL.md) first.
 Authors:
 - Kris Thielemans (this document and PET exercises)
 - David Atkinson (MR exercises)
-- Edoardo Pasca (overall clean-up)
+- Evgueni Ovtchinnikov (PET and MR exercises)
+- Edoardo Pasca (overall check and clean-up)
 
 This software is distributed under an open source license, see [LICENSE.txt](LICENSE.txt)
 for details.
