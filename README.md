@@ -4,12 +4,12 @@ This material is intended for practical demonstrations using
 [SIRF](https://github.com/CCPPETMR/SIRF/wiki/Software-Documentation) on PET and MR Image Reconstruction.
 
 This repository contains exercises to get you going
-with SIRF. Please check [INSTALL.md](INSTALL.md) first (unless
-you have a Virtual Machine with the exercises
-pre-installed).
+with SIRF. Please check [INSTALL.md](INSTALL.md) first.
 
-Authors (this document):
-- Kris Thielemans
+Authors:
+- Kris Thielemans (this document and PET exercises)
+- David Atkinson (MR exercises)
+- Edoardo Pasca (overall clean-up)
 
 This software is distributed under an open source license, see [LICENSE.txt](LICENSE.txt)
 for details.
@@ -34,6 +34,33 @@ Appendices
 ==========
 
 
+Jupyter notebooks
+-----------------
+If you are trying this on your own and have never used Jupyter notebooks,
+you could [read the official documentation](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
+A useful introduction to the notebook interface [can be found here](http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html).
+
+In a nut-shell, you need to start the server
+
+   cd /wherever/it/is/SIRF-Exercises
+   jupyter notebook
+
+This will open a web-page that looks like a file browser
+(the *Jupyter Notebook dashboard*).
+Click on `notebooks`, and drill down until you find a file with the extension `.ipynb`
+that looks of interest, and click on that. This should open a new tab in your
+web browser with the notebook open, all ready to run.
+
+You will normally work by executing each *cell*
+bit by bit, and then editing it to do some more work. Useful 
+shortcuts:
+
+-   `LEFT-CTRL + <RETURN>` executes the current cell.
+-   `SHIFT + <RETURN>` executes the current cell and advances the cursor to the next
+     cell.
+-   `TAB` tries to complete the word/command you have just typed.
+
+
 File extensions
 ---------------
 
@@ -44,11 +71,8 @@ File extensions
 - `.v`: raw data of an image (in floats)
 - `.hs`: Interfile header for projection data (sinograms)
 - `.s`: raw data of projection data (in floats)
-- `.par`: STIR parameter file
-- `.sh`: Shell script (sequence of commands)
-- `.bat`: Windows batch file
-- `.log`: log file (used to record output of a command)
 - `.py`: Python file
+- `.ipynb`: jupyter notebook
 
 A note on keyboard short-cuts inside a VirtualBox VM
 ----------------------------------------------------
@@ -91,34 +115,6 @@ for z in range(0,image.shape[0]):
    plt.imshow(image[z,:,:])
 # now do something else
 ```
-
-Jupyter notebooks
------------------
-If you are trying this on your own and have never used Jupyter notebooks,
-you could [read the official documentation](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
-A useful introduction to the notebook interface [can be found here](http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html).
-
-In a nut-shell, you need to start the server
-
-   cd /wherever/it/is/SIRF-Exercises
-   jupyter notebook
-
-This will open a web-page that looks like a file browser
-(the *Jupyter Notebook dashboard*).
-Click on `notebooks`, and drill down until you find a file with the extension `.ipynb`
-that looks of interest, and click on that. This should open a new tab in your
-web browser with the notebook open, all ready to run.
-
-You will normally work by executing each *cell*
-bit by bit, and then editing it to do some more work. Useful 
-shortcuts:
-
--   `LEFT-CTRL + <RETURN>` executes the current cell.
--   `SHIFT + <RETURN>` executes the current cell and advances the cursor to the next
-     cell.
--   `TAB` tries to complete the word/command you have just typed.
-
-
 iPython
 -------
 You might be able to convince spyder to run iPython.
@@ -166,5 +162,4 @@ to what you would use in the terminal. (*Note*: these commands do not work in a 
 ```python
     %reset
 ```
-
 
