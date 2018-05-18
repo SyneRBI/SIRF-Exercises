@@ -8,6 +8,7 @@ with SIRF. Please check the [INSTALL.md](INSTALL.md) first.
 
 Authors:
 - Kris Thielemans (this document and PET exercises)
+- Christoph Kolbitsch (MR exercises)
 - David Atkinson (MR exercises)
 - Evgueni Ovtchinnikov (PET and MR exercises)
 - Edoardo Pasca (overall check and clean-up)
