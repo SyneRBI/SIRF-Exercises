@@ -22,17 +22,18 @@ Therefore, please install the VM as per the instructions, start it up, open a te
 
 
 - Get example data
-
+   ```bash
     ~/devel/SIRF-Exercises/scripts/download_PET_data.sh
     ~/devel/SIRF-Exercises/scripts/download_MR_data.sh
-
+   ```
+   
   This will be a ~2.5 GB download.
 
 - Start the jupyter server
-
+  ```bash
     cd ~/devel/SIRF-Exercises
     jupyter notebook
-    
+  ```  
 ## Installing SIRF and the exercises yourself
 
 You will need SIRF of course. Please check the [instructions on our wiki](https://github.com/CCPPETMR/SIRF/wiki/How-to-obtain-SIRF).
