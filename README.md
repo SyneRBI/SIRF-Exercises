@@ -68,14 +68,15 @@ File extensions
 ---------------
 
 - `.dat`: Siemens raw MR data file
-- '.h5': HDF5 file with MR data or images
+- `.h5`: HDF5 file with MR data or images
 - `.hv`: Interfile header for an image (volume)
 - `.ahv`: (ignore) old-style Interfile header for an image
 - `.v`: raw data of an image (in floats)
-- `.hs`: Interfile header for projection data (sinograms)
-- `.s`: raw data of projection data (in floats)
+- `.hs`: Interfile header for PET acquisition data (sinograms)
+- `.s`: raw data of PET acquisition data (in floats)
 - `.py`: Python file
 - `.ipynb`: jupyter notebook
+- `.md`: text file with documentation (in Markdown format)
 
 A note on keyboard short-cuts inside a VirtualBox VM
 ----------------------------------------------------
