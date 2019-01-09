@@ -63,6 +63,10 @@ shortcuts:
      cell.
 -   `TAB` tries to complete the word/command you have just typed.
 
+Jupyter notebooks (normally) run iPython, [see the section below](#iPython) for some useful commands.
+
+Check the [jupyter doc on closing a notebook](https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/execute.html#close-a-notebook-kernel-shut-down).
+
 
 File extensions
 ---------------
