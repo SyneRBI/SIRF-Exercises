@@ -66,6 +66,7 @@ shortcuts:
 Jupyter notebooks (normally) run iPython, [see the section below](#iPython) for some useful commands.
 
 Check the [jupyter doc on closing a notebook](https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/execute.html#close-a-notebook-kernel-shut-down).
+(Note: it is *not* just closing the browser tab).
 
 
 File extensions
@@ -80,6 +81,7 @@ File extensions
 - `.s`: raw data of PET acquisition data (in floats)
 - `.py`: Python file
 - `.ipynb`: jupyter notebook
+- `.par`: STIR parameter files.
 - `.md`: text file with documentation (in Markdown format)
 
 A note on keyboard short-cuts inside a VirtualBox VM
@@ -125,8 +127,10 @@ for z in range(0,image.shape[0]):
 ```
 iPython
 -------
-You might be able to convince spyder to run iPython.
-And here are some useful iPython "magic" commands that you can use in the iPython
+The jupyter notebooks will normally be running iPython, although this depends a bit on your configuration.
+iPython is Python with a few extensions to make the experience a bit friendlier.
+
+Here are some useful iPython "magic" commands that you can use in the iPython
 console on the right (but not in the scripts). Most of these are identical
 to what you would use in the terminal. (*Note*: these commands do not work in a Python console.)
 

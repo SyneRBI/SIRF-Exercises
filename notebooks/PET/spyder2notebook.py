@@ -58,7 +58,7 @@ a = json.dump(notebook_cells, f, indent=2)
 f.close()   
 
 out = to_camel_case(os.path.basename(sys.argv[1]).strip('.py')) + '.ipynb'
-
+print(out)
 f = open(out, "r")
 a = json.load(f)
 a['worksheets'][0]['cells'] = notebook_cells
