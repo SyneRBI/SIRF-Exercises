@@ -125,6 +125,10 @@ for z in range(0,image.shape[0]):
    plt.imshow(image[z,:,:])
 # now do something else
 ```
+
+We use [matplotlib](https://matplotlib.org/), a python module that allows you to make plots almost like in MATLAB.
+Check [here](https://github.com/patvarilly/dsghent-python-for-data-scientists-2016/blob/master/notebooks/02_MatplotlibAndSeaborn.ipynb) for some examples.
+
 iPython
 -------
 The jupyter notebooks will normally be running iPython, although this depends a bit on your configuration.
