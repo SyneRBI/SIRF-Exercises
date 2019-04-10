@@ -38,7 +38,20 @@ The rest of this document contains some information to get started.
 
 Information
 ===========
-
+Getting started
+---------------
+Some exercises use data that you will have to download first.
+```sh
+cd ~/devel/SIRF-Exercises/scripts
+./download_PET_data.sh
+./download_MR_data.sh
+```
+The MR exercises will need you to start a Gadgetron server. If you have installed SIRF properly,
+you should be able to type in a terminal
+```sh
+gadgetron
+```
+You can kill it at the end by going back to the terminal and pressing `Ctrl-C`.
 
 Jupyter notebooks
 -----------------
