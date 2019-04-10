@@ -77,6 +77,16 @@ rm -f ${filename4}.md5 # (re)create md5 checksum
 echo "cde99f7f7c53e7a8fa2e8995c21df8af ${filename4}" > ${filename4}.md5
 download ${URL} ${filename4} ${suffix}
 
+# Get Zenodo dataset
+URL=https://zenodo.org/record/2633785/files/
+
+filenameGRAPPA=PTB_ACRPhantom_GRAPPA.zip
+# (re)download md5 checksum
+wget --show-progress  ${URL}${filenameGRAPPA} 
+
+echo "Unpacking $filenameGRAPPA"
+unzip ${filenameGRAPPA}
+
 # make symbolic links in the normal demo directory
 if test -z "$SIRF_PATH"
 then
@@ -86,13 +96,18 @@ fi
 
 final_dest=$SIRF_PATH/data/examples/MR
 echo "Creating symbolic links in ${final_dest} "
+
 cd ${final_dest}
 rm -f ${filename1}
 rm -f ${filename2}
 rm -f ${filename3}
 rm -f ${filename4}
+rm -f ptb_resolutionphantom_*
 ln -s ${destination}/${filename1}
 ln -s ${destination}/${filename2}
 ln -s ${destination}/${filename3}
 ln -s ${destination}/${filename4}
+ln -s ${destination}/PTB_ACRPhantom_GRAPPA/*_ismrmrd.h5 ./ 
 echo "All done!"
+
+
