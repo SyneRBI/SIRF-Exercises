@@ -23,6 +23,7 @@ Introduction
 ============
 
 The SIRF documentation can be found [here](https://github.com/CCPPETMR/SIRF/wiki/Software-Documentation).
+***The current version of these exercises needs SIRF v2.0.***
 
 We are using Python for the exercises. Python is an open-source interactive language, 
 a bit like MATLAB. We provide Python scripts for the exercises, so you should be fine.
