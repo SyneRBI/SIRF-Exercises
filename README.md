@@ -12,6 +12,8 @@ Authors:
 - David Atkinson (MR exercises)
 - Evgueni Ovtchinnikov (PET and MR exercises)
 - Edoardo Pasca (overall check and clean-up)
+- Johannes Mayer (MR exercises)
+- Richard Brown (registration exercises)
 
 This software is distributed under an open source license, see [LICENSE.txt](LICENSE.txt)
 for details.
