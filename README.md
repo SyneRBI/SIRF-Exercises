@@ -12,6 +12,8 @@ Authors:
 - David Atkinson (MR exercises)
 - Evgueni Ovtchinnikov (PET and MR exercises)
 - Edoardo Pasca (overall check and clean-up)
+- Johannes Mayer (MR exercises)
+- Richard Brown (registration exercises)
 
 This software is distributed under an open source license, see [LICENSE.txt](LICENSE.txt)
 for details.
@@ -19,6 +21,9 @@ for details.
 
 Introduction
 ============
+
+The SIRF documentation can be found [here](https://github.com/CCPPETMR/SIRF/wiki/Software-Documentation).
+***The current version of these exercises needs SIRF v2.0.***
 
 We are using Python for the exercises. Python is an open-source interactive language, 
 a bit like MATLAB. We provide Python scripts for the exercises, so you should be fine.
@@ -34,7 +39,20 @@ The rest of this document contains some information to get started.
 
 Information
 ===========
-
+Getting started
+---------------
+Some exercises use data that you will have to download first.
+```sh
+cd ~/devel/SIRF-Exercises/scripts
+./download_PET_data.sh
+./download_MR_data.sh
+```
+The MR exercises will need you to start a Gadgetron server. If you have installed SIRF properly,
+you should be able to type in a terminal
+```sh
+gadgetron
+```
+You can kill it at the end by going back to the terminal and pressing `Ctrl-C`.
 
 Jupyter notebooks
 -----------------
@@ -125,6 +143,10 @@ for z in range(0,image.shape[0]):
    plt.imshow(image[z,:,:])
 # now do something else
 ```
+
+We use [matplotlib](https://matplotlib.org/), a python module that allows you to make plots almost like in MATLAB.
+Check [here](https://github.com/patvarilly/dsghent-python-for-data-scientists-2016/blob/master/notebooks/02_MatplotlibAndSeaborn.ipynb) for some examples.
+
 iPython
 -------
 The jupyter notebooks will normally be running iPython, although this depends a bit on your configuration.
