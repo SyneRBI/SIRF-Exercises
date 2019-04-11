@@ -6,9 +6,9 @@ This is a basic list of things to do and tell people during the course.
 1. Show how to connect to Azure clients (if available). Should be something like https://sirf1....cloudapp.azure.com:9999/.
 *Do not forget the `https`*. People will need to accept the secure exception. Jupyter notebook password is `virtual%1`.
 
-2. Navigate to .../SIRF-Exercises/README.md to show how to open files and give them something to read.
+2. Navigate to [.../SIRF-Exercises/DocForParticipants.md](DocForParticipants.md) to show how to open files and give them something to read.
 
-3. Show how to start the VM and connect: open terminal (either via `Activities` or pressing `ctrl-alt-T`) and type
+3. Show how to start the VM. Show about resizing, and scaling (VB menu: `View`->`Scaling factor`), and how to connect: open terminal (either via `Activities` or pressing `ctrl-alt-T`) and type
 ```bash
   update_VM.sh
   cd ~/devel/SIRF-Exercises/scripts/
