@@ -79,13 +79,13 @@ download ${URL} ${filename4} ${suffix}
 
 # Get Zenodo dataset
 URL=https://zenodo.org/record/2633785/files/
-
 filenameGRAPPA=PTB_ACRPhantom_GRAPPA.zip
 # (re)download md5 checksum
-wget --show-progress  ${URL}${filenameGRAPPA} 
+echo "a7e0b72a964b1e84d37f9609acd77ef2 ${filenameGRAPPA}" > ${filenameGRAPPA}.md5
+download ${URL} ${filenameGRAPPA}
 
 echo "Unpacking $filenameGRAPPA"
-unzip ${filenameGRAPPA}
+unzip -o ${filenameGRAPPA}
 
 # make symbolic links in the normal demo directory
 if test -z "$SIRF_PATH"

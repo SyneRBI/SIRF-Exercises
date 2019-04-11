@@ -56,7 +56,7 @@ download $filename
 # specific to PET data
 
 echo "Unpacking $filename"
-unzip ${filename}
+unzip -o ${filename}
 
 # make symbolic links in the normal demo directory
 if test -z "$SIRF_PATH"
