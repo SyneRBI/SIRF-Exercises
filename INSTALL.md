@@ -75,7 +75,11 @@ due to the file format used by jupyter notebooks. The following should work
     pip install --user nbstripout
     cd SIRF-Exercises
     nbstripout --install
+    git config --global filter.nbstripout.extrakeys '
+      metadata.celltoolbar metadata.kernel_spec.display_name
+      metadata.kernel_spec.name
+      metadata.language_info.codemirror_mode.version
+      metadata.language_info.pygments_lexer metadata.language_info.version'
     git pull
 
 (You do not have to write the `nbstripout` lines on the VM, and on other systems you have to write those only once).
-

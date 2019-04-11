@@ -61,22 +61,6 @@ rm -f ${filename2}.md5 # (re)create md5 checksum
 echo "44d9766ddbbf2a082d07ddba74a769c9 ${filename2}" > ${filename2}.md5
 download ${URL} ${filename2} ${suffix}
 
-# Get file 3
-URL=https://github.com/CCPPETMR/SIRF_data/raw/master/examples/MR/
-filename3=grappa2_1rep.h5
-suffix=""
-rm -f ${filename3}.md5 # (re)create md5 checksum
-echo "fe75ecf61896b97351f87b231fc3bf74 ${filename3}" > ${filename3}.md5
-download ${URL} ${filename3} ${suffix}
-
-# Get file 4
-URL=https://github.com/CCPPETMR/SIRF_data/raw/master/examples/MR/
-filename4=grappa2_6rep.h5
-suffix=""
-rm -f ${filename4}.md5 # (re)create md5 checksum
-echo "cde99f7f7c53e7a8fa2e8995c21df8af ${filename4}" > ${filename4}.md5
-download ${URL} ${filename4} ${suffix}
-
 # Get Zenodo dataset
 URL=https://zenodo.org/record/2633785/files/
 filenameGRAPPA=PTB_ACRPhantom_GRAPPA.zip
@@ -100,13 +84,9 @@ echo "Creating symbolic links in ${final_dest} "
 cd ${final_dest}
 rm -f ${filename1}
 rm -f ${filename2}
-rm -f ${filename3}
-rm -f ${filename4}
 rm -f ptb_resolutionphantom_*
 ln -s ${destination}/${filename1}
 ln -s ${destination}/${filename2}
-ln -s ${destination}/${filename3}
-ln -s ${destination}/${filename4}
 ln -s ${destination}/PTB_ACRPhantom_GRAPPA/*_ismrmrd.h5 ./ 
 echo "All done!"
 
