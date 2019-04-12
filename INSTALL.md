@@ -3,14 +3,13 @@
 Author: Kris Thielemans
 
 An easy way to run the exercises is to use the SIRF Virtual Machine where
-most of this has been done for you, but you can install all of this yourself
-of course. Below are some brief instructions.
+SIRF has already been installed for you. Alternatively you can install SIRF yourself. Below are some brief instructions.
 
 The exercises use [Jupyter notebooks](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html).
 These provide a nice GUI interface to Python. You need 2 components:
 the jupyter notebook server and a web browser.
 
-## Installation via the SIRF Virtual Machine
+## SIRF Virtual Machine
 
 We distribute a VM with SIRF and all its dependencies, please [check our wiki](https://github.com/CCPPETMR/CCPPETMR_VM/wiki).
 The VM also contains the source for the SIRF-Exercises. However, we do not include the data to restrict its file size.
@@ -56,7 +55,7 @@ should work for you
 
        $SIRF_PYTHON_EXECUTABLE -m pip install jupyter
 
-Note that we used an environment variable set when you install SIRF to make
+Note that we set an environment variable when you installed SIRF to make
 sure that you use a Python version which is compatible with how you compiled SIRF.
 
 Of course, if you've used (Ana)conda to install Python etc (and are sure
@@ -67,7 +66,7 @@ After all this, you will need to do the steps indicated in the instructions abov
 
 ### Updating the exercises after installation
 
-You can repeat of course clone the repository again to get any updates. However, if you made any changes
+You can repeat clone the repository again to get any updates. However, if you made any changes
 to the exercises, you might want to keep those. Merging your changes and any
 "upstream" ones is unfortunately a bit complicated
 due to the file format used by jupyter notebooks. The following should work
