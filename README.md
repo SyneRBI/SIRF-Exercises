@@ -43,7 +43,7 @@ Information
 ===========
 Getting started
 ---------------
-Some exercises use data that you will have to download first.
+Some exercises use data that you will need. This data is pre-installed with the larger VM (about 4.9Gb total). If you need to download the data:
 ```sh
 cd ~/devel/SIRF-Exercises/scripts
 ./download_PET_data.sh
