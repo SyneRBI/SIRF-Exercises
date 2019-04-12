@@ -29,7 +29,11 @@ Show how to close the session (either `File->Close and halt` or go "home" and cl
 ```bash
 gadgetron&
 ```
-4. Warn that pressing `Logout` will mean all sessions are closed and you will have to start again. Warn that pressing
+4. Warn that you cannot have 2 Python sessions simultaneously accessing
+the same MR HDF5 file.
+The only work-around is to use “File->Close and halt”  after you’ve finished with a notebook (or just “Kernel->Shutdown”).
+
+5. Warn that pressing `Logout` will mean all sessions are closed and you will have to start again. Warn that pressing
 `Quit` means the server will quit and they will be in trouble. (On Azure, the server should restart after a few seconds,
 but not on the VM).
 

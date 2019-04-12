@@ -110,6 +110,10 @@ Jupyter notebooks (normally) run iPython, [see the section below](#iPython) for 
 Check the [jupyter doc on closing a notebook](https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/execute.html#close-a-notebook-kernel-shut-down).
 (Note: it is *not* just closing the browser tab).
 
+***Warning:*** Due to a limitation in SIRF (and ISMRMRD) you cannot have 2 Python sessions simultaneously accessing
+the same MR HDF5 file.
+You have to use “File->Close and halt”  after you’ve finished with a notebook (or just “Kernel->Shutdown”).
+
 Appendices
 ==========
 
