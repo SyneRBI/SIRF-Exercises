@@ -18,6 +18,11 @@ Authors:
 This software is distributed under an open source license, see [LICENSE.txt](LICENSE.txt)
 for details.
 
+Gentle request
+--------------
+If you are attending the course, ***please read this before the course.*** A brief summary of the steps to get started
+is in our [documentation for participants](https://github.com/CCPPETMR/SIRF-Exercises/blob/master/DocForParticipants.md).  
+
 
 Introduction
 ============
@@ -31,24 +36,17 @@ Nevertheless, it would be best to read a Python tutorial first, see the [Appendi
 
 We use
 [Jupyter notebooks](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html).
+If you have never used Jupyter notebooks,
+you could [read the official documentation](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
+A useful introduction to the notebook interface [can be found here](http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html).
 
 The rest of this document contains some information to get started.
-***Please read this before the course.***
-
-Once you're finished here, head over to our [documentation for participants](https://github.com/CCPPETMR/SIRF-Exercises/blob/master/DocForParticipants.md) to get started with the course.
 
 
-
-Information
-===========
 Getting started
----------------
-Some exercises use data that you will need. This data is pre-installed with the larger VM (about 4.9Gb total). If you need to download the data:
-```sh
-cd ~/devel/SIRF-Exercises/scripts
-./download_PET_data.sh
-./download_MR_data.sh
-```
+================
+Some exercises use data that you will need. Check the [installation instructions](INSTALL.md).
+
 The MR exercises will need you to start a Gadgetron server. If you have installed SIRF properly,
 you should be able to type in a terminal
 ```sh
@@ -56,24 +54,43 @@ gadgetron
 ```
 You can kill it at the end by going back to the terminal and pressing `Ctrl-C`.
 
-Jupyter notebooks
------------------
-If you are trying this on your own and have never used Jupyter notebooks,
-you could [read the official documentation](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
-A useful introduction to the notebook interface [can be found here](http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html).
+Starting the jupyter server
+---------------------------
+To start with the exercises, you need to start the jupyter server. Depending on how/where you run these exercises, this will
+be in different ways:
 
-You will need a web browser on the VM such as Firefox. If this is not installed:
+### On the VM using the web browser of your host system (recommended)
+In the VM terminal, type
+  ```bash
+    cd ~/devel/SIRF-Exercises
+    jupyter notebook  --no-browser --ip 0.0.0.0
+```
+Then open a web-browser on your laptop/desktop and point it to https://localhost:8888 (fill in the password or the token).
+
+### On the VM using a web browser in the VM
+You will need to install a web browser on the VM such as Firefox. 
 ```bash
    sudo apt install firefox
 ```
+Now do
 
-In a nut-shell, you need to start the server
 ```bash
    cd ~/devel/SIRF-Exercises
    jupyter notebook
 ```
+which should start your web-browser automatically.
 
-This will open a web-page that looks like a file browser
+### You have installed SIRF and the exercises yourself
+
+You have a jupyter server (as you followed the [installation instructions](INSTALL.md) so just use
+```bash
+   cd /wherever/you/installed/it/SIRF-Exercises
+   jupyter notebook
+```
+
+Using the notebooks
+===================
+The initial web-page that you will see looks like a file browser
 (the *Jupyter Notebook dashboard*).
 Click on `notebooks`, and drill down until you find a file with the extension `.ipynb`
 that looks of interest, and click on that. This should open a new tab in your
@@ -93,6 +110,8 @@ Jupyter notebooks (normally) run iPython, [see the section below](#iPython) for 
 Check the [jupyter doc on closing a notebook](https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/execute.html#close-a-notebook-kernel-shut-down).
 (Note: it is *not* just closing the browser tab).
 
+Appendices
+==========
 
 File extensions
 ---------------

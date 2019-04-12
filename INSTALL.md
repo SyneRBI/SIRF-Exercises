@@ -28,12 +28,7 @@ Therefore, please install the VM as per the instructions, start it up, open a te
    
   This will be a ~2.5 GB download.
 
-You have now everything ready. To actually start with the exercises, you need to start the jupyter server
-  ```bash
-    cd ~/devel/SIRF-Exercises
-    jupyter notebook  --no-browser --ip 0.0.0.0
-```
-Then open a web-browser on your laptop and point it to https://localhost:8888 (fill in the password or the token).
+You have now everything ready.
  
 Check our [README](README.md) for more information on usage.
 
@@ -69,11 +64,6 @@ SIRF was compiled with that Python version), you can use conda to install
 jupyter as well.
 
 After all this, you will need to do the steps indicated in the instructions above for the VM.
-One difference is that you will probably want to use a web-browser on your system, so just use
-
-    jupyter notebook
-
-which should start your web-browser automatically.
 
 ### Updating the exercises after installation
 
