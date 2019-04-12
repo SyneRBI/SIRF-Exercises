@@ -24,7 +24,7 @@ function download {
         fi
     fi
 
-    wget --show-progress  ${URL}${filename}
+    curl -OL ${URL}${filename}
 
     if md5sum -c ${filename}.md5
     then
@@ -48,7 +48,7 @@ filename=NEMA_IQ.zip
 # (re)download md5 checksum
 rm -f ${filename}.md5
 # hard-wired md5 for now
-#wget ${URL}${filename}.md5
+#curl -OL ${URL}${filename}.md5
 echo "ef848b8f6d5fd57b072a953b374ba4da ${filename}" > ${filename}.md5
 
 download $filename

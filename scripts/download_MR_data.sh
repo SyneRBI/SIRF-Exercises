@@ -26,7 +26,7 @@ function download {
         fi
     fi
 
-    wget --show-progress -O ${filename} ${URL}${filename}${suffix}
+    curl -L -o ${filename} ${URL}${filename}${suffix}
 
     if md5sum -c ${filename}.md5
     then
@@ -87,7 +87,5 @@ rm -f ${filename2}
 rm -f ptb_resolutionphantom_*
 ln -s ${destination}/${filename1}
 ln -s ${destination}/${filename2}
-ln -s ${destination}/PTB_ACRPhantom_GRAPPA/*_ismrmrd.h5 ./ 
+ln -s ${destination}/PTB_ACRPhantom_GRAPPA/*_ismrmrd.h5 ./
 echo "All done!"
-
-
