@@ -35,6 +35,8 @@ We use
 The rest of this document contains some information to get started.
 ***Please read this before the course.***
 
+Once you're finished here, head over to our [documentation for participants](https://github.com/CCPPETMR/SIRF-Exercises/blob/master/DocForParticipants.md) to get started with the course.
+
 
 
 Information
