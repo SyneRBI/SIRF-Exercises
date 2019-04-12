@@ -62,6 +62,11 @@ If you are trying this on your own and have never used Jupyter notebooks,
 you could [read the official documentation](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
 A useful introduction to the notebook interface [can be found here](http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html).
 
+You will need a web browser on the VM such as Firefox. If this is not installed:
+```bash
+   sudo apt install firefox
+```
+
 In a nut-shell, you need to start the server
 ```bash
    cd ~/devel/SIRF-Exercises
