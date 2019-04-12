@@ -1,8 +1,7 @@
 # Instructions for participants
 
-This is a basic "getting started" for participants of one of our courses. We will run these
-exercises either via the cloud or in a Virtual Machine. The start-up phase is different if you
-run one of these, but the rest of the usage should be the same.
+This is a basic "getting started" for course participants. We will run these
+exercises either via the Azure cloud or in a Virtual Machine (VM). The start-up phase is different for Azure and the VM, but the rest of the usage should be the same.
 
 Please check our [README](README.md).
 
