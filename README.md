@@ -64,7 +64,7 @@ A useful introduction to the notebook interface [can be found here](http://jupyt
 
 In a nut-shell, you need to start the server
 ```bash
-   cd /wherever/it/is/SIRF-Exercises
+   cd ~/devel/SIRF-Exercises
    jupyter notebook
 ```
 
