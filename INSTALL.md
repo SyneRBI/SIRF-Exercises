@@ -31,29 +31,35 @@ Therefore, please install the VM as per the instructions, start it up, open a te
 You have now everything ready. To actually start with the exercises, you need to start the jupyter server
   ```bash
     cd ~/devel/SIRF-Exercises
-    jupyter notebook
-  ```  
-Check our [README](README.md) for more information.
+    jupyter notebook  --no-browser --ip 0.0.0.0
+```
+Then open a web-browser on your laptop and point it to https://localhost:8888 (fill in the password or the token).
+ 
+Check our [README](README.md) for more information on usage.
 
 ## Installing SIRF and the exercises yourself
 
 You will need SIRF of course. Please check the [instructions on our wiki](https://github.com/CCPPETMR/SIRF/wiki/How-to-obtain-SIRF).
 
-The SIRF-exercises themselves don't need further installation. Just get them, preferably via
+The SIRF-exercises themselves can just be downloaded, preferably via
 
     mkdir ~/devel
     cd ~/devel
     git clone https://github.com/CCPPETMR/SIRF-Exercises
 
 
-adjusting the path to where you installed the SIRF-Exercises of course.
+adjusting the path to where you want to install the SIRF-Exercises of course.
 
-Finally, you need the jupyter server. Check first if your system comes with the jupyter server. 
+Finally, you need the jupyter server. Check first if your system comes with the jupyter server
+by typing
+
+    jupyter --help
+
 
 If you need to install it, we currently recommend using `pip`. The following command
 should work for you
 
-       $SIRF_PYTHON_EXECUTABLE -m pip install jupyter
+    $SIRF_PYTHON_EXECUTABLE -m pip install jupyter
 
 Note that we set an environment variable when you installed SIRF to make
 sure that you use a Python version which is compatible with how you compiled SIRF.
@@ -63,6 +69,11 @@ SIRF was compiled with that Python version), you can use conda to install
 jupyter as well.
 
 After all this, you will need to do the steps indicated in the instructions above for the VM.
+One difference is that you will probably want to use a web-browser on your system, so just use
+
+    jupyter notebook
+
+which should start your web-browser automatically.
 
 ### Updating the exercises after installation
 
