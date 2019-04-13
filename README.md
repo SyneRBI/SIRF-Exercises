@@ -65,7 +65,10 @@ In the VM terminal, type
     cd ~/devel/SIRF-Exercises
     jupyter notebook  --no-browser --ip 0.0.0.0
 ```
-Then open a web-browser on your laptop/desktop and point it to https://localhost:8888 (fill in the password or the token).
+You will get a message that ends `Or copy and paste one of these URLs:
+        http://(vagrant or 127.0.0.1):8888/?token=axxxxcf837a4ab78aa13275dc893af9b91143225c226xxxx`
+        
+On your laptop/desktop, open a web-browser and use the full address from the message (including the `token=...` part). You will need to edit the `(vagrant or 127.0.0.1)` to `127.0.0.1`. Alternatively, use the address http://localhost:8888 and then when requested, copy and paste the token value, which in this example would be `axxxxcf837a4ab78aa13275dc893af9b91143225c226xxxx`. 
 
 ### On the VM using a web browser in the VM
 You will need to install a web browser on the VM such as Firefox. 
