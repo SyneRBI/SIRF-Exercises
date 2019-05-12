@@ -76,8 +76,7 @@ due to the file format used by jupyter notebooks. The following should work
     cd SIRF-Exercises
     nbstripout --install
     git config --global filter.nbstripout.extrakeys '
-      metadata.celltoolbar metadata.kernelspec.display_name
-      metadata.kernelspec.name
+      metadata.celltoolbar 
       metadata.language_info.codemirror_mode.version
       metadata.language_info.pygments_lexer metadata.language_info.version'
     git pull
