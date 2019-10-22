@@ -62,8 +62,7 @@ be in different ways:
 ### On the VM using the web browser of your host system (recommended)
 In the VM terminal, type
   ```bash
-    cd ~/devel/SIRF-Exercises
-    jupyter notebook  --no-browser --ip 0.0.0.0
+    jupyter notebook
 ```
 You will get a message that ends `Or copy and paste one of these URLs:
         http://(vagrant or 127.0.0.1):8888/?token=axxxxcf837a4ab78aa13275dc893af9b91143225c226xxxx`
@@ -78,8 +77,7 @@ You will need to install a web browser on the VM such as Firefox.
 Now do
 
 ```bash
-   cd ~/devel/SIRF-Exercises
-   jupyter notebook
+   jupyter notebook --browser firefox
 ```
 which should start your web-browser automatically.
 
