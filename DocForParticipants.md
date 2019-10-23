@@ -40,7 +40,7 @@ Then open a web-browser on your laptop and point it to https://localhost:8888 (f
 but not on the VM, so start it again as above).
 
 ## Get started with the course!
-Start with [notebooks/MR/interactive/a_fully_sampled.ipynb](notebooks/MR/interactive/a_fully_sampled.ipynb).
+Start with [notebooks/Introductory/introduction.ipynb](notebooks/Introductory/introduction.ipynb) and its [README.md](notebooks/Introductory/README.md).
 
 
 
