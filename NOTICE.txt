@@ -1,0 +1,21 @@
+CCP PETMR Synergistic Image Reconstruction Framework (SIRF).
+Copyright 2015-2019 Rutherford Appleton Laboratory STFC
+Copyright 2015-2019 University College London (UCL)
+Copyright 2017-2019 Physikalisch-Technische Bundesanstalt (PTB)
+Copyright 2019 National Phisical Laboratory (NPL)
+Copyright 2019 University of Leeds
+
+This software product is developed for the Collaborative Computational 
+Project in Positron Emission Tomography and Magnetic Resonance imaging
+(http://www.ccppetmr.ac.uk/) at RAL STFC (http://www.stfc.ac.uk), UCL (http://www.ucl.ac.uk/)
+and other contributing institutions.
+
+Main contributors:
+- Kris Thielemans (this document and PET exercises)
+- Christoph Kolbitsch (MR exercises)
+- David Atkinson (MR exercises)
+- Evgueni Ovtchinnikov (PET and MR exercises)
+- Edoardo Pasca (overall check and clean-up)
+- Johannes Mayer (MR exercises)
+- Richard Brown (PET and registration exercises)
+- Daniel Deidda and Palak Wadhwa (HKEM exercise)
