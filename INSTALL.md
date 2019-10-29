@@ -28,7 +28,13 @@ Therefore, please install the VM as per the instructions, start it up, open a te
    
   This will be a ~2.5 GB download.
 
-You have now everything ready.
+  Note that if you want to run notebooks in MR/Old_notebooks (not recommended),
+  you will have to get some more data
+    ```bash
+    ~/devel/SIRF-Exercises/scripts/download_MR_data_old_notebooks.sh
+   ```
+
+You now have everything ready.
  
 Check our [README](README.md) for more information on usage.
 

@@ -45,6 +45,22 @@ destination=${1:-~/data}
 mkdir -p ${destination}
 cd ${destination}
 
+# Get file 1
+URL=https://www.dropbox.com/s/cazoi5l7oljtwsy/
+filename1=meas_MID00108_FID57249_test_2D_2x.dat
+suffix=?dl=0
+rm -f ${filename1}.md5 # (re)create md5 checksum
+echo "8f06cacf6b3f4b46435bf8e970e1fe3f ${filename1}" > ${filename1}.md5
+download ${URL} ${filename1} ${suffix}
+
+# Get file 2
+URL=https://www.dropbox.com/s/tz7q02fziskq9u7/
+filename2=meas_MID00103_FID57244_test.dat
+suffix=?dl=0
+rm -f ${filename2}.md5 # (re)create md5 checksum
+echo "44d9766ddbbf2a082d07ddba74a769c9 ${filename2}" > ${filename2}.md5
+download ${URL} ${filename2} ${suffix}
+
 # Get Zenodo dataset
 URL=https://zenodo.org/record/2633785/files/
 filenameGRAPPA=PTB_ACRPhantom_GRAPPA.zip
@@ -66,6 +82,10 @@ final_dest=$SIRF_PATH/data/examples/MR
 echo "Creating symbolic links in ${final_dest} "
 
 cd ${final_dest}
+rm -f ${filename1}
+rm -f ${filename2}
 rm -f ptb_resolutionphantom_*
+ln -s ${destination}/${filename1}
+ln -s ${destination}/${filename2}
 ln -s ${destination}/PTB_ACRPhantom_GRAPPA/*_ismrmrd.h5 ./
 echo "All done!"
