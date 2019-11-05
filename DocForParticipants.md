@@ -26,9 +26,9 @@ Later in the course, you can use this terminal to start `gadgetron`.
   ./download_PET_data.sh
   ./download_MR_data.sh
   cd ~/devel/SIRF-Exercises/
-  jupyter notebook --no-browser --ip 0.0.0.0
+  jupyter notebook
 ```
-Then open a web-browser on your laptop and point it to https://localhost:8888 (fill in the password or the token).
+Then open a web-browser on your laptop and point it to http://localhost:8888 (fill in the password or the token).
 
 
 ## jupyter notebook manipulations
