@@ -15,9 +15,9 @@ This is a basic list of things to do and tell people during the course.
   ./download_PET_data.sh
   ./download_MR_data.sh
   cd ~/devel/SIRF-Exercises/
-  jupyter notebook --no-browser --ip 0.0.0.0
+  jupyter notebook
 ```
-Then open a web-browser on your local laptop and point it to https://localhost:8888 (fill in the password or the token).
+Then open a web-browser on your local laptop and point it to http://localhost:8888 (fill in the password or the token).
 
 4. From now on, everything is the same when using the cloud or the VM.
 
