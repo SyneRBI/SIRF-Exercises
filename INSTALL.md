@@ -40,13 +40,13 @@ Check our [README](README.md) for more information on usage.
 
 ## Installing SIRF and the exercises yourself
 
-You will need SIRF of course. Please check the [instructions on our wiki](https://github.com/CCPPETMR/SIRF/wiki/How-to-obtain-SIRF).
+You will need SIRF of course. Please check the [instructions on our wiki](https://github.com/SyneRBI/SIRF/wiki/How-to-obtain-SIRF).
 
 The SIRF-exercises themselves can just be downloaded, preferably via
 
     mkdir ~/devel
     cd ~/devel
-    git clone https://github.com/CCPPETMR/SIRF-Exercises
+    git clone https://github.com/SyneRBI/SIRF-Exercises
     cd SIRF-Exercises
 
 
@@ -55,19 +55,19 @@ adjusting the path to where you want to install the SIRF-Exercises of course.
 You will need to install the additional Python dependencies needed for the
 exercises also
 
-    python3 -m pip install --user -r requirements.txt
+    $SIRF_PYTHON_EXECUTABLE -m pip install --user -r requirements.txt
 
+where we used the environment variable created when you follow the `SIRF-SuperBuild` instructions to make
+sure that you use a Python version which is compatible with how you compiled SIRF.
 This will do a "user" install - if you'd prefer a system install omit the
 `--user` flag. If you don't know what this means, use the above command.
+
 Of course, if you've used (Ana)conda to install Python etc (and are sure
 SIRF was compiled with that Python version), you can use conda to install
-dependencies as well. In this case, you may have to manually install pip in
-your conda environment:
+dependencies as well. Or you could still choose to use conda's `pip` after
 
     conda install pip
 
-Note that we set an environment variable when you installed SIRF to make
-sure that you use a Python version which is compatible with how you compiled SIRF.
 
 After all this, you will need to do the steps indicated in the instructions above for the VM, after the `update_VM.sh` step.
 
