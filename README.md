@@ -15,6 +15,7 @@ Authors:
 - Johannes Mayer (MR exercises)
 - Richard Brown (PET and registration exercises)
 - Daniel Deidda and Palak Wadhwa (HKEM exercise)
+- Ashley Gillman (overall check and clean-up)
 
 This software is distributed under an open source license, see [LICENSE.txt](LICENSE.txt)
 for details.
