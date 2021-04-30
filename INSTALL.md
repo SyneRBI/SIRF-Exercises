@@ -40,36 +40,36 @@ Check our [README](README.md) for more information on usage.
 
 ## Installing SIRF and the exercises yourself
 
-You will need SIRF of course. Please check the [instructions on our wiki](https://github.com/CCPPETMR/SIRF/wiki/How-to-obtain-SIRF).
+You will need SIRF of course. Please check the [instructions on our wiki](https://github.com/SyneRBI/SIRF/wiki/How-to-obtain-SIRF).
 
 The SIRF-exercises themselves can just be downloaded, preferably via
 
     mkdir ~/devel
     cd ~/devel
-    git clone https://github.com/CCPPETMR/SIRF-Exercises
+    git clone https://github.com/SyneRBI/SIRF-Exercises
+    cd SIRF-Exercises
 
 
 adjusting the path to where you want to install the SIRF-Exercises of course.
 
-Finally, you need the jupyter server. Check first if your system comes with the jupyter server
-by typing
+You will need to install the additional Python dependencies needed for the
+exercises also
 
-    jupyter --help
+    $SIRF_PYTHON_EXECUTABLE -m pip install --user -r requirements.txt
 
-
-If you need to install it, we currently recommend using `pip`. The following command
-should work for you
-
-    $SIRF_PYTHON_EXECUTABLE -m pip install jupyter
-
-Note that we set an environment variable when you installed SIRF to make
+where we used the environment variable created when you follow the `SIRF-SuperBuild` instructions to make
 sure that you use a Python version which is compatible with how you compiled SIRF.
+This will do a "user" install - if you'd prefer a system install omit the
+`--user` flag. If you don't know what this means, use the above command.
 
 Of course, if you've used (Ana)conda to install Python etc (and are sure
 SIRF was compiled with that Python version), you can use conda to install
-jupyter as well.
+dependencies as well. Or you could still choose to use conda's `pip` after
 
-After all this, you will need to do the steps indicated in the instructions above for the VM.
+    conda install pip
+
+
+After all this, you will need to do the steps indicated in the instructions above for the VM, after the `update_VM.sh` step.
 
 ### Updating the exercises after installation
 
@@ -78,7 +78,6 @@ to the exercises, you might want to keep those. Merging your changes and any
 "upstream" ones is unfortunately a bit complicated
 due to the file format used by jupyter notebooks. The following should work
 
-    pip install --user nbstripout
     cd SIRF-Exercises
     nbstripout --install
     git config --global filter.nbstripout.extrakeys '
