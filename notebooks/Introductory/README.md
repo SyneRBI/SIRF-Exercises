@@ -10,7 +10,9 @@ download the corresponding [slides](http://www.ccpsynerbi.ac.uk/sites/www.ccppet
 
 ## Basic concepts of SIRF via Python
 The [introduction](introduction.ipynb) notebook serves as a starting point for all SIRF jupyter notebooks. 
-The notebook only uses the PET component of SIRF. However, for basic usage PET and MR aspects are very similar.
+The notebook shows how MR, PET and CT images can be created and manipulated.
+
+The [acquisition_model_mr_pet_ct](acquisition_model_mr_pet_ct.ipynb) notebook shows how to create a MR, PET and CT acquisition model and go from images to raw data and back again for each modality. 
 
 ### Learning objectives
 
