@@ -38,7 +38,7 @@ The only work-around is to use “File->Close and halt”  after you’ve finish
 but not on the VM).
 
 ## Get started with the course!
-Start with [notebooks/MR/interactive/a_fully_sampled.ipynb](notebooks/MR/a_fully_sampled.ipynb).
+Start with the [notebooks/Introductory/](introductory notebooks) and the associated [README.md](notebooks/Introductory/README.md).
 
 
 
