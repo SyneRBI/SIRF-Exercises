@@ -163,4 +163,19 @@ then
     popd
 fi
 
+
+# create the common.py files in each notebook directory
+common="import os
+data_path = os.path.abspath('${DATA_PATH}')
+"
+
+for i in Introductory  MR  PET  Reg  Synergistic; do
+
+echo "creating common.py in $i"  
+cat > ${REPO_DIR}/notebooks/$i/sirf_exercises.py << EOL 
+$common 
+EOL
+
+done
+
 echo "All done!"
