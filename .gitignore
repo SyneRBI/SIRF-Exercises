@@ -54,6 +54,7 @@ errr.txt
 *_out.txt
 
 # no data in this repo
+data/
 *.h5
 *.s
 *.l

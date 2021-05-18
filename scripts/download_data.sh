@@ -45,8 +45,6 @@ if [[ $DO_OLD ]]; then
   DO_MR='true'
 fi
 
-echo PET $DO_PET MR $DO_MR OLD $DO_OLD
-
 # a function to download a file and check its md5
 # assumes that file.md5 exists
 function download {
@@ -77,10 +75,11 @@ function download {
     fi
 }
 
-SIRF_EXERCISES_PATH=${SIRF_EXERCISES_PATH:-~/.sirf-exercises}
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+REPO_DIR="$(dirname ${SCRIPT_DIR})"
 DATA_PATH=${@:$OPTIND:1}
-DATA_PATH=${DATA_PATH:-$SIRF_EXERCISES_PATH/data}
-echo Destination is $DATA_PATH
+DATA_PATH=${DATA_PATH:-${REPO_DIR}/data}
+echo Destination is ${DATA_PATH}
 
 #
 # PET
