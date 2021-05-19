@@ -165,17 +165,17 @@ fi
 
 
 # create the common.py files in each notebook directory
-common="import os
+DATA_PATH_SCRIPT=$(cat <<EOF
+import os
 data_path = os.path.abspath('${DATA_PATH}')
-"
+EOF
+)
 
-for i in Introductory  MR  PET  Reg  Synergistic; do
-
-echo "creating common.py in $i"  
-cat > ${REPO_DIR}/notebooks/$i/sirf_exercises.py << EOL 
-$common 
-EOL
-
+for d in Introductory  MR  PET  Reg  Synergistic; do
+    echo "creating data_path.py in $d"  
+    cat <<-EOF >${REPO_DIR}/notebooks/$d/data_path.py 
+    $DATA_PATH_SCRIPT
+    EOF
 done
 
 echo "All done!"

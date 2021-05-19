@@ -61,3 +61,6 @@ data/
 *.v
 *.dat
 *.hdr
+
+# Auto-generated data path scripts
+data_path.py
