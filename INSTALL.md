@@ -22,8 +22,7 @@ Therefore, please install the VM as per the instructions, start it up, open a te
 
 - Get example data
    ```bash
-    ~/devel/SIRF-Exercises/scripts/download_PET_data.sh
-    ~/devel/SIRF-Exercises/scripts/download_MR_data.sh
+    ~/devel/SIRF-Exercises/scripts/download_data.sh -m -p
    ```
    
   This will be a ~2.5 GB download.
@@ -31,7 +30,7 @@ Therefore, please install the VM as per the instructions, start it up, open a te
   Note that if you want to run notebooks in MR/Old_notebooks (not recommended),
   you will have to get some more data
     ```bash
-    ~/devel/SIRF-Exercises/scripts/download_MR_data_old_notebooks.sh
+    ~/devel/SIRF-Exercises/scripts/download_data.sh -m -p -o
    ```
 
 You now have everything ready.

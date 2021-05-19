@@ -12,8 +12,7 @@ This is a basic list of things to do and tell people during the course.
 ```bash
   update_VM.sh
   cd ~/devel/SIRF-Exercises/scripts/
-  ./download_PET_data.sh
-  ./download_MR_data.sh
+  ./download_data.sh -m -p
   cd ~/devel/SIRF-Exercises/
   jupyter notebook
 ```
