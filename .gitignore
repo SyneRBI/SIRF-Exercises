@@ -45,6 +45,7 @@ $RECYCLE.BIN/
 *~
 
 .ipynb_checkpoints
+__pycache__
 
 # STIR output files
 info.txt
