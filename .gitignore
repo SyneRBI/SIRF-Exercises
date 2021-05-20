@@ -45,6 +45,7 @@ $RECYCLE.BIN/
 *~
 
 .ipynb_checkpoints
+__pycache__
 
 # STIR output files
 info.txt
@@ -54,9 +55,13 @@ errr.txt
 *_out.txt
 
 # no data in this repo
+data/
 *.h5
 *.s
 *.l
 *.v
 *.dat
 *.hdr
+
+# Auto-generated data path scripts
+exercises_data_path.py
