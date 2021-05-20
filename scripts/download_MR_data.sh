@@ -1,5 +1,5 @@
 #! /bin/bash
-# A sript to download data for the MR part of the SIRF-Exercises course
+# A script to download data for the MR part of the SIRF-Exercises course
 #
 # Usage:
 #   /path/download_MR_data.sh optional_destination_directory

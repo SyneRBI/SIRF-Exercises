@@ -1,5 +1,5 @@
 #! /bin/bash
-# A sript to download data for the MR/Old_notebooks part of the SIRF-Exercises course
+# A script to download data for the MR/Old_notebooks part of the SIRF-Exercises course
 # These notebooks are no longer recommended.
 #
 # Usage:
