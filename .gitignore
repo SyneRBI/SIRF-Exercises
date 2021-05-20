@@ -64,4 +64,4 @@ data/
 *.hdr
 
 # Auto-generated data path scripts
-data_path.py
+exercises_data_path.py

@@ -3,11 +3,9 @@
 #
 # Usage:
 #   /path/download_PET_data.sh optional_destination_directory
-# if no argument is used, "${SIRF_EXERCISES_PATH}/data/PET" will be used, or finally
-# the destination directory will be set to ~/.sirf-exercises/data/PET.
+# if no argument is used, the destination directory will be set to <repository-root>/data
 #
-# Author: Kris Thielemans, Ashley Gillman
-# Copyright (C) 2018-2021 University College London
+# Author: Ashley Gillman
 # Copyright (C) 2021 CSIRO
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"

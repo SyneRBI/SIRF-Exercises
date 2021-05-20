@@ -1,5 +1,5 @@
 #! /bin/bash
-# A sript to download all data for the SIRF-Exercises course
+# A script to download all data for the SIRF-Exercises course
 #
 # Author: Kris Thielemans, Richard Brown, Ashley Gillman
 # Copyright (C) 2018-2021 University College London
@@ -11,10 +11,9 @@ trap "echo some error occured. Retry" ERR
 
 print_usage() {
     echo "Usage: $0 [-p] [-m] [-o] [DEST_DIR]"
-    echo "A sript to download all data for the SIRF-Exercises course"
-    echo "  DEST_DIR  Optional desination directory."
-    echo "            If not supplied, .\"\${SIRF_EXERCISES_PATH}/data\" will be used"
-    echo "            with a default value of SIRF_EXERCISES_PATH=\"~/.sirf-exercises\""
+    echo "A script to download all data for the SIRF-Exercises course"
+    echo "  DEST_DIR  Optional destination directory."
+    echo "            If not supplied, \"../data\" will be used, i.e., a subdirectory to the repository."
     echo "  -p        Download only PET data"
     echo "  -m        Download only MR data"
     echo "  -o        Download only old notebook data"
@@ -22,6 +21,7 @@ print_usage() {
     echo "if none of -p|-m|-o are specified, all are downloaded."
 }
 
+# parse flags
 while getopts 'pmoh' flag; do
   case "${flag}" in
     p) DO_PET='true' ;;
@@ -33,6 +33,12 @@ while getopts 'pmoh' flag; do
        exit 1 ;;
   esac
 done
+
+DEST_DIR=${@:$OPTIND:1}                  # parse optional DEST_DIR
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+REPO_DIR="$(dirname ${SCRIPT_DIR})"
+DATA_PATH=${DEST_DIR:-${REPO_DIR}/data}  # if no DEST_DIR, use REPO_DIR/data
+echo Destination is ${DATA_PATH}
 
 if ! [[ $DO_PET || $DO_MR || $DO_OLD ]]; then
   DO_PET='true'
@@ -75,11 +81,6 @@ function download {
     fi
 }
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-REPO_DIR="$(dirname ${SCRIPT_DIR})"
-DATA_PATH=${@:$OPTIND:1}
-DATA_PATH=${DATA_PATH:-${REPO_DIR}/data}
-echo Destination is ${DATA_PATH}
 
 #
 # PET
@@ -164,18 +165,13 @@ then
 fi
 
 
-# create the common.py files in each notebook directory
-DATA_PATH_SCRIPT=$(cat <<EOF
-import os
-data_path = os.path.abspath('${DATA_PATH}')
-EOF
-)
-
+# create the exercises_data_path.py files in each notebook directory
 for d in Introductory  MR  PET  Reg  Synergistic; do
-    echo "creating data_path.py in $d"  
-    cat <<-EOF >${REPO_DIR}/notebooks/$d/data_path.py 
-    $DATA_PATH_SCRIPT
-    EOF
+    echo "creating exercises_data_path.py in $d"  
+    cat <<EOF >${REPO_DIR}/notebooks/$d/exercises_data_path.py 
+import os
+exercises_data_path = os.path.abspath('${DATA_PATH}')
+EOF
 done
 
 echo "All done!"
