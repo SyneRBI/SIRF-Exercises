@@ -23,8 +23,7 @@ Later in the course, you can use this terminal to start `gadgetron`.
 ```bash
   update_VM.sh
   cd ~/devel/SIRF-Exercises/scripts/
-  ./download_PET_data.sh
-  ./download_MR_data.sh
+  ./download_data.sh -m -p
   cd ~/devel/SIRF-Exercises/
   jupyter notebook
 ```
@@ -39,8 +38,22 @@ Then open a web-browser on your laptop and point it to http://localhost:8888 (fi
 `Quit` means the server will quit and you will be in trouble. (On Azure, the server should restart after a few seconds,
 but not on the VM, so start it again as above).
 
+## start a Gadgetron server
+
+SIRF uses Gadgetron for MR reconstruction. You will need to start a "server" such that SIRF can communicate to it.
+You can do this from in the Jupyter interface by creating a terminal that runs on Azure/VM/docker (on the "Home" tab, click on `New` on the right, and choose `Terminal`) and typing
+```bash
+gadgetron&
+```
+This starts `gadgetron` and runs it in the "background". You can leave the terminal window open and navigate
+back to "Home".
+
 ## Get started with the course!
-Start with [notebooks/Introductory/introduction.ipynb](notebooks/Introductory/introduction.ipynb) and its [README.md](notebooks/Introductory/README.md).
+Start with the [notebooks/Introductory/](introductory notebooks) and the associated [README.md](notebooks/Introductory/README.md).
+
+*Warning*: Due to a limitation in the ISMRMRD library that we use to read MR HDF5 files, you cannot have
+2 Python sessions simultaneously accessing the same MR HDF5 file.
+The only work-around is to use “File->Close and halt”  after you’ve finished with a notebook (or just “Kernel->Shutdown”).
 
 
 
