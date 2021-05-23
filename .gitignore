@@ -62,6 +62,8 @@ data/
 *.v
 *.dat
 *.hdr
+*.gz
+*.npz
 
 # Auto-generated data path scripts
 exercises_data_path.py
