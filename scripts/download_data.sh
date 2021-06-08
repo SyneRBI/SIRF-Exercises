@@ -186,12 +186,10 @@ then
 fi
 
 
-# create the exercises_data_path.py files in each notebook directory
-for d in Introductory  MR  PET  Reg  Synergistic; do
-    echo "creating exercises_data_path.py in $d"  
-    cat <<EOF >${REPO_DIR}/notebooks/$d/exercises_data_path.py 
-import os
-exercises_data_path = os.path.abspath('${DATA_PATH}')
+# create the data_path.py files in Python library
+echo "creating data_path.py in ${REPO_DIR}/lib/sirf_exercises/data_path.py"  
+cat <<EOF >${REPO_DIR}/lib/sirf_exercises/data_path.py 
+data_path = '${DATA_PATH}'
 EOF
 done
 
