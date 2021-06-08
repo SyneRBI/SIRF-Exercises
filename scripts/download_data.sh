@@ -23,6 +23,18 @@ print_usage() {
     echo "if none of -p|-m|-o are specified, all are downloaded."
 }
 
+# get the real, absolute path
+canonicalise() {
+    if [[ $1 = /* ]]; then  # starts with "/"? Already absolute path
+        echo "$1"
+    else
+        DIR=$(dirname "$1")
+        BASE=$(basename "$1")
+        DIR=$(cd $DIR; pwd -P)  # makes absolute, collapses any "/../"
+        echo "${DIR}/${BASE}"
+    fi
+}
+
 # parse flags
 while getopts 'pmoh' flag; do
   case "${flag}" in
@@ -37,15 +49,15 @@ while getopts 'pmoh' flag; do
 done
 
 DEST_DIR=${@:$OPTIND:1}                  # parse optional DEST_DIR
-DOWNLOAD_DIR=${@:$OPTIND+1:2}              # parse optional DOWNLOAD_DIR
+DOWNLOAD_DIR=${@:$OPTIND+1:2}            # parse optional DOWNLOAD_DIR
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 REPO_DIR="$(dirname ${SCRIPT_DIR})"
-DATA_PATH=${DEST_DIR:-${REPO_DIR}/data}        # if no DEST_DIR, use REPO_DIR/data
-DOWNLOAD_DIR=${DOWNLOAD_DIR:-${DATA_PATH}}     # if no DOWNLOAD_DIR, use DEST_DIR
-DATA_PATH="$(readlink -f ${DATA_PATH})"        # canonicalise
-DOWNLOAD_DIR="$(readlink -f ${DOWNLOAD_DIR})"  # canonicalise
-echo Destination is ${DATA_PATH}
-echo $DOWNLOAD_DIR
+DATA_PATH=${DEST_DIR:-${REPO_DIR}/data}         # if no DEST_DIR, use REPO_DIR/data
+DOWNLOAD_DIR=${DOWNLOAD_DIR:-${DATA_PATH}}      # if no DOWNLOAD_DIR, use DEST_DIR
+DATA_PATH="$(canonicalise ${DATA_PATH})"        # canonicalise
+DOWNLOAD_DIR="$(canonicalise ${DOWNLOAD_DIR})"  # canonicalise
+echo Destination is \"${DATA_PATH}\"
+echo Download location is \"${DOWNLOAD_DIR}\"
 
 if ! [[ $DO_PET || $DO_MR || $DO_OLD ]]; then
   DO_PET='true'
