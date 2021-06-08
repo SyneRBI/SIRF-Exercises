@@ -5,16 +5,18 @@ This material is intended for practical demonstrations using
 
 This repository contains exercises to get you going
 with SIRF. Please check the [INSTALL.md](INSTALL.md) first.
+There is also some basic information on [CIL](https://www.ccpi.ac.uk/CIL) functionality to show similarities with SIRF.
 
 Authors:
 - Kris Thielemans (this document and PET exercises)
 - Christoph Kolbitsch (MR exercises)
+- Johannes Mayer (MR exercises)
 - David Atkinson (MR exercises)
 - Evgueni Ovtchinnikov (PET and MR exercises)
 - Edoardo Pasca (overall check and clean-up)
-- Johannes Mayer (MR exercises)
 - Richard Brown (PET and registration exercises)
 - Daniel Deidda and Palak Wadhwa (HKEM exercise)
+- Ashley Gillman (overall check and clean-up)
 
 This software is distributed under an open source license, see [LICENSE.txt](LICENSE.txt)
 for details.
@@ -29,7 +31,7 @@ Introduction
 ============
 
 The SIRF documentation can be found [here](https://github.com/CCPPETMR/SIRF/wiki/Software-Documentation).
-***The current version of these exercises needs SIRF v2.1.0-rc.1***
+***The current version of these exercises needs SIRF v3.0.0***
 
 We are using Python for the exercises. Python is an open-source interactive language, 
 a bit like MATLAB. We provide Python scripts for the exercises, so you should be fine.
