@@ -14,6 +14,8 @@ print_usage() {
     echo "A script to download all data for the SIRF-Exercises course"
     echo "  DEST_DIR  Optional destination directory."
     echo "            If not supplied, \"../data\" will be used, i.e., a subdirectory to the repository."
+    echo "  DOWNLOAD_DIR  Optional download directory. Useful if you have the files already downloaded."
+    echo "            If not supplied, DEST_DIR will be used."
     echo "  -p        Download only PET data"
     echo "  -m        Download only MR data"
     echo "  -o        Download only old notebook data"
@@ -35,10 +37,15 @@ while getopts 'pmoh' flag; do
 done
 
 DEST_DIR=${@:$OPTIND:1}                  # parse optional DEST_DIR
+DOWNLOAD_DIR=${@:$OPTIND+1:2}              # parse optional DOWNLOAD_DIR
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 REPO_DIR="$(dirname ${SCRIPT_DIR})"
-DATA_PATH=${DEST_DIR:-${REPO_DIR}/data}  # if no DEST_DIR, use REPO_DIR/data
+DATA_PATH=${DEST_DIR:-${REPO_DIR}/data}        # if no DEST_DIR, use REPO_DIR/data
+DOWNLOAD_DIR=${DOWNLOAD_DIR:-${DATA_PATH}}     # if no DOWNLOAD_DIR, use DEST_DIR
+DATA_PATH="$(readlink -f ${DATA_PATH})"        # canonicalise
+DOWNLOAD_DIR="$(readlink -f ${DOWNLOAD_DIR})"  # canonicalise
 echo Destination is ${DATA_PATH}
+echo $DOWNLOAD_DIR
 
 if ! [[ $DO_PET || $DO_MR || $DO_OLD ]]; then
   DO_PET='true'
@@ -90,8 +97,8 @@ if [[ -n ${DO_PET} ]]
 then
     echo Downloading PET data
 
-    mkdir -p ${DATA_PATH}/PET/mMR
-    pushd ${DATA_PATH}/PET/mMR
+    mkdir -p ${DOWNLOAD_DIR}
+    pushd ${DOWNLOAD_DIR}
         echo Downloading UCL NEMA_IQ data
 
         URL=https://zenodo.org/record/1304454/files/
@@ -104,9 +111,12 @@ then
         echo "ef848b8f6d5fd57b072a953b374ba4da ${filename}" > ${filename}.md5
 
         download $filename $URL
+    popd
 
-        echo "Unpacking $filename"
-        unzip -o ${filename}
+    mkdir -p ${DATA_PATH}/PET/mMR
+    pushd ${DATA_PATH}/PET/mMR
+        echo "Unpacking ${filename}"
+        unzip -o ${DOWNLOAD_DIR}/${filename}
     popd
 fi
 
@@ -118,8 +128,8 @@ if [[ -n ${DO_MR} ]]
 then
     echo Downloading MR data
 
-    mkdir -p ${DATA_PATH}/MR
-    pushd ${DATA_PATH}/MR
+    mkdir -p ${DOWNLOAD_DIR}
+    pushd ${DOWNLOAD_DIR}
         echo Downloading MR data
 
         # Get Zenodo dataset
@@ -128,9 +138,12 @@ then
         # (re)download md5 checksum
         echo "a7e0b72a964b1e84d37f9609acd77ef2 ${filenameGRAPPA}" > ${filenameGRAPPA}.md5
         download ${filenameGRAPPA} ${URL}
+    popd
 
-        echo "Unpacking $filenameGRAPPA"
-        unzip -o ${filenameGRAPPA}
+    mkdir -p ${DATA_PATH}/MR
+    pushd ${DATA_PATH}/MR
+        echo "Unpacking ${filenameGRAPPA}"
+        unzip -o ${DOWNLOAD_DIR}/${filenameGRAPPA}
     popd
 fi
 
@@ -142,8 +155,8 @@ if [[ -n ${DO_OLD} ]]
 then
     echo Downloading Old Notebooks MR data
 
-    mkdir -p ${DATA_PATH}/MR
-    pushd ${DATA_PATH}/MR
+    mkdir -p ${DOWNLOAD_DIR}
+    pushd ${DOWNLOAD_DIR}
         # meas_MID00108_FID57249_test_2D_2x.dat -> ${DATA_PATH}/MR
 
         URL=https://www.dropbox.com/s/cazoi5l7oljtwsy/
@@ -161,6 +174,14 @@ then
         rm -f ${filename2}.md5 # (re)create md5 checksum
         echo "44d9766ddbbf2a082d07ddba74a769c9 ${filename2}" > ${filename2}.md5
         download ${filename2} ${URL} ${suffix}
+    popd
+
+    mkdir -p ${DATA_PATH}/MR
+    pushd ${DATA_PATH}/MR
+        echo "Unpacking ${filename1}"
+        rsync -ua ${DOWNLOAD_DIR}/${filename1} .
+        echo "Unpacking ${filename2}"
+        rsync -ua ${DOWNLOAD_DIR}/${filename2} .
     popd
 fi
 
