@@ -66,4 +66,7 @@ data/
 *.npz
 
 # Auto-generated data path scripts
-exercises_data_path.py
+lib/sirf_exercises/data_path.py
+
+# Nix temp
+_build
