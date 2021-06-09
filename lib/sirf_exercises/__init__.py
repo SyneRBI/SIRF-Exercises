@@ -1,6 +1,6 @@
-'''Library of common utilities shared between notebooks in SIRF-Exercises.
-'''
+'''Library of common utilities shared between notebooks in SIRF-Exercises.'''
 
+# Author: Ashley Gillman
 # Copyright 2021 Commonwealth Scientific and Industrial Research Organisation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,8 @@
 import os
 
 def exercises_data_path(*data_type):
-    '''Returns the path to data used by SIRF-exercises.
+    '''
+    Returns the path to data used by SIRF-exercises.
 
     data_type: either 'PET', 'MR' or 'Synergistic', or use multiple arguments for
     subdirectories like exercises_data_path('PET', 'mMR', 'NEMA_IQ').

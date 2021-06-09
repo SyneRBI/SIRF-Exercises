@@ -10,17 +10,18 @@ trap "echo some error occured. Retry" ERR
 
 
 print_usage() {
-    echo "Usage: $0 [-p] [-m] [-o] [DEST_DIR]"
+    echo "Usage: $0 [-p] [-m] [-o] [DEST_DIR] [DOWNLOAD_DIR] | -h"
     echo "A script to download all data for the SIRF-Exercises course"
-    echo "  DEST_DIR  Optional destination directory."
-    echo "            If not supplied, \"../data\" will be used, i.e., a subdirectory to the repository."
-    echo "  DOWNLOAD_DIR  Optional download directory. Useful if you have the files already downloaded."
-    echo "            If not supplied, DEST_DIR will be used."
     echo "  -p        Download only PET data"
     echo "  -m        Download only MR data"
     echo "  -o        Download only old notebook data"
     echo "  -h        Print this help"
-    echo "if none of -p|-m|-o are specified, all are downloaded."
+    echo "  DEST_DIR  Optional destination directory."
+    echo "            If not supplied, \"../data\" will be used, i.e., a subdirectory to the repository."
+    echo "  DOWNLOAD_DIR  Optional download directory. Useful if you have the files already downloaded."
+    echo "                If not supplied, DEST_DIR will be used."
+    echo
+    echo "Flags must be before positional arguments."
 }
 
 # get the real, absolute path
@@ -48,8 +49,14 @@ while getopts 'pmoh' flag; do
     esac
 done
 
-DEST_DIR=${@:"$OPTIND":1}                  # parse optional DEST_DIR
-DOWNLOAD_DIR=${@:"$OPTIND"+1:2}            # parse optional DOWNLOAD_DIR
+DEST_DIR=${@:$OPTIND:1}                  # parse optional DEST_DIR
+DOWNLOAD_DIR=${@:$OPTIND+1:2}            # parse optional DOWNLOAD_DIR
+# check if user put flags after paths
+if [[ "$DEST_DIR" = -* || "$DOWNLOAD_DIR" = -* ]]; then
+    print_usage
+    exit 1
+fi
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 REPO_DIR="$(dirname "${SCRIPT_DIR}")"
 DATA_PATH="${DEST_DIR:-"${REPO_DIR}"/data}"   # if no DEST_DIR, use REPO_DIR/data
@@ -58,12 +65,6 @@ DATA_PATH="$(canonicalise "$DATA_PATH")"        # canonicalise
 DOWNLOAD_DIR="$(canonicalise "$DOWNLOAD_DIR")"  # canonicalise
 echo Destination is \""$DATA_PATH"\"
 echo Download location is \""$DOWNLOAD_DIR"\"
-
-if ! [[ "$DO_PET" || "$DO_MR" || "$"DO_OLD ]]; then
-    DO_PET='true'
-    DO_MR='true'
-    DO_OLD='true'
-fi
 
 # Old Notebooks also need MR data
 if [[ "$DO_OLD" ]]; then
