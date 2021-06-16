@@ -15,6 +15,7 @@
 
 import os
 
+
 def exercises_data_path(*data_type):
     '''
     Returns the path to data used by SIRF-exercises.
@@ -35,3 +36,21 @@ def exercises_data_path(*data_type):
             "scripts directory")
 
     return os.path.join(data_path, *data_type)
+
+
+def cd_to_working_dir(*exercise_name):
+    '''
+    Creates and changes the current directory to the a working directory for the
+    current exercise, based on exercise_name.
+
+    Implementation detail: this is defined as
+    {exercises_data_path()}/working_folder/{exercise_name}. If multiple
+    exercise_name's are given, they will be treated as subdirectories.
+
+
+    exercise_name: name of the current exercise, the path will include this.
+    Multiple arguments can be given for subdirectories.
+    '''
+    working_dir = exercises_data_path('working_folder', *exercise_name)
+    os.makedirs(working_dir, exist_ok=True)
+    os.chdir(working_dir)
