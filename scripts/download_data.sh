@@ -192,9 +192,9 @@ then
     mkdir -p "${DATA_PATH}/MR"
     pushd "${DATA_PATH}/MR"
         echo "Unpacking ${filename1}"
-        rsync -ua "${DOWNLOAD_DIR}/${filename1}" .
+        cp "${DOWNLOAD_DIR}/${filename1}" .
         echo "Unpacking ${filename2}"
-        rsync -ua "${DOWNLOAD_DIR}/${filename2}" .
+        cp "${DOWNLOAD_DIR}/${filename2}" .
     popd
 fi
 
