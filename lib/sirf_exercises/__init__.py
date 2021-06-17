@@ -40,17 +40,16 @@ def exercises_data_path(*data_type):
 
 def cd_to_working_dir(*subfolders):
     '''
-```suggestion
     Creates and changes the current directory to a working directory for the
     current exercise, based on the argument(s). If multiple
     strings are given, they will be treated as subdirectories.
 
     Implementation detail: this is defined as
-    {exercises_data_path()}/working_folder/subfolder1/subfolder2. 
+    {exercises_data_path()}/working_folder/{subfolders[0]}/{subfolders[1]}/.... 
 
     subfolders: the path will include this.
     Multiple arguments can be given for nested subdirectories.
     '''
-    working_dir = exercises_data_path('working_folder', *exercise_name)
+    working_dir = exercises_data_path('working_folder', *subfolders)
     os.makedirs(working_dir, exist_ok=True)
     os.chdir(working_dir)
