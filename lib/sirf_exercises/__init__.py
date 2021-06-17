@@ -33,23 +33,23 @@ def exercises_data_path(*data_type):
     if data_path is None or not os.path.exists(data_path):
         raise RuntimeError(
             "Exercises data weren't found. Please run download_data.sh in the "
-            "scripts directory")
+            "scripts directory (use its -h option to get help)")
 
     return os.path.join(data_path, *data_type)
 
 
-def cd_to_working_dir(*exercise_name):
+def cd_to_working_dir(*subfolders):
     '''
-    Creates and changes the current directory to the a working directory for the
-    current exercise, based on exercise_name.
+```suggestion
+    Creates and changes the current directory to a working directory for the
+    current exercise, based on the argument(s). If multiple
+    strings are given, they will be treated as subdirectories.
 
     Implementation detail: this is defined as
-    {exercises_data_path()}/working_folder/{exercise_name}. If multiple
-    exercise_name's are given, they will be treated as subdirectories.
+    {exercises_data_path()}/working_folder/subfolder1/subfolder2. 
 
-
-    exercise_name: name of the current exercise, the path will include this.
-    Multiple arguments can be given for subdirectories.
+    subfolders: the path will include this.
+    Multiple arguments can be given for nested subdirectories.
     '''
     working_dir = exercises_data_path('working_folder', *exercise_name)
     os.makedirs(working_dir, exist_ok=True)
