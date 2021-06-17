@@ -10,16 +10,16 @@ trap "echo some error occured. Retry" ERR
 
 
 print_usage() {
-    echo "Usage: $0 [-p] [-m] [-o] [DEST_DIR] [DOWNLOAD_DIR] | -h"
+    echo "Usage: $0 [-p] [-m] [-o] [-d DEST_DIR] [-D DOWNLOAD_DIR] | -h"
     echo "A script to download all data for the SIRF-Exercises course"
     echo "  -p        Download only PET data"
     echo "  -m        Download only MR data"
     echo "  -o        Download only old notebook data"
     echo "  -h        Print this help"
-    echo "  DEST_DIR  Optional destination directory."
-    echo "            If not supplied, \"../data\" will be used, i.e., a subdirectory to the repository."
-    echo "  DOWNLOAD_DIR  Optional download directory. Useful if you have the files already downloaded."
-    echo "                If not supplied, DEST_DIR will be used."
+    echo "  -d DEST_DIR  Optional destination directory."
+    echo "               If not supplied, \"../data\" will be used, i.e., a subdirectory to the repository."
+    echo "  -D DOWNLOAD_DIR  Optional download directory. Useful if you have the files already downloaded."
+    echo "                   If not supplied, DEST_DIR will be used."
     echo
     echo "Flags must be before positional arguments."
 }
@@ -37,25 +37,19 @@ canonicalise() {
 }
 
 # parse flags
-while getopts 'pmoh' flag; do
+while getopts 'pmohd:D:' flag; do
     case "${flag}" in
         p) DO_PET='true' ;;
         m) DO_MR='true' ;;
         o) DO_OLD='true' ;;
+        d) DEST_DIR="$OPTARG" ;;
+        D) DOWNLOAD_DIR="$OPTARG" ;;
         h) print_usage
             exit 1 ;;
         *) print_usage
             exit 1 ;;
     esac
 done
-
-DEST_DIR=${@:$OPTIND:1}                  # parse optional DEST_DIR
-DOWNLOAD_DIR=${@:$OPTIND+1:2}            # parse optional DOWNLOAD_DIR
-# check if user put flags after paths
-if [[ "$DEST_DIR" = -* || "$DOWNLOAD_DIR" = -* ]]; then
-    print_usage
-    exit 1
-fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 REPO_DIR="$(dirname "${SCRIPT_DIR}")"

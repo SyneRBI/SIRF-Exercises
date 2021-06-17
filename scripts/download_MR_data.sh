@@ -9,4 +9,4 @@
 # Copyright (C) 2021 CSIRO
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-"$SCRIPT_DIR/download_data.sh" -o "$1"
+"$SCRIPT_DIR/download_data.sh" -o -d "$1"
