@@ -17,11 +17,14 @@ print_usage() {
     echo "  -o        Download only old notebook data"
     echo "  -h        Print this help"
     echo "  -d DEST_DIR  Optional destination directory."
-    echo "               If not supplied, \"../data\" will be used, i.e., a subdirectory to the repository."
+    echo "               If not supplied, \"SIRF_Exercises/data\" will be used, i.e., a subdirectory to the repository."
     echo "  -D DOWNLOAD_DIR  Optional download directory. Useful if you have the files already downloaded."
     echo "                   If not supplied, DEST_DIR will be used."
     echo
     echo "Flags must be before positional arguments."
+    echo ""
+    echo "Please note that if you run the script multiple times with different values"
+    echo "for the -d or -D options, you might end up with multiple copies of the files."
 }
 
 # get the real, absolute path
@@ -45,7 +48,7 @@ while getopts 'pmohd:D:' flag; do
         d) DEST_DIR="$OPTARG" ;;
         D) DOWNLOAD_DIR="$OPTARG" ;;
         h) print_usage
-            exit 1 ;;
+            exit 0 ;;
         *) print_usage
             exit 1 ;;
     esac
