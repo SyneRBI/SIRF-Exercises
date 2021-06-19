@@ -30,8 +30,8 @@ is in our [documentation for participants](https://github.com/CCPPETMR/SIRF-Exer
 Introduction
 ============
 
-The SIRF documentation can be found [here](https://github.com/CCPPETMR/SIRF/wiki/Software-Documentation).
-***The current version of these exercises needs SIRF v3.0.0***
+The SIRF documentation can be found [here](https://github.com/SyneRBI/SIRF/wiki/Software-Documentation).
+***The current version of these exercises needs SIRF v3.1.0***
 
 We are using Python for the exercises. Python is an open-source interactive language, 
 a bit like MATLAB. We provide Python scripts for the exercises, so you should be fine.
@@ -40,7 +40,7 @@ Nevertheless, it would be best to read a Python tutorial first, see the [Appendi
 We use
 [Jupyter notebooks](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html).
 If you have never used Jupyter notebooks,
-you could [read the official documentation](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
+you should [read the official documentation](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
 A useful introduction to the notebook interface [can be found here](http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html).
 
 The rest of this document contains some information to get started.
@@ -57,6 +57,8 @@ gadgetron
 ```
 You can kill it at the end by going back to the terminal and pressing `Ctrl-C`.
 
+**Note**: if you are using the SIRF "service" docker image, `gadgetron` will have been started for you. If you try to launch another instance, you will get errors about port conflicts. This might also be the case when using cloud instances, e.g. JupyterHub or Azure (follow advice from your instructors). 
+
 Starting the jupyter server
 ---------------------------
 To start with the exercises, you need to start the jupyter server. Depending on how/where you run these exercises, this will
@@ -69,8 +71,11 @@ In the VM terminal, type
 ```
 You will get a message that ends `Or copy and paste one of these URLs:
         http://(vagrant or 127.0.0.1):8888/?token=axxxxcf837a4ab78aa13275dc893af9b91143225c226xxxx`
-        
-On your laptop/desktop, open a web-browser and use the full address from the message (including the `token=...` part). You will need to edit the `(vagrant or 127.0.0.1)` to `127.0.0.1`. Alternatively, use the address http://localhost:8888 and then when requested, copy and paste the token value, which in this example would be `axxxxcf837a4ab78aa13275dc893af9b91143225c226xxxx`. 
+
+On your (host) laptop/desktop, open a web-browser and either
+- navigate to [http://localhost:8888](http://localhost:8888). The password should be `virtual`.
+- use the full address from the message (including the `token=...` part). You will need to edit the `(vagrant or 127.0.0.1)` to `127.0.0.1`.
+- use the address http://localhost:8888 and then when requested, copy and paste the token value, which in this example would be `axxxxcf837a4ab78aa13275dc893af9b91143225c226xxxx`. 
 
 ### On the VM using a web browser in the VM
 You will need to install a web browser on the VM such as Firefox. 
@@ -83,6 +88,16 @@ Now do
    jupyter notebook --browser firefox
 ```
 which should start your web-browser automatically.
+
+### Docker
+
+The jupyter notebook should already be started for you. Follow instructions in our
+[Docker README](https://github.com/SyneRBI/SIRF-SuperBuild/tree/master/docker#readme).
+
+### Cloud
+
+This will be available to participants of one of our courses. Follow the instructions
+given to you.
 
 ### You have installed SIRF and the exercises yourself
 
@@ -108,6 +123,9 @@ shortcuts:
 -   `SHIFT + <RETURN>` executes the current cell and advances the cursor to the next
      cell.
 -   `TAB` tries to complete the word/command you have just typed.
+-   `Enter` edits "edit" mode to change a cell, `Esc` exits "edit" mode to "command" mode.
+-    In "command" mode, press `A` to create a new cell Above, or `B` below your current cell. You can also use `C`, `X`, V`. Check the Jupyter help for more info.
+-    When using Jupyter "classic" mode, pressing `H` in "command" mode gives you a useful list of shortcuts.
 
 Jupyter notebooks (normally) run iPython, [see the section below](#iPython) for some useful commands.
 
@@ -124,17 +142,30 @@ Appendices
 File extensions
 ---------------
 
-- `.dat`: Siemens raw MR data file
 - `.h5`: HDF5 file with MR data or images
 - `.hv`: Interfile header for an image (volume)
 - `.ahv`: (ignore) old-style Interfile header for an image
 - `.v`: raw data of an image (in floats)
+- '.nii' or '.nii.gz': image files in Nifti format.
 - `.hs`: Interfile header for PET acquisition data (sinograms)
 - `.s`: raw data of PET acquisition data (in floats)
 - `.py`: Python file
 - `.ipynb`: jupyter notebook
 - `.par`: STIR parameter files.
 - `.md`: text file with documentation (in Markdown format)
+
+## Siemens data files
+
+These are after extraction from DICOM. Please check [our Wiki](https://github.com/SyneRBI/SIRF/wiki) for information.
+
+- `.dat`: raw MR data file
+- '.l' and '.l.hdr': list mode data and header
+- '.n' and '.n.hdr': normalisation data and header
+- '.s' and '.s.hdr': "sinogram" (i.e. acquisition data) and header
+
+Note that sometimes the PET data files are called `'.bf` ("binary file").
+
+Always pass the header files to SIRF, not the name of the data file.
 
 A note on keyboard short-cuts inside a VirtualBox VM
 ----------------------------------------------------
