@@ -11,7 +11,7 @@ Authors:
 - Kris Thielemans (this document and PET exercises)
 - Christoph Kolbitsch (MR exercises)
 - Johannes Mayer (MR exercises)
-- David Atkinson (MR exercises)
+- David Atkinson (MR and geometry exercises)
 - Evgueni Ovtchinnikov (PET and MR exercises)
 - Edoardo Pasca (overall check and clean-up)
 - Richard Brown (PET and registration exercises)
