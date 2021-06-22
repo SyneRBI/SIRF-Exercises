@@ -20,6 +20,7 @@ print_usage() {
     echo "               If not supplied, \"SIRF_Exercises/data\" will be used, i.e., a subdirectory to the repository."
     echo "  -D DOWNLOAD_DIR  Optional download directory. Useful if you have the files already downloaded."
     echo "                   If not supplied, DEST_DIR will be used."
+    echo "  -w WORKING_DIR  Optional working directory. Defaults to DEST_DIR"
     echo
     echo "Flags must be before positional arguments."
     echo ""
@@ -40,13 +41,14 @@ canonicalise() {
 }
 
 # parse flags
-while getopts 'pmohd:D:' flag; do
+while getopts 'pmohd:D:w:' flag; do
     case "${flag}" in
         p) DO_PET='true' ;;
         m) DO_MR='true' ;;
         o) DO_OLD='true' ;;
         d) DEST_DIR="$OPTARG" ;;
         D) DOWNLOAD_DIR="$OPTARG" ;;
+        w) WORKING_DIR="$OPTARG" ;;
         h) print_usage
             exit 0 ;;
         *) print_usage
@@ -60,6 +62,7 @@ DATA_PATH="${DEST_DIR:-"${REPO_DIR}"/data}"   # if no DEST_DIR, use REPO_DIR/dat
 DOWNLOAD_DIR="${DOWNLOAD_DIR:-"$DATA_PATH"}"  # if no DOWNLOAD_DIR, use DEST_DIR
 DATA_PATH="$(canonicalise "$DATA_PATH")"        # canonicalise
 DOWNLOAD_DIR="$(canonicalise "$DOWNLOAD_DIR")"  # canonicalise
+WORKING_DIR="$(canonicalise "$WORKING_DIR")"    # canonicalise
 echo Destination is \""$DATA_PATH"\"
 echo Download location is \""$DOWNLOAD_DIR"\"
 
@@ -195,11 +198,23 @@ then
     popd
 fi
 
+if [[ -n "${WORKING_DIR}" ]]
+then
+  echo "creating working_path.py in ${REPO_DIR}/lib/sirf_exercises/working_path.py"  
+  cat <<EOF >"${REPO_DIR}/lib/sirf_exercises/working_path.py" 
+working_dir = '${WORKING_DIR}'
+EOF
+fi
+
+if [[ -n "${DO_PET}" ]] || [[ -n "${DO_MR}" ]] || [[ -n "${DO_OLD}" ]]
+then
 
 # create the data_path.py files in Python library
 echo "creating data_path.py in ${REPO_DIR}/lib/sirf_exercises/data_path.py"  
 cat <<EOF >"${REPO_DIR}/lib/sirf_exercises/data_path.py" 
 data_path = '${DATA_PATH}'
 EOF
+
+fi
 
 echo "All done!"
