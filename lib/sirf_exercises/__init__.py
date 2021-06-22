@@ -47,8 +47,9 @@ def cd_to_working_dir(*subfolders, base_dir=None):
     Implementation detail: this is defined as
     {exercises_data_path()}/working_folder/{subfolders[0]}/{subfolders[1]}/...
 
-    subfolders: the path will include this.
-    Multiple arguments can be given for nested subdirectories.
+    :param subfolders: the path will include this. Multiple arguments can be given for nested subdirectories.
+    :param base_dir: base directory for the working directory.
+    :type base_dir: string or path object, default what returned by `exercises_data_path`
     '''
     if base_dir is None:
         working_dir = exercises_data_path('working_folder', *subfolders)
