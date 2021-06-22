@@ -46,8 +46,15 @@ def cd_to_working_dir(*subfolders):
 
     Implementation detail: this is defined as
     {exercises_data_path()}/working_folder/{subfolders[0]}/{subfolders[1]}/...
+
+    subfolders: the path will include this.
+    Multiple arguments can be given for nested subdirectories.
     '''
-    working_dir = exercises_data_path('working_folder', *subfolders)
+    try:
+        from .working_path import working_dir
+        working_dir = os.path.join(working_dir, *subfolders)
+    except ImportError:
+        working_dir = exercises_data_path('working_folder', *subfolders)
     os.makedirs(working_dir, exist_ok=True)
     os.chdir(working_dir)
 
