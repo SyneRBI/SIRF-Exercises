@@ -38,7 +38,7 @@ def exercises_data_path(*data_type):
     return os.path.join(data_path, *data_type)
 
 
-def cd_to_working_dir(*subfolders, base_dir=None):
+def cd_to_working_dir(*subfolders):
     '''
     Creates and changes the current directory to a working directory for the
     current exercise, based on the argument(s). If multiple
@@ -46,14 +46,8 @@ def cd_to_working_dir(*subfolders, base_dir=None):
 
     Implementation detail: this is defined as
     {exercises_data_path()}/working_folder/{subfolders[0]}/{subfolders[1]}/...
-
-    :param subfolders: the path will include this. Multiple arguments can be given for nested subdirectories.
-    :param base_dir: base directory for the working directory.
-    :type base_dir: string or path object, default what returned by `exercises_data_path`
     '''
-    if base_dir is None:
-        working_dir = exercises_data_path('working_folder', *subfolders)
-    else:
-        working_dir = os.path.join(os.path.abspath(base_dir), *subfolders)
+    working_dir = exercises_data_path('working_folder', *subfolders)
     os.makedirs(working_dir, exist_ok=True)
     os.chdir(working_dir)
+
