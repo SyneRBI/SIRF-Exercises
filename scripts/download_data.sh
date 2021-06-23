@@ -62,7 +62,6 @@ DATA_PATH="${DEST_DIR:-"${REPO_DIR}"/data}"   # if no DEST_DIR, use REPO_DIR/dat
 DOWNLOAD_DIR="${DOWNLOAD_DIR:-"$DATA_PATH"}"  # if no DOWNLOAD_DIR, use DEST_DIR
 DATA_PATH="$(canonicalise "$DATA_PATH")"        # canonicalise
 DOWNLOAD_DIR="$(canonicalise "$DOWNLOAD_DIR")"  # canonicalise
-WORKING_DIR="$(canonicalise "$WORKING_DIR")"    # canonicalise
 echo Destination is \""$DATA_PATH"\"
 echo Download location is \""$DOWNLOAD_DIR"\"
 
@@ -200,6 +199,7 @@ fi
 
 if [[ -n "${WORKING_DIR}" ]]
 then
+  WORKING_DIR="$(canonicalise "$WORKING_DIR")"    # canonicalise
   echo "creating working_path.py in ${REPO_DIR}/lib/sirf_exercises/working_path.py"  
   cat <<EOF >"${REPO_DIR}/lib/sirf_exercises/working_path.py" 
 working_dir = '${WORKING_DIR}'
