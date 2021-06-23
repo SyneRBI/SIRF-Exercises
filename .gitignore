@@ -70,3 +70,6 @@ lib/sirf_exercises/data_path.py
 
 # Nix temp
 _build
+
+# working directory
+working_dir
