@@ -1,16 +1,57 @@
 # Instructions for participants
 
-This is a basic "getting started" for course participants. We will run these
-exercises either via the Azure cloud or in a Virtual Machine (VM). The start-up phase is different for Azure and the VM, but the rest of the usage should be the same.
+This instruction contain documentation and links to get started with the exercises of SIRF.
 
-Please check our [README](README.md).
+- [Start Here](#start-here)
+- [Start SIRF](#start-sirf)
+    - [Using an Azure Client](#using-and-azure-client-(if-available))
+    - [Using the VM](#using-the-vm)
+    - [Using Docker](#using-docker)
+    - [Using your own installed SIRF and SIRF-exercises](#using-your-own-installed-sirf-and-sirf-exercises )
+- [Start a Gadgetron server](#start-a-gadgetron-server)
+- [Getting the Data](#getting-the-data)
+- [Get started with the course!](#get-started-with-the-course!)
+- [Appendix of useful info](#appendix)
 
 
-## Start
+The SIRF documentation can be found [here](https://github.com/SyneRBI/SIRF/wiki/Software-Documentation).
+***The current version of these exercises needs SIRF v3.1.0***
 
-### Using an Azure client (if available). 
 
-The web-address should be something like https://sirf1....cloudapp.azure.com:9999/. See local instructions.
+## Start Here
+
+There are several ways to get SIRF and its exercises running for the training course. 
+
+ 1. Accessing a remote server prepared for the trainign course (could be Azure, or others). This is specific for organized training courses. Please check with your instructors. 
+ 2. Installing and running the SIRF Virtual Machine (VM).
+ 3. Installing and running the SIRF Docker image.
+ 4. Installing and builing SIRF on your machine from source.
+
+
+We recommend that if you are installing this for a training course, you use any of the first three options, as installign SIRF from source is harder than the rest.
+The VM works well in any operating system, Docker is easiest in Linux.
+
+Instructions for all (except the training course specific server, as this will be given in the training course) can be found at https://github.com/SyneRBI/SIRF/wiki/How-to-obtain-SIRF.
+Intructions to self-build the exercises (once you have SIRF built from source) can be additionally found in this repository at [the installation instructions page.](INSTALL.md)
+
+## Start SIRF
+
+Once you have SIRF on your system, or access to a server with SIRF, its time to get it running. 
+
+We are using Python for the exercises. Python is an open-source interactive language, 
+a bit like MATLAB. We provide Python scripts for the exercises, so you should be fine.
+Nevertheless, it would be best to read a Python tutorial first, see the [Appendices](#appendices).
+
+We use
+[Jupyter notebooks](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html).
+If you have never used Jupyter notebooks,
+you should [read the official documentation](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
+A useful introduction to the notebook interface [can be found here](http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html).
+
+This section contains instructions to start SIRF with all the different ways it is provided. In following steps, we will download data (not always required) and start a Gadgetron server.
+### Using an Azure client (if available)
+
+The web-address should be something like https://sirf1....cloudapp.azure.com:9999/. See local instructions of your training sessoin.
 *Do not forget the `https`*. You will need to accept the secure exception. The Jupyter notebook password is `virtual%1`.
 
 If the instructors tell you, you might have to create a terminal via the jupyter notebook and type `update_VM.sh`.
@@ -20,6 +61,7 @@ Later in the course, you can use this terminal to start `gadgetron`.
 
 1. start the VM from VirtualBox (user `sirfuser`, password `virtual`)
 2. Open terminal (either via `Activities` or pressing `ctrl-alt-T`) and type
+
 ```bash
   update_VM.sh
   cd ~/devel/SIRF-Exercises/scripts/
@@ -27,33 +69,223 @@ Later in the course, you can use this terminal to start `gadgetron`.
   cd ~/devel/SIRF-Exercises/
   jupyter notebook
 ```
-Then open a web-browser on your laptop and point it to http://localhost:8888 (fill in the password or the token).
+
+Then open a web-browser on your computer and point it to http://localhost:8888 (fill in the password or the token).
+
+### Using Docker
+
+The instructions to start Docker and SIRF are documented in the [Docker instructions at SIRF](https://github.com/SyneRBI/SIRF-SuperBuild/blob/master/docker/README.md), please follow those to start it. 
+Docker is easiest in Linux, so if you are not familiar with Docker and are running on Windows, we suggest using the VM instead. 
+
+### Using your own installed SIRF and SIRF-exercises 
+
+You have a jupyter server (as you followed the [installation instructions](INSTALL.md) so just use
+```bash
+   cd /wherever/you/installed/it/SIRF-Exercises
+   jupyter notebook
+```
 
 
-## jupyter notebook manipulations
+## Start a Gadgetron server
 
-[README.md](README.md) contains links on how to use the Jupyter notebook.
-
-***Warning:*** Clicking `Logout` will mean all sessions are closed and you will have to start again. Clicking 
-`Quit` means the server will quit and you will be in trouble. (On Azure, the server should restart after a few seconds,
-but not on the VM, so start it again as above).
-
-## start a Gadgetron server
-
-SIRF uses Gadgetron for MR reconstruction. You will need to start a "server" such that SIRF can communicate to it.
-You can do this from in the Jupyter interface by creating a terminal that runs on Azure/VM/docker (on the "Home" tab, click on `New` on the right, and choose `Terminal`) and typing
+SIRF uses Gadgetron for MR reconstruction. You will need to start a "server" such that SIRF can communicate to it. Docker already starts this automatically, but if you are using anything else you need to start Gadgetron yourself.
+You can do this from in the Jupyter interface by creating a terminal that runs on Azure/VM (on the "Home" tab, click on `New` on the right, and choose `Terminal`) and typing
 ```bash
 gadgetron&
 ```
 This starts `gadgetron` and runs it in the "background". You can leave the terminal window open and navigate
 back to "Home".
 
+You can kill it at the end by going back to the terminal and pressing `Ctrl-C`.
+
+
+## Getting the Data
+
+Some exercises use data that you will need. In the cloud and in Azure, we provide the data you need for the tests, but otherwise, you will need to download it.
+There are download scripts available for that, available in the SIRF-Exercises 
+
+- Get example data
+   ```bash
+    ~/devel/SIRF-Exercises/scripts/download_data.sh -m -p
+   ```
+   
+  This will be a ~2.5 GB download.
+
+  Note that if you want to run notebooks in MR/Old_notebooks (not recommended),
+  you will have to get some more data
+    ```bash
+    ~/devel/SIRF-Exercises/scripts/download_data.sh -m -p -o
+   ```
+
 ## Get started with the course!
 Start with the [notebooks/Introductory/](introductory notebooks) and the associated [README.md](notebooks/Introductory/README.md).
 
-*Warning*: Due to a limitation in the ISMRMRD library that we use to read MR HDF5 files, you cannot have
-2 Python sessions simultaneously accessing the same MR HDF5 file.
-The only work-around is to use “File->Close and halt”  after you’ve finished with a notebook (or just “Kernel->Shutdown”).
+---------------------------
+
+
+# Appendix
+
+- [Python Basics](#python)
+- [iPython](#ipython)
+- [Jupyter notebook manipulations](#jupyter-notebook-manipulations)
+- [File extensions](#file-extensions)
+- [A note on keyboard short-cuts inside a VirtualBox VM](#a-note-on-keyboard-short-cuts-inside-a-virtualbox-vm)
+- [The Linux terminal](#linux-terminal)
+
+
+## Python Basics
+
+Here is some suggested material on Python (ordered from easy to quite time-consuming).
+
+-   The official Python tutorial. Just read Section 1, 3, a bit of 4 and a tiny bit of 6.
+    <https://docs.python.org/2/tutorial/>
+
+-   Examples for matplotlib, the python module that allows you to make plots almost like in MATLAB
+    <https://github.com/patvarilly/dihub-python-for-data-scientists-2015/blob/master/notebooks/02_Matplotlib.ipynb>
+
+-   You could read bits and pieces of Python the Hard Way
+    <http://learnpythonthehardway.org/book/index.html>
+
+-   Google has an online class on Python for those who know some programming.
+    This goes quite in depth and covers 2 days.
+    <https://developers.google.com/edu/python/?csw=1>
+
+One thing which might surprise you that in Python *indentation is important*. You would write for instance
+```python
+for z in range(0,image.shape[0]):
+   plt.figure()
+   plt.imshow(image[z,:,:])
+# now do something else
+```
+
+We use [matplotlib](https://matplotlib.org/), a python module that allows you to make plots almost like in MATLAB.
+Check [here](https://github.com/patvarilly/dsghent-python-for-data-scientists-2016/blob/master/notebooks/02_MatplotlibAndSeaborn.ipynb) for some examples.
+
+## iPython
+
+The jupyter notebooks will normally be running iPython, although this depends a bit on your configuration.
+iPython is Python with a few extensions to make the experience a bit friendlier.
+
+Here are some useful iPython "magic" commands that you can use in the iPython
+console on the right (but not in the scripts). Most of these are identical
+to what you would use in the terminal. (*Note*: these commands do not work in a Python console.)
+
+- change how figures appear
+    - separate figures
+    ```
+    %matplotlib
+    ```
+
+    - inline with other output
+    ```     
+    %matplotlib inline
+    ```
+
+    - inline in the notebook but with extra options for the figures (required for animations)
+    ```     
+     %matplotlib notebook
+    ```
+
+-   change to a new directory
+```python
+    cd some_dir/another_subdir
+```
+-   change back 2 levels up
+```python
+    cd ../..
+```
+-   print current working directory
+```python
+    pwd
+```
+-   list files in current directory
+```python
+    ls *.hs
+```
+-   Running system commands from the iPython prompt can be done via an exclamation mark
+```python
+    !FBP2D FBP.par
+```
+-   Get rid of everything in memory
+```python
+    %reset
+```
+
+## Jupyter notebook manipulations
+
+The initial web-page that you will see looks like a file browser
+(the *Jupyter Notebook dashboard*).
+Click on `notebooks`, and drill down until you find a file with the extension `.ipynb`
+that looks of interest, and click on that. This should open a new tab in your
+web browser with the notebook open, all ready to run.
+
+You will normally work by executing each *cell*
+bit by bit, and then editing it to do some more work. Useful 
+shortcuts:
+
+-   `LEFT-CTRL + <RETURN>` executes the current cell.
+-   `SHIFT + <RETURN>` executes the current cell and advances the cursor to the next cell.
+-   `TAB` tries to complete the word/command you have just typed.
+-   `Enter` edits "edit" mode to change a cell, `Esc` exits "edit" mode to "command" mode.
+-    In "command" mode, press `A` to create a new cell Above, or `B` below your current cell. You can also use `C`, `X`, `V`. Check the Jupyter help for more info.
+-    When using Jupyter "classic" mode, pressing `H` in "command" mode gives you a useful list of shortcuts.
+
+Jupyter notebooks (normally) run iPython, [see the section below](#iPython) for some useful commands.
+
+Check the [jupyter doc on closing a notebook](https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/execute.html#close-a-notebook-kernel-shut-down).
+(Note: it is *not* just closing the browser tab).
+
+***Warning:*** Due to a limitation in SIRF (and ISMRMRD) you cannot have 2 Python sessions simultaneously accessing
+the same MR HDF5 file.
+You have to use “File->Close and halt”  after you’ve finished with a notebook (or just “Kernel->Shutdown”).
+
+***Warning:*** Clicking `Logout` will mean all sessions are closed and you will have to start again. Clicking 
+`Quit` means the server will quit and you will be in trouble. (On Azure, the server should restart after a few seconds,
+but not on the VM, so start it again as above).
+
+
+
+## File extensions
+
+- `.h5`: HDF5 file with MR data or images
+- `.hv`: Interfile header for an image (volume)
+- `.ahv`: (ignore) old-style Interfile header for an image
+- `.v`: raw data of an image (in floats)
+- `.nii` or `.nii.gz`: image files in Nifti format.
+- `.hs`: Interfile header for PET acquisition data (sinograms)
+- `.s`: raw data of PET acquisition data (in floats)
+- `.py`: Python file
+- `.ipynb`: jupyter notebook
+- `.par`: STIR parameter files.
+- `.md`: text file with documentation (in Markdown format)
+
+### Siemens data files
+
+These are after extraction from DICOM. Please check [our Wiki](https://github.com/SyneRBI/SIRF/wiki) for information.
+
+- `.dat`: raw MR data file
+- `.l` and `.l.hdr`: list mode data and header
+- `.n` and `.n.hdr`: normalisation data and header
+- `.s` and `.s.hdr`: "sinogram" (i.e. acquisition data) and header
+
+Note that sometimes the PET data files are called `.bf` ("binary file").
+
+Always pass the header files to SIRF, not the name of the data file.
+
+## A note on keyboard short-cuts inside a VirtualBox VM
+
+On Windows and Linux, VirtualBox sets the "host-key" by default to `Right-CTRL` on Windows/Linux, so
+unless you change this, you have to use `Left-CTRL` to "send" the `CTRL`-keystroke
+to the Virtual Machine. So, below we will always type `Left-CTRL`.
+
+## Linux Terminal
+
+If you have never used a Linux/Unix terminal before, have a look at 
+[a tutorial](https://help.ubuntu.com/community/UsingTheTerminal).
+
+You can use `UPARROW` to go to previous commands, and use copy-paste shortcuts 
+`Left-CTRL-SHIFT-C` and `Left-CTRL-SHIFT-V`.
+
 
 
 

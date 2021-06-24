@@ -2,40 +2,15 @@
 
 Author: Kris Thielemans
 
-An easy way to run the exercises is to use the SIRF Virtual Machine where
-SIRF has already been installed for you. Alternatively you can install SIRF yourself. Below are some brief instructions.
+An easy way to run the exercises is to use the SIRF Virtual Machine or a Docker image where
+SIRF has already been installed for you. To install SIRF and SIRF-Exercises with these methods, please read https://github.com/SyneRBI/SIRF/wiki/How-to-obtain-SIRF.
+
+Alternatively you can install SIRF yourself. Below are some brief instructions.
 
 The exercises use [Jupyter notebooks](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html).
 These provide a nice GUI interface to Python. You need 2 components:
-the jupyter notebook server and a web browser.
+The jupyter notebook server and a web browser to open it.
 
-## SIRF Virtual Machine
-
-We distribute a VM with SIRF and all its dependencies, please [check our wiki](https://github.com/CCPPETMR/CCPPETMR_VM/wiki).
-The VM also contains the source for the SIRF-Exercises. However, we do not include the data to restrict its file size.
-Therefore, please install the VM as per the instructions, start it up, open a terminal and execute the following:
-
-- We recommend first updating your VM
-
-   update_VM.sh
-
-
-- Get example data
-   ```bash
-    ~/devel/SIRF-Exercises/scripts/download_data.sh -m -p
-   ```
-   
-  This will be a ~2.5 GB download.
-
-  Note that if you want to run notebooks in MR/Old_notebooks (not recommended),
-  you will have to get some more data
-    ```bash
-    ~/devel/SIRF-Exercises/scripts/download_data.sh -m -p -o
-   ```
-
-You now have everything ready.
- 
-Check our [README](README.md) for more information on usage.
 
 ## Installing SIRF and the exercises yourself
 
