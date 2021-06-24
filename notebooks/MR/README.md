@@ -22,10 +22,4 @@ Jupyter notebooks for the MR exercises. Recommended order:
 
 ## Feel free to ignore
 
-[Old_notebooks](Old_notebooks) Examples scripts of SIRF MR reconstruction used in previous training events. Feel free to ignore.
-
-[notebook_setup](notebook_setup.py) Script to set up path. Feel free to ignore.
-
-[tools](tools) Garbage as far as I can tell. Feel free to ignore.
-
-
+[Old_notebooks](Old_notebooks), [notebook_setup](notebook_setup.py) and [tools](tools) contain examples scripts of SIRF MR reconstruction used in previous training events. Feel free to ignore.
