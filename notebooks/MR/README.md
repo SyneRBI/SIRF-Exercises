@@ -13,11 +13,11 @@ Jupyter notebooks for the MR exercises. Recommended order:
 
 ## Week 2
 
-[d_undersampled_reconstructions](d_undersampled_reconstructions.ipynb) demonstrates different possibilities to reconstruct undersampled data. You will do a GRAPPA reconstruction using Gadgetron and implement your own conjugate-gradient SENSE parallel image reconstruction using the SIRF MR acquisition model. 
+1. [d_undersampled_reconstructions](d_undersampled_reconstructions.ipynb) demonstrates different possibilities to reconstruct undersampled data. You will do a GRAPPA reconstruction using Gadgetron and implement your own conjugate-gradient SENSE parallel image reconstruction using the SIRF MR acquisition model. 
 
-[e_advanced_recon](e_advanced_recon.ipynb) shows how to do iterative SENSE image reconstruction by combining the SIRF MR acuqisition model with with the scipy package for optimisation.
+2. [e_advanced_recon](e_advanced_recon.ipynb) shows how to do iterative SENSE image reconstruction by combining the SIRF MR acuqisition model with with the scipy package for optimisation.
 
-[f_create_undersampled_kspace](f_create_undersampled_kspace.ipynb) demonstrates a retrospective data under-sampling.
+3. [f_create_undersampled_kspace](f_create_undersampled_kspace.ipynb) demonstrates a retrospective data under-sampling.
 
 
 ## Feel free to ignore
