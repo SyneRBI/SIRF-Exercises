@@ -1,16 +1,12 @@
 # Notebook dependencies
 jupyter
 ipywidgets
-numpy --only-binary=numpy
-scipy --only-binary=scipy
-matplotlib --only-binary=matplotlib
-numba --only-binary=numba
-  llvmlite --only-binary=llvmlite  # numba dependency
-h5py --only-binary=h5py
+numpy
+scipy
+matplotlib
+numba
+h5py
 nibabel
-  scikit-image --only-binary=scikit-image  # nibabel dependency
-  PyWavelets --only-binary=PyWavelets      # nibabel dependency
-  imageio --only-binary=imageio            # nibabel dependency
 brainweb>=1.5.1
 tqdm
 docopt
