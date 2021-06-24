@@ -10,7 +10,7 @@ This instruction contain documentation and links to get started with the exercis
     - [Using your own installed SIRF and SIRF-exercises](#using-your-own-installed-sirf-and-sirf-exercises )
 - [Start a Gadgetron server](#start-a-gadgetron-server)
 - [Getting the Data](#getting-the-data)
-- [Get started with the course!](#get-started-with-the-course!)
+- [Get started with the course!](#get-started-with-the-course)
 - [Appendix of useful info](#appendix)
 
 
@@ -79,7 +79,7 @@ Docker is easiest in Linux, so if you are not familiar with Docker and are runni
 
 ### Using your own installed SIRF and SIRF-exercises 
 
-You have a jupyter server (as you followed the [installation instructions](INSTALL.md) so just use
+You have a jupyter server (as you followed the [installation instructions](INSTALL.md)) so just use
 ```bash
    cd /wherever/you/installed/it/SIRF-Exercises
    jupyter notebook
@@ -117,10 +117,16 @@ There are download scripts available for that, available in the SIRF-Exercises
     ~/devel/SIRF-Exercises/scripts/download_data.sh -m -p -o
    ```
 
-## Get started with the course!
-Start with the [notebooks/Introductory/](introductory notebooks) and the associated [README.md](notebooks/Introductory/README.md).
+## Get started with the course
+
+Start with the [introductory notebooks](notebooks/Introductory/) and the associated [README.md](notebooks/Introductory/README.md).
+
+
+
 
 ---------------------------
+
+
 
 
 # Appendix
