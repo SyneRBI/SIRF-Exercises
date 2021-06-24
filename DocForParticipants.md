@@ -3,7 +3,7 @@
 This instruction contain documentation and links to get started with the exercises of SIRF.
 
 - [Start Here](#start-here)
-- [Start SIRF](#start-sirf)
+- [Start a jupyter notebook server for the SIRF exercises](#Start-a-jupyter-notebook-server-for-the-SIRF-exercises)
     - [Using an Azure Client](#using-and-azure-client-(if-available))
     - [Using the VM](#using-the-vm)
     - [Using Docker](#using-docker)
@@ -22,21 +22,21 @@ The SIRF documentation can be found [here](https://github.com/SyneRBI/SIRF/wiki/
 
 There are several ways to get SIRF and its exercises running for the training course. 
 
- 1. Accessing a remote server prepared for the trainign course (could be Azure, or others). This is specific for organized training courses. Please check with your instructors. 
+ 1. Accessing a remote server prepared for the training course (could be Azure, STFC cloud or others). This is specific for organized training courses. Please check with your instructors. 
  2. Installing and running the SIRF Virtual Machine (VM).
  3. Installing and running the SIRF Docker image.
- 4. Installing and builing SIRF on your machine from source.
+ 4. Installing and building SIRF and the SIRF-Exercises on your machine from source.
 
 
-We recommend that if you are installing this for a training course, you use any of the first three options, as installign SIRF from source is harder than the rest.
-The VM works well in any operating system, Docker is easiest in Linux.
+We recommend that if you are installing this for a training course, you use any of the first three options, as installing SIRF from source is harder than the rest.
+The VM works well in any operating system, Docker works well in Linux and MacOS, (Windows support for our Docker images is currently untested).
 
 Instructions for all (except the training course specific server, as this will be given in the training course) can be found at https://github.com/SyneRBI/SIRF/wiki/How-to-obtain-SIRF.
-Intructions to self-build the exercises (once you have SIRF built from source) can be additionally found in this repository at [the installation instructions page.](INSTALL.md)
+Instructions to self-build the exercises (once you have SIRF built from source) can be additionally found in this repository at [the installation instructions page](INSTALL.md).
 
-## Start SIRF
+ ## Start a jupyter notebook server for the SIRF exercises
 
-Once you have SIRF on your system, or access to a server with SIRF, its time to get it running. 
+Once you have SIRF on your system, or access to a server with SIRF, it is time to get it running. 
 
 We are using Python for the exercises. Python is an open-source interactive language, 
 a bit like MATLAB. We provide Python scripts for the exercises, so you should be fine.
@@ -48,7 +48,7 @@ If you have never used Jupyter notebooks,
 you should [read the official documentation](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
 A useful introduction to the notebook interface [can be found here](http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html).
 
-This section contains instructions to start SIRF with all the different ways it is provided. In following steps, we will download data (not always required) and start a Gadgetron server.
+This section contains instructions to start the SIRF exercises with all the different ways it is provided. In following steps, we will download data and start a Gadgetron server.
 ### Using an Azure client (if available)
 
 The web-address should be something like https://sirf1....cloudapp.azure.com:9999/. See local instructions of your training sessoin.
@@ -63,14 +63,14 @@ Later in the course, you can use this terminal to start `gadgetron`.
 2. Open terminal (either via `Activities` or pressing `ctrl-alt-T`) and type
 
 ```bash
+  # optionally update to the latest release of SIRF and the SIRF-Exercises
   update_VM.sh
   cd ~/devel/SIRF-Exercises/scripts/
   ./download_data.sh -m -p
-  cd ~/devel/SIRF-Exercises/
   jupyter notebook
 ```
 
-Then open a web-browser on your computer and point it to http://localhost:8888 (fill in the password or the token).
+Then open a web-browser on your computer (i.e. the host) and point it to http://localhost:8888 (fill in the password or the token).
 
 ### Using Docker
 
@@ -82,6 +82,7 @@ Docker is easiest in Linux, so if you are not familiar with Docker and are runni
 You have a jupyter server (as you followed the [installation instructions](INSTALL.md)) so just use
 ```bash
    cd /wherever/you/installed/it/SIRF-Exercises
+   scripts/download_data -p -m
    jupyter notebook
 ```
 
@@ -291,7 +292,6 @@ If you have never used a Linux/Unix terminal before, have a look at
 
 You can use `UPARROW` to go to previous commands, and use copy-paste shortcuts 
 `Left-CTRL-SHIFT-C` and `Left-CTRL-SHIFT-V`.
-
 
 
 
