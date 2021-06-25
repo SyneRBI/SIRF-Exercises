@@ -21,6 +21,8 @@ This instruction contain documentation and links to get started with the exercis
 The SIRF documentation can be found [here](https://github.com/SyneRBI/SIRF/wiki/Software-Documentation).
 ***The current version of these exercises needs SIRF v3.1.0***
 
+Documentation is in the form of MarkDown files (`*.md`), which are simple text files which you open from the Jupyter notebook, but they look nicer when browsing to [GitHub](https://github.com/SyneRBI/SIRF-Exercises/tree/master/).
+
 ## Start Here
 
 We are using Python for the exercises. Python is an open-source interactive language, 
@@ -75,6 +77,12 @@ Follow instructions given elsewhere.
   ```
 
 Then open a web-browser on your computer (i.e. the host) and point it to http://localhost:8888 (fill in the password or the token).
+
+If this fails, you could try to use web browser in the VM instead.
+```bash
+   sudo apt install firefox
+   jupyter notebook --browser firefox
+```
 
 ### Using Docker
 
@@ -132,8 +140,16 @@ cells for running the script, but you can also do this from the command line (se
 
 ## Get started with the course
 
-Start with the [introductory notebooks](notebooks/Introductory/) and the associated [README.md](notebooks/Introductory/README.md).
+All notebooks are located in several subdirectories of [`notebooks`](./notebooks) . Each have a `README.md` file that you should read beforehand, as some notebooks have special requirements (e.g., the order that they're run in). Note that you can open a `README.md` from the Jupyter notebook, but they look nicer when browsing to [GitHub](https://github.com/SyneRBI/SIRF-Exercises/tree/master/notebooks).
 
+- [Introductory](./notebooks/Introductory/) notebooks are designed to familiarise you with Python, Jupyter, SIRF, and patterns seen in the other notebooks.
+- [Geometry](./notebooks/Geometry/) notebooks contain lessons on how SIRF deals with spatial geometry of images.
+- [PET](./notebooks/PET/) notebooks contain lessons on using SIRF for PET reconstruction and simulation.
+- [MR](./notebooks/MR/) notebooks contain lessons on using SIRF for MR reconstruction and simulation.
+- [Reg](./notebooks/Reg/) notebooks contain lessons on using SIRF's image registration and resampling tools.
+- [Synergistic](./notebooks/Synergistic/) notebooks contain lessons demonstrating more advanced features of SIRF for synergistic image reconstruction.
+
+Start with the [introductory notebooks](notebooks/Introductory/) and the associated [README.md](notebooks/Introductory/README.md).
 
 
 
@@ -147,7 +163,7 @@ Start with the [introductory notebooks](notebooks/Introductory/) and the associa
 - [File extensions](#file-extensions)
 - [A note on keyboard short-cuts inside a VirtualBox VM](#a-note-on-keyboard-short-cuts-inside-a-virtualbox-vm)
 - [The Linux terminal](#linux-terminal)
-
+- [Minimal info on Jupyter Lab](#jupyter-lab)
 
 ## Python Basics
 
@@ -301,3 +317,6 @@ If you have never used a Linux/Unix terminal before, have a look at
 
 You can use `UPARROW` to go to previous commands, and use copy-paste shortcuts 
 `Left-CTRL-SHIFT-C` and `Left-CTRL-SHIFT-V`.
+
+## Jupyter Lab
+If you are more familiar with the Jupyter Lab interface, rather than the Jupyter Notebook one, you can access this by navigating to `<IP>:<port>/lab` (i.e., changing the path part of the url to `/lab`). We don't yet recommend this unless you know what you are doing as we cannot support both interfaces.
