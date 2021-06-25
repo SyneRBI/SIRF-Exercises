@@ -23,7 +23,7 @@ for details.
 
 # Links to documentation
 
-Full instructions on getting started is in our [documentation for participants](https://github.com/SyneRBI/SIRF-Exercises/blob/master/DocForParticipants.md).  
+Full instructions on getting started is in our [documentation for participants](DocForParticipants.md). (Or use [this link to GitHub](https://github.com/SyneRBI/SIRF-Exercises/blob/master/DocForParticipants.md) for nice formatting, but do check which version of the exercises you are using).  
 *Gentle request*:
 If you are attending a course, ***please read this before the course.*** 
 
