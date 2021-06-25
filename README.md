@@ -32,33 +32,18 @@ If you are attending the course, ***please read this before the course.***
 
 
 
-Starting the jupyter server
----------------------------
-To start with the exercises, you need to start the jupyter server. Depending on how/where you run these exercises, this will
-be in different ways:
+Jupyter Lab
+-----------
+If you are more familiar with the Jupyter Lab interface, rather than the Jupyter Notebook one, you can access this by navigating to `<IP>:<port>/lab` (i.e., changing the path part of the url to `/lab`). We don't yet recommend this unless you know what you are doing as we cannot support both interfaces.
 
-### On the VM using the web browser of your host system (recommended)
-In the VM terminal, type
-  ```bash
-    jupyter notebook
-```
-You will get a message that ends `Or copy and paste one of these URLs:
-        http://(vagrant or 127.0.0.1):8888/?token=axxxxcf837a4ab78aa13275dc893af9b91143225c226xxxx`
+Contents
+========
+Notebooks are located in the [`notebooks`](./notebooks) subdirectory. Each have a README file that you should read beforehand, as some notebooks have special requirements (e.g., the order that they're run in).
 
-On your (host) laptop/desktop, open a web-browser and either
-- navigate to [http://localhost:8888](http://localhost:8888). The password should be `virtual`.
-- use the full address from the message (including the `token=...` part). You will need to edit the `(vagrant or 127.0.0.1)` to `127.0.0.1`.
-- use the address http://localhost:8888 and then when requested, copy and paste the token value, which in this example would be `axxxxcf837a4ab78aa13275dc893af9b91143225c226xxxx`. 
-
-### On the VM using a web browser in the VM
-You will need to install a web browser on the VM such as Firefox. 
-```bash
-   sudo apt install firefox
-```
-Now do
-
-```bash
-   jupyter notebook --browser firefox
-```
-which should start your web-browser automatically.
+- [Introductory](./notebooks/Introductory/) notebooks are designed to familiarise you with Python, Jupyter, SIRF, and patterns seen in the other notebooks.
+- [Geometry](./notebooks/Geometry/) notebooks contain lessons on how SIRF deals with spatial geometry of images.
+- [PET](./notebooks/PET/) notebooks contain lessons on using SIRF for PET reconstruction and simulation.
+- [MR](./notebooks/MR/) notebooks contain lessons on using SIRF for MR reconstruction and simulation.
+- [Reg](./notebooks/Reg/) notebooks contain lessons on using SIRF's image registration and resampling tools.
+- [Synergistic](./notebooks/Synergistic/) notebooks contain lessons demonstrating more advanced features of SIRF for synergistic image reconstruction.
 
