@@ -17,8 +17,18 @@ This instruction contain documentation and links to get started with the exercis
 The SIRF documentation can be found [here](https://github.com/SyneRBI/SIRF/wiki/Software-Documentation).
 ***The current version of these exercises needs SIRF v3.1.0***
 
-
 ## Start Here
+
+We are using Python for the exercises. Python is an open-source interactive language, 
+a bit like MATLAB. We provide Python scripts for the exercises, so you should be fine.
+Nevertheless, it would be best to read a Python tutorial first, see the [Appendices](#appendices).
+
+We use
+[Jupyter notebooks](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html).
+If you have never used Jupyter notebooks,
+you should [read the official documentation](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
+A useful introduction to the notebook interface [can be found here](http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html).
+
 
 There are several ways to get SIRF and its exercises running for the training course. 
 
@@ -32,30 +42,24 @@ We recommend that if you are installing this for a training course, you use any 
 The VM works well in any operating system, Docker works well in Linux and MacOS, (Windows support for our Docker images is currently untested).
 
 Instructions for all (except the training course specific server, as this will be given in the training course) can be found at https://github.com/SyneRBI/SIRF/wiki/How-to-obtain-SIRF.
-Instructions to self-build the exercises (once you have SIRF built from source) can be additionally found in this repository at [the installation instructions page](INSTALL.md).
+Instructions to self-build the exercises (once you have SIRF built from source) can be found in this repository at [the installation instructions page](INSTALL.md).
 
- ## Start a jupyter notebook server for the SIRF exercises
+Once you have SIRF and the exercises on your system, or access to a server with SIRF, it is time to get them running. 
 
-Once you have SIRF on your system, or access to a server with SIRF, it is time to get it running. 
+The next sections contain instructions to start the Jupyter notebook server with the SIRF exercises for all the different installation options. In following steps, we will start a Gadgetron server and download data.
 
-We are using Python for the exercises. Python is an open-source interactive language, 
-a bit like MATLAB. We provide Python scripts for the exercises, so you should be fine.
-Nevertheless, it would be best to read a Python tutorial first, see the [Appendices](#appendices).
+## Start a jupyter notebook server for the SIRF exercises
 
-We use
-[Jupyter notebooks](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html).
-If you have never used Jupyter notebooks,
-you should [read the official documentation](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
-A useful introduction to the notebook interface [can be found here](http://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Notebook%20Basics.html).
-
-This section contains instructions to start the SIRF exercises with all the different ways it is provided. In following steps, we will download data and start a Gadgetron server.
 ### Using an Azure client (if available)
 
 The web-address should be something like https://sirf1....cloudapp.azure.com:9999/. See local instructions of your training sessoin.
-*Do not forget the `https`*. You will need to accept the secure exception. The Jupyter notebook password is `virtual%1`.
+*Do not forget the `https`*. You will need to accept the secure exception. The Jupyter notebook password is `virtual`.
 
 If the instructors tell you, you might have to create a terminal via the jupyter notebook and type `update_VM.sh`.
 Later in the course, you can use this terminal to start `gadgetron`.
+
+### Using an STFC Cloud instance (if available)
+Follow instructions given elsewhere.
 
 ### Using the VM
 
@@ -65,8 +69,6 @@ Later in the course, you can use this terminal to start `gadgetron`.
 ```bash
   # optionally update to the latest release of SIRF and the SIRF-Exercises
   update_VM.sh
-  cd ~/devel/SIRF-Exercises/scripts/
-  ./download_data.sh -m -p
   jupyter notebook
 ```
 
@@ -77,12 +79,13 @@ Then open a web-browser on your computer (i.e. the host) and point it to http://
 The instructions to start Docker and SIRF are documented in the [Docker instructions at SIRF](https://github.com/SyneRBI/SIRF-SuperBuild/blob/master/docker/README.md), please follow those to start it. 
 Docker is easiest in Linux, so if you are not familiar with Docker and are running on Windows, we suggest using the VM instead. 
 
+Please note that for SIRF 3.1, you need to point your (host) web-browser to http://localhost:9999 (fill in the `virtual` password).
+
 ### Using your own installed SIRF and SIRF-exercises 
 
 You have a jupyter server (as you followed the [installation instructions](INSTALL.md)) so just use
 ```bash
    cd /wherever/you/installed/it/SIRF-Exercises
-   scripts/download_data -p -m
    jupyter notebook
 ```
 
@@ -103,20 +106,29 @@ You can kill it at the end by going back to the terminal and pressing `Ctrl-C`.
 ## Getting the Data
 
 Some exercises use data that you will need. In the cloud and in Azure, we provide the data you need for the tests, but otherwise, you will need to download it.
-There are download scripts available for that, available in the SIRF-Exercises 
+There are download scripts available for that, available in the `SIRF-Exercises/scripts` folder. The introductory notebooks contain
+cells for running the script, but you can also do this from the command line (see above on how to start a terminal from Jupyter).
 
 - Get example data
    ```bash
-    ~/devel/SIRF-Exercises/scripts/download_data.sh -m -p
+   cd /wherever/you/installed/it/SIRF-Exercises
+   scripts/download_data.sh -m -p
    ```
-   
-  This will be a ~2.5 GB download.
+  On the VM and Azure, the exercises are installed in `~/devel`, in docker in `/devel`, and in the STFC Cloud in `~`. (Apologies for that!).
+  
+  This will be a ~3 GB download.
 
   Note that if you want to run notebooks in MR/Old_notebooks (not recommended),
   you will have to get some more data
-    ```bash
-    ~/devel/SIRF-Exercises/scripts/download_data.sh -m -p -o
+   ```bash
+  scripts/download_data.sh -m -p -o
    ```
+
+  Note that the `download_data.sh` script has several options allowing you to put data in other places. Run
+   ```bash
+  scripts/download_data.sh -h
+   ```
+  for more information.
 
 ## Get started with the course
 
