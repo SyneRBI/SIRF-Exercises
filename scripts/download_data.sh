@@ -225,15 +225,13 @@ working_dir = '${WORKING_DIR}'
 EOF
 fi
 
-if [[ -n "${DO_PET}" ]] || [[ -n "${DO_MR}" ]] || [[ -n "${DO_OLD}" ]]
-then
+# make sure we created DATA_PATH, even if nothing was downloaded
+mkdir -p "${DATA_PATH}"
 
 # create the data_path.py files in Python library
 echo "creating data_path.py in ${REPO_DIR}/lib/sirf_exercises/data_path.py"  
 cat <<EOF >"${REPO_DIR}/lib/sirf_exercises/data_path.py" 
 data_path = '${DATA_PATH}'
 EOF
-
-fi
 
 echo "All done!"
