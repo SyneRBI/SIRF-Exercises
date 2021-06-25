@@ -73,9 +73,11 @@ fi
 # check the md5, OSX compat
 function check_md5 {
     filename=$1
-    if [[ -e $(which md5sum) ]]; then
-        md5sum -c "${filename}.md5"
-    elif [[ -e $(which md5) ]]; then
+    if  command -v md5sum > /dev/null  2>&1
+    then
+        md5sum -c "${filename}.md5" > /dev/null  2>&1
+    elif command -v md5 > /dev/null  2>&1
+    then
         md5 -r "${filename}" > "${filename}.tmp.md5"
         diff -q "${filename}.tmp.md5" "${filename}.md5"
         retval=$?
