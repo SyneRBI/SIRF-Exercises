@@ -50,6 +50,8 @@ Getting started
 ================
 Some exercises use data that you will need. Check the [installation instructions](INSTALL.md).
 
+If you are using the Docker `service` image (if you're in a course using a cloud service, this is the case), the following steps are automatically run for you. Skip ahead to [Docker](#docker)/[Cloud](#cloud).
+
 The MR exercises will need you to start a Gadgetron server. If you have installed SIRF properly,
 you should be able to type in a terminal
 ```sh
@@ -91,8 +93,9 @@ which should start your web-browser automatically.
 
 ### Docker
 
-The jupyter notebook should already be started for you. Follow instructions in our
+The jupyter notebook should already be started for you if you are using the `service` image. Follow instructions in our
 [Docker README](https://github.com/SyneRBI/SIRF-SuperBuild/tree/master/docker#readme).
+If prompted for a password, it is `virtual`.
 
 ### Cloud
 
@@ -135,6 +138,21 @@ Check the [jupyter doc on closing a notebook](https://jupyter-notebook-beginner-
 ***Warning:*** Due to a limitation in SIRF (and ISMRMRD) you cannot have 2 Python sessions simultaneously accessing
 the same MR HDF5 file.
 You have to use “File->Close and halt”  after you’ve finished with a notebook (or just “Kernel->Shutdown”).
+
+Jupyter Lab
+-----------
+If you are more familiar with the Jupyter Lab interface, rather than the Jupyter Notebook one, you can access this by navigating to `<IP>:<port>/lab` (i.e., changing the path part of the url to `/lab`). We don't yet recommend this unless you know what you are doing as we cannot support both interfaces.
+
+Contents
+========
+Notebooks are located in the [`notebooks`](./notebooks) subdirectory. Each have a README file that you should read beforehand, as some notebooks have special requirements (e.g., the order that they're run in).
+
+- [Introductory](./notebooks/Introductory/) notebooks are designed to familiarise you with Python, Jupyter, SIRF, and patterns seen in the other notebooks.
+- [Geometry](./notebooks/Geometry/) notebooks contain lessons on how SIRF deals with spatial geometry of images.
+- [PET](./notebooks/PET/) notebooks contain lessons on using SIRF for PET reconstruction and simulation.
+- [MR](./notebooks/MR/) notebooks contain lessons on using SIRF for MR reconstruction and simulation.
+- [Reg](./notebooks/Reg/) notebooks contain lessons on using SIRF's image registration and resampling tools.
+- [Synergistic](./notebooks/Synergistic/) notebooks contain lessons demonstrating more advanced features of SIRF for synergistic image reconstruction.
 
 Appendices
 ==========
