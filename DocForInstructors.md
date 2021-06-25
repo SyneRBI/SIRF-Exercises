@@ -9,15 +9,15 @@ This is a basic list of things to do and tell people during the course.
 2. Navigate to [.../SIRF-Exercises/DocForParticipants.md](DocForParticipants.md) to show how to open files and give them something to read.
 
 3. Show how to start the VM. Show about resizing, and scaling (VB menu: `View`->`Scaling factor`), and how to connect: open terminal (either via `Activities` or pressing `ctrl-alt-T`) and type
-```bash
+  ```bash
   update_VM.sh # if required
   cd ~/devel/SIRF-Exercises/
   scripts/download_data.sh -m -p
   jupyter notebook
-```
-Then open a web-browser on your local laptop and point it to http://localhost:8888 (fill in the password or the token).
+  ```
+  Then open a web-browser on your local laptop and point it to http://localhost:8888 (fill in the password or the token).
 
-4. start a docker instance.
+4. Start a docker instance.
 Then open a web-browser on your local laptop and point it to http://localhost:9999 (fill in the password).
 
 5. From now on, everything is the same whatever option you used (except for Gadgetron)
@@ -27,9 +27,9 @@ Then open a web-browser on your local laptop and point it to http://localhost:99
 2. Warn that closing the tab leaves a python session running. This can be surprising (for instance with read/write access).
 Show how to close the session (either `File->Close and halt` or go "home" and click on the `Running` tab.
 3. Show how to create a terminal ("home", `New` on the right, `Terminal`). Use this to start the Gadgetron. Say this is not necessary on Docker as already started.
-```bash
-gadgetron&
-```
+   ```bash
+   gadgetron&
+   ```
 4. Warn that you cannot have 2 Python sessions simultaneously accessing
 the same MR HDF5 file.
 The only work-around is to use “File->Close and halt”  after you’ve finished with a notebook (or just “Kernel->Shutdown”).
