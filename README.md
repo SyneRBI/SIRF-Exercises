@@ -50,8 +50,6 @@ Getting started
 ================
 Some exercises use data that you will need. Check the [installation instructions](INSTALL.md).
 
-If you are using the Docker `service` image (if you're in a course using a cloud service, this is the case), the following steps are automatically run for you. Skip ahead to [Docker](#docker)/[Cloud](#cloud).
-
 The MR exercises will need you to start a Gadgetron server. If you have installed SIRF properly,
 you should be able to type in a terminal
 ```sh
@@ -93,9 +91,8 @@ which should start your web-browser automatically.
 
 ### Docker
 
-The jupyter notebook should already be started for you if you are using the `service` image. Follow instructions in our
+The jupyter notebook should already be started for you. Follow instructions in our
 [Docker README](https://github.com/SyneRBI/SIRF-SuperBuild/tree/master/docker#readme).
-If prompted for a password, it is `virtual`.
 
 ### Cloud
 
@@ -279,4 +276,3 @@ to what you would use in the terminal. (*Note*: these commands do not work in a 
 ```python
     %reset
 ```
-
