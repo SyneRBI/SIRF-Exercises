@@ -136,6 +136,21 @@ Check the [jupyter doc on closing a notebook](https://jupyter-notebook-beginner-
 the same MR HDF5 file.
 You have to use “File->Close and halt”  after you’ve finished with a notebook (or just “Kernel->Shutdown”).
 
+Jupyter Lab
+-----------
+If you are more familiar with the Jupyter Lab interface, rather than the Jupyter Notebook one, you can access this by navigating to `<IP>:<port>/lab` (i.e., changing the path part of the url to `/lab`). We don't yet recommend this unless you know what you are doing as we cannot support both interfaces.
+
+Contents
+========
+Notebooks are located in the [`notebooks`](./notebooks) subdirectory. Each have a README file that you should read beforehand, as some notebooks have special requirements (e.g., the order that they're run in).
+
+- [Introductory](./notebooks/Introductory/) notebooks are designed to familiarise you with Python, Jupyter, SIRF, and patterns seen in the other notebooks.
+- [Geometry](./notebooks/Geometry/) notebooks contain lessons on how SIRF deals with spatial geometry of images.
+- [PET](./notebooks/PET/) notebooks contain lessons on using SIRF for PET reconstruction and simulation.
+- [MR](./notebooks/MR/) notebooks contain lessons on using SIRF for MR reconstruction and simulation.
+- [Reg](./notebooks/Reg/) notebooks contain lessons on using SIRF's image registration and resampling tools.
+- [Synergistic](./notebooks/Synergistic/) notebooks contain lessons demonstrating more advanced features of SIRF for synergistic image reconstruction.
+
 Appendices
 ==========
 
@@ -261,4 +276,3 @@ to what you would use in the terminal. (*Note*: these commands do not work in a 
 ```python
     %reset
 ```
-
