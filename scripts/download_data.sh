@@ -70,6 +70,25 @@ if [[ "$DO_OLD" ]]; then
     DO_MR='true'
 fi
 
+# check the md5, OSX compat
+function check_md5 {
+    filename=$1
+    if  command -v md5sum > /dev/null  2>&1
+    then
+        md5sum -c "${filename}.md5" > /dev/null  2>&1
+    elif command -v md5 > /dev/null  2>&1
+    then
+        md5 -r "${filename}" > "${filename}.tmp.md5"
+        diff -q "${filename}.tmp.md5" "${filename}.md5"
+        retval=$?
+        rm "${filename}.tmp.md5"
+        return $retval
+    else
+        echo "Unable to check md5. Please install md5sum or md5"
+        return 0
+    fi
+}
+
 # a function to download a file and check its md5
 # assumes that file.md5 exists
 function download {
@@ -78,7 +97,7 @@ function download {
     suffix="$3"
     if [ -r "$filename" ]
     then
-        if md5sum -c "${filename}.md5"
+        if check_md5 "${filename}"
         then
             echo "File exists and its md5sum is ok"
             return 0
@@ -91,7 +110,7 @@ function download {
     echo curl -L -o "$filename" "${URL}${filename}${suffix}"
     curl -L -o "$filename" "${URL}${filename}${suffix}"
 
-    if md5sum -c "${filename}.md5"
+    if check_md5 "${filename}"
     then
         echo "Downloaded file's md5sum is ok"
     else
