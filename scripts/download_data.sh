@@ -83,7 +83,7 @@ function check_md5 {
         return $retval
     else
         echo "Unable to check md5. Please install md5sum or md5"
-        exit 1
+        return 0
     fi
 }
 
