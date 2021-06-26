@@ -1,6 +1,6 @@
 # Contents
 
-Jupyter notebooks for the PET exercises. Recommended order
+Jupyter notebooks for the PET exercises. Recommended order:
 
 ## Week 1
 1. First look at the [Introductory/ notebooks](../Introductory/).
@@ -8,6 +8,7 @@ Jupyter notebooks for the PET exercises. Recommended order
 2. [image\_creation\_and\_simulation](image_creation_and_simulation.ipynb) shows how to create some images with geometric shapes, and explains attenuation modelling etc.
 3. [OSEM\_reconstruction](OSEM_reconstruction.ipynb) shows how to run a `sirf.STIR` class for OSEM reconstruction.
 4. [reconstruct\_measured\_data](reconstruct_measured_data.ipynb) goes into detail on how to reconstruct data from the Siemens mMR.
+5. [DIY_OSEM](DIY_OSEM.ipynb) invites you to write MLEM and OSEM yourself using SIRF functionality (optional)
 
 ## Week 2
 1. [ML\_reconstruction](ML_reconstruction.ipynb) illustrates Maximum Likelihood Estimation via OSEM and gradient ascent.
