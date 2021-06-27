@@ -19,7 +19,7 @@ It is not really a "synergistic" notebook in itself, but can serve as the basis 
 
 #### Get the data
 
-The file, [BrainWeb.ipynb](BrainWeb.ipynb), will generate data that will be used by a few of the notebooks. This uses a wrapper that obtains the brainweb data, and this wrapper can be obtained via `pip install brainweb --user` (the script will also call this command).
+The file, [BrainWeb.ipynb](BrainWeb.ipynb), will generate data that will be used by a few of the notebooks. This uses a wrapper that obtains the brainweb data, installed as part of the requirements of the exercises.
 
 #### What images?
 
@@ -27,7 +27,7 @@ The extracted images include two PET images (FDG and amyloid), two MR images (T1
 
 #### Convert to STIR
 
-The script will convert the native brainweb data into stir interfile format. It will also create cropped versions of the files, which have the suffixes `_small`. Most of the notebooks use these to speed up reconstruction times. But you could equally use the full-size images.
+The script will convert the native brainweb data into STIR interfile format. It will also create cropped versions of the files, which have the suffixes `_small`. Most of the notebooks use these to speed up reconstruction times. But you could equally use the full-size images.
 
 #### Forward project
 The images are then forward projected, and the resulting noise and noiseless sinograms are created.
@@ -38,7 +38,7 @@ A misalignment is also added to the amyloid image (and its corresponding mu-map)
 
 #### Adding tumours to the data
 
-Lastly, a tumour is added to the original amyloid image. This data isn't currently used in the notebooks, but will be useful for studying the effect of feature suppression when the feature is not present in the side information.
+Lastly, a tumour is added to the original amyloid image. This data is useful for studying the effect of feature suppression when the feature is not present in the side information.
 
 ## 2. de Pierro MAPEM <a name="de_pierro"></a>
 
