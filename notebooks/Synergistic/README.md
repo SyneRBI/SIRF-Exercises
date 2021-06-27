@@ -42,11 +42,11 @@ Lastly, a tumour is added to the original amyloid image. This data is useful for
 
 ## 2. de Pierro MAPEM for Bowsher <a name="de_pierro"></a>
 
-[de\_Pierro\_MAPEM.ipynb](de_Pierro_MAPEM.ipynb) is a continuation of [../PET/MAPEM.ipynb](../PET/MAPEM.ipynb), however this example uses a (quadratic) Bowsher prior that depends on side information (in this case an MR image) as opposed to a quadratic prior using uniformm weights.
+[MAPEM_Bowsher.ipynb](MAPEM_Bowsher.ipynb) is a continuation of [../PET/MAPEM.ipynb](../PET/MAPEM.ipynb), however this example uses a (quadratic) Bowsher prior that depends on side information (in this case an MR image) as opposed to a quadratic prior using uniformm weights.
 
 ## 3. Dual PET <a name="dual_pet"></a>
 
-In [Dual_PET.ipynb](Dual_PET.ipynb), we reconstruct the FDG and amyloid acquisitions at the same time. This is an extension of [de\_Pierro\_MAPEM.ipynb](de_Pierro_MAPEM.ipynb), in which the Bowsher weights are constantly updated as our estimate of the other acquisition improves. 
+In [Dual_PET.ipynb](Dual_PET.ipynb), we reconstruct the FDG and amyloid acquisitions at the same time. This is an extension of [MAPEM_Bowsher.ipynb](MAPEM_Bowsher.ipynb), in which the Bowsher weights are constantly updated as our estimate of the other acquisition improves. 
 
 The further complication of having a misalignment between the FDG and amyloid is also included. 
 
