@@ -2,11 +2,18 @@
 
 You should find in this directory a few notebooks that are designed to give you a feeling for synergistic reconstructions.
 
+0. [Gradient descent/ascent for MR, PET and CT](#gradient-descent-for-MR-PET-CT)
 1. [Generate the data](#gen_data)
 2. [de Pierro MAPEM](#de_pierro)
 3. [Dual PET](#dual_pet)
 4. [HKEM](#HKEM)
-5. [Joint-TV](#Joint-TV)
+5. [Joint-TV for MR](#Joint-TV)
+
+## 0. Gradient descent/ascent for MR, PET and CT<a name="gradient-descent-for-MR-PET-CT"></a>
+
+The [gradient_descent_mr_pet_ct notebook](gradient_descent_mr_pet_ct.ipynb) shows how to write
+a simple gradient descent (or ascent...) algorithm for MR, PET and CT (using CIL for the latter).
+It is not really a "synergistic" notebook in itself, but can serve as the basis for any synergistic algorithm that uses alternating optimisation between the different modalities.
 
 ## 1. Generate the data <a name="gen_data"></a>
 
@@ -47,8 +54,8 @@ Answers for this notebook is given in [Solutions/Dual\_PET\_Answer-noMotion.ipyn
 
 ## 4. HKEM <a name="HKEM"></a>
 
-The hybrid kernel EM method is explored in [HKEM_reconstruction.ipynb](HKEM_reconstruction.ipynb). The effect on many parameters, such as neighbourhood size is also explored.
+The hybrid kernel EM method is explored in [HKEM_reconstruction.ipynb](HKEM_reconstruction.ipynb). The HKEM algorithm is an example of a "guided" reconstruction method. Here, an MR image is used to guide the PET reconstruction. The effect on many parameters, such as neighbourhood size is also explored.
 
-## 5. Joint-TV <a name="Joint-TV"></a>
+## 5. Joint-TV for MR <a name="Joint-TV"></a>
 
-A joint total variation regulariser is explored in [Joint-TV.ipynb](Joint-TV.ipynb) for the purpose of multi-modal MR reconstruction.
+A joint total variation regulariser is explored in [cil_joint_tv_mr.ipynb](cil_joint_tv_mr.ipynb) for the purpose of multi-modal MR reconstruction.
