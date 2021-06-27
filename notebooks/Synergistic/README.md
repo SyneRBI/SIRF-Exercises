@@ -4,7 +4,7 @@ You should find in this directory a few notebooks that are designed to give you 
 
 0. [Gradient descent/ascent for MR, PET and CT](#gradient-descent-for-MR-PET-CT)
 1. [Generate the data](#gen_data)
-2. [de Pierro MAPEM](#de_pierro)
+2. [de Pierro MAPEM with the Bowsher prior](#de_pierro)
 3. [Dual PET](#dual_pet)
 4. [HKEM](#HKEM)
 5. [Joint-TV for MR](#Joint-TV)
@@ -40,9 +40,9 @@ A misalignment is also added to the amyloid image (and its corresponding mu-map)
 
 Lastly, a tumour is added to the original amyloid image. This data is useful for studying the effect of feature suppression when the feature is not present in the side information.
 
-## 2. de Pierro MAPEM <a name="de_pierro"></a>
+## 2. de Pierro MAPEM for Bowsher <a name="de_pierro"></a>
 
-[de\_Pierro\_MAPEM.ipynb](de_Pierro_MAPEM.ipynb) is a continuation of [../PET/MAPEM.ipynb](../PET/MAPEM.ipynb), however this example uses a Bowsher prior that depends on side information (in this case an MR image) as opposed to a quadratic prior.
+[de\_Pierro\_MAPEM.ipynb](de_Pierro_MAPEM.ipynb) is a continuation of [../PET/MAPEM.ipynb](../PET/MAPEM.ipynb), however this example uses a (quadratic) Bowsher prior that depends on side information (in this case an MR image) as opposed to a quadratic prior using uniformm weights.
 
 ## 3. Dual PET <a name="dual_pet"></a>
 
