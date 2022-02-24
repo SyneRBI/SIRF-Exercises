@@ -112,7 +112,7 @@ simulation.set_contrast_template_data(contrast_template)
 fname_acquisition_template = fpath_input / "acquisition_template.h5"
 acquisition_template = pMR.AcquisitionData(str(fname_acquisition_template))
 
-num_acquisitions = 256
+num_acquisitions = 128
 subset_idx = np.arange(num_acquisitions)
 acquisition_template = acquisition_template.get_subset(subset_idx)
 acquisition_template = pMR.set_goldenangle2D_trajectory(acquisition_template)
@@ -122,6 +122,19 @@ simulation.set_acquisition_template_data(acquisition_template)
 # %%
 csm = aux.unity_coilmaps_from_rawdata(acquisition_template)
 simulation.set_csm(csm)
+
+# %%
+# we add the usual simulation
+
+offset_x_mm = 0
+offset_y_mm = 0
+offset_z_mm = -127.5
+rotation_angles_deg = [0,0,0]
+translation = np.array([offset_x_mm, offset_y_mm, offset_z_mm])
+euler_angles_deg = np.array(rotation_angles_deg)
+
+offset_trafo = pReg.AffineTransformation(translation, euler_angles_deg)
+simulation.set_offset_trafo(offset_trafo)
 
 # %% [markdown]
 # To set up a time-dependant magnetisation we use the same principle as with the motion dynamic:
@@ -143,7 +156,10 @@ simulation.add_external_contrast_dynamic(mrf_dynamic)
 
 # %%
 # now we simulate and store it
+import time
+tstart = time.time()
 simulation.simulate_data()
+print("--- Required {} minutes for the simulation.".format( (time.time()-tstart)/60))
 
 fname_output = root_path / "Output/output_c_simulate_mrf_static.h5"
 if not fname_output.parent.is_dir():
