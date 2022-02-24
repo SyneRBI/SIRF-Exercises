@@ -23,18 +23,37 @@ def read_motionfields(fpath_prefix):
 	data = np.array(temp, dtype=object)
 	return data
 
+def coilmaps_from_rawdata(ad):
+
+	assert_validity(ad, pMR.AcquisitionData)
+
+	csm = pMR.CoilSensitivityData()
+	csm.smoothness = 50
+	csm.calculate(ad)
+
+	return csm
+
+def unity_coilmaps_from_rawdata(ad):
+	
+	csm = coilmaps_from_rawdata(ad)
+	
+	
+	csm_datatype = csm.as_array().dtype
+	csm_shape = csm.as_array().shape
+	unity_csm = np.ones(shape=csm_shape, dtype=csm_datatype)
+	csm.fill(unity_csm)
+
+	return csm
+
 
 def reconstruct_data(ad, csm=None):
 	assert_validity(ad, pMR.AcquisitionData)
 	if csm is not None:
 		assert_validity(csm, pMR.CoilSensitivityData)
-
+	else:
+		csm = coilmaps_from_rawdata(ad)
 	img = pMR.ImageData()
 	img.from_acquisition_data(ad)
-
-	csm = pMR.CoilSensitivityData()
-	csm.smoothness = 50
-	csm.calculate(ad)
 
 	am = pMR.AcquisitionModel(ad, img)
 	am.set_coil_sensitivity_maps(csm)
@@ -56,3 +75,5 @@ def set_motionfields_from_path(modyn, fpath_prefix):
 
 	for m in mvfs:
 		modyn.add_displacement_field(m)
+
+

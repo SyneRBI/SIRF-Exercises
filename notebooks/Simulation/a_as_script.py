@@ -9,8 +9,8 @@
 # - preparing valid simulation input data.
 # 
 # #### Content overview: 
-# - formatting an anatomy segmentation into Nifti
-# - formatting displacement vector fields into Nifti
+# - formatting an anatomy segmentation into Nifti using nibabel
+# - formatting displacement vector fields into Nifti using nibabel
 # - formatting orientation of MR rawdata
 # - Writing XML rawdata input
 # - using simulation to store ground truth T1, T2 and spin density maps
@@ -66,7 +66,7 @@ fname_contrast_template = str(fpath_out) + "/contrast_template.h5"
 command_conttempl = "{} {} {}".format(fpath_preprocess_exe, fname_input_contrast_template, fname_contrast_template)
 
 
-fname_input_acquisition_template = root_path + 'General/meas_MID33_rad_2d_gc_FID78808_ismrmrd.h5'
+fname_input_acquisition_template = root_path + 'General/meas_MID27_CV_11s_TI2153_a6_2x2x8_TR45_FID33312.h5'
 fname_acquisition_template = str(fpath_out) + "/acquisition_template.h5"
 command_acqtemplate = "{} {} {}".format(fpath_preprocess_exe, fname_input_acquisition_template, fname_acquisition_template)
 
@@ -175,9 +175,10 @@ plot_array(inhale_abs)
 # %%
 # it seems our motion fields are in LPS.
 
-# if we flip array indices of a DVF we must ensure the 
 def flip_mvf(mvf, axis):
-
+    
+    # if we flip array indices of a DVF we must ensure 
+    # the vector changes it's direction 
     mvf = np.flip(mvf, axis=axis)
     mvf[:,:,:,axis] *= -1
     
@@ -209,6 +210,8 @@ def reformat_mvfs( mvfs ):
 
 resp_mvfs = reformat_mvfs(resp_mvfs)
 
+
+
 # %%
 # so far we only saw some voxelised data. Now we need to store it with approriate geometry information
 # such that the simulation knows where the voxels are.
@@ -221,6 +224,7 @@ resolution_mm_per_pixel = np.array([2,2,-2,1])
 # the first voxel center is lies at -FOV / 2 + dx/2
 
 offset_mm =(-np.array(segmentation.shape)/2 + 0.5) * resolution_mm_per_pixel[0:3]
+
 affine = np.diag(resolution_mm_per_pixel)
 affine[:3,3] = offset_mm
 
@@ -229,9 +233,7 @@ affine[:3,3] = offset_mm
 
 # store segmentation as nifti
 img = nib.Nifti1Image(segmentation.get_fdata(), affine)
-# this is crucial since otherwise the offset won't end up in the nifti
-img.set_qform(affine)
-
+img.set_qform(affine) # crucial!
 fname_segmentation = str(fpath_out) + "/segmentation.nii"
 nib.save(img, fname_segmentation)
 
@@ -244,7 +246,11 @@ def store_mvfs(fpath_mvf_output, mvfs, affine):
         fname_mvf_output = fpath_mvf_output + "/mvf_{}".format(i)
         tmp = mvfs[i,:].astype(np.float32)
         img = nib.Nifti1Image(tmp, affine)
-
+        img.set_qform(affine) # crucial!
+        img.header.set_intent('vector')  # we need to say that these are vectors
+        img.header['intent_p1'] = int(1) # we need to specify it's a displacement
+        
+        
         print("Storing {}".format(fname_mvf_output))
         nib.save(img, fname_mvf_output)
 
@@ -252,6 +258,34 @@ fpath_mvf_output = fpath_out / 'mvfs_resp'
 fpath_mvf_output.mkdir(exist_ok=True,parents=True)
 
 store_mvfs(str(fpath_mvf_output), resp_mvfs, affine)
+del resp_mvfs
+
+
+# %%
+# as a crosscheck you can store the motion in 3D and look at it and see if it needs tweaking
+resp_mvfs = read_motionfields(str(fpath_mvf_output))
+
+resampler = pReg.NiftyResampler()
+resampler.set_padding_value(0)
+resampler.set_interpolation_type_to_nearest_neighbour()
+
+segmentation = pReg.NiftiImageData3D(fname_segmentation)
+resampler.set_floating_image(segmentation)
+resampler.set_reference_image(segmentation)
+
+ci=0
+for mvf in resp_mvfs:
+    print("Generating motionstate {}.".format(ci))
+    resampler.clear_transformations()
+    resampler.add_transformation(mvf)
+    resampler.process()
+
+    resampled_img = resampler.get_output()
+    resampled_img = pReg.NiftiImageData3D(resampled_img.abs())
+    resampled_img.write( str(fpath_out / "resp_motion_state_{}.nii".format(ci)))
+
+    ci += 1
+
 del resp_mvfs
 
 # %%
@@ -340,8 +374,8 @@ mrsim.set_acquisition_template_data(acquisition_template)
 # now we set up an affine transformation to move the acquired slice around
 offset_x_mm = 0
 offset_y_mm = 0
-offset_z_mm = 0
-rotation_angles_deg = [0,0,0]
+offset_z_mm = -127.5
+rotation_angles_deg = [-15,-15,0]
 translation = np.array([offset_x_mm, offset_y_mm, offset_z_mm])
 euler_angles_deg = np.array(rotation_angles_deg)
 
@@ -385,9 +419,6 @@ f.savefig('/media/sf_CCPPETMR/fig_gtmaps', dpi=300)
 # - learned about the XML file describing the tissue parameters,
 # - added a transformation that leads to 2D images in 4 chamber view.
 # 
-# Congratulations you can continue to use the simulation framework to generate some simulations.
-
-# %% [markdown]
-# 
+# _Next step: use the simulation to simulate an MR raw data file._
 
 
