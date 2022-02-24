@@ -3,9 +3,10 @@ import numpy as np
 
 
 from sirf.Utilities import assert_validity
+
 import sirf.Reg as pReg
 import sirf.Gadgetron as pMR
-
+import sirf.DynamicSimulation as pDS
 
 
 
@@ -39,3 +40,19 @@ def reconstruct_data(ad, csm=None):
 	am.set_coil_sensitivity_maps(csm)
 
 	return am.inverse(ad)
+
+
+def get_normed_surrogate_signal(t0_s, tmax_s, Nt, f_Hz):
+
+	t_s = np.linspace(t0_s, tmax_s, Nt)
+	sig = 0.5 * (1 + np.sin( 2*np.pi*f_Hz*t_s))
+	return t_s, sig
+
+	
+def set_motionfields_from_path(modyn, fpath_prefix):
+
+	assert_validity(modyn, pDS.MRMotionDynamic)
+	mvfs = read_motionfields(fpath_prefix)
+
+	for m in mvfs:
+		modyn.add_displacement_field(m)
