@@ -2,7 +2,7 @@
 # ### Notebook C: 
 
 # %% [markdown]
-# ## Notbook C: How to preprocess input data for simulation
+# ## Notbook C: Simulating an MRF acquisition
 # 
 # #### Prerequisites:
 # - basic knowledge of Python 
@@ -112,7 +112,7 @@ simulation.set_contrast_template_data(contrast_template)
 fname_acquisition_template = fpath_input / "acquisition_template.h5"
 acquisition_template = pMR.AcquisitionData(str(fname_acquisition_template))
 
-num_acquisitions = 128
+num_acquisitions = 64 #magnetisation.shape[0]
 subset_idx = np.arange(num_acquisitions)
 acquisition_template = acquisition_template.get_subset(subset_idx)
 acquisition_template = pMR.set_goldenangle2D_trajectory(acquisition_template)
@@ -128,7 +128,7 @@ simulation.set_csm(csm)
 
 offset_x_mm = 0
 offset_y_mm = 0
-offset_z_mm = -127.5
+offset_z_mm = -4.5
 rotation_angles_deg = [0,0,0]
 translation = np.array([offset_x_mm, offset_y_mm, offset_z_mm])
 euler_angles_deg = np.array(rotation_angles_deg)
@@ -161,7 +161,7 @@ tstart = time.time()
 simulation.simulate_data()
 print("--- Required {} minutes for the simulation.".format( (time.time()-tstart)/60))
 
-fname_output = root_path / "Output/output_c_simulate_mrf_static.h5"
+fname_output = root_path / "Output/output_c_simulate_mrf_static_{}.h5".format(num_acquisitions)
 if not fname_output.parent.is_dir():
     fname_output.parent.mkdir(parents=True, exist_ok=True)
 
@@ -171,5 +171,9 @@ simulation.write_simulation_results(str(fname_output))
 simulated_data = pMR.AcquisitionData(str(fname_output))
 recon = pReg.NiftiImageData3D(aux.reconstruct_data(simulated_data))
 recon.write("/media/sf_CCPPETMR/tmp_mrf.nii")
+
+# %%
+prefix_output = root_path / "Output/output_c_static_ground_truth"
+simulation.save_parametermap_ground_truth(str(prefix_output))
 
 
