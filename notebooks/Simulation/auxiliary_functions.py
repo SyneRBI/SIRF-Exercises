@@ -1,7 +1,7 @@
 from pathlib import Path 
 import numpy as np
 import xmltodict
-
+import scipy.signal as scisig
 
 from sirf.Utilities import assert_validity
 
@@ -110,11 +110,19 @@ def iterative_reconstruct_data(ad, csm=None, num_iter=10):
 
 	
 
-def get_normed_surrogate_signal(t0_s, tmax_s, Nt, f_Hz):
+def get_normed_sinus_signal(t0_s, tmax_s, Nt, f_Hz):
 
 	t_s = np.linspace(t0_s, tmax_s, Nt)
 	sig = 0.5 * (1 + np.sin( 2*np.pi*f_Hz*t_s))
 	return t_s, sig
+
+def get_normed_sawtooth_signal(t0_s, tmax_s, Nt, f_Hz):
+
+	t_s = np.linspace(t0_s, tmax_s, Nt)
+	
+	sig = 0.5*(1 + scisig.sawtooth(2*np.pi*f_Hz*t_s))
+	return t_s, sig
+
 
 	
 def set_motionfields_from_path(modyn, fpath_prefix):
