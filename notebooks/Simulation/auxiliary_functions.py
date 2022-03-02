@@ -9,6 +9,43 @@ import sirf.Reg as pReg
 import sirf.Gadgetron as pMR
 import sirf.DynamicSimulation as pDS
 
+import matplotlib.pyplot as plt
+
+
+def plot_array(arr):
+	
+	textcolor = 'white'
+	assert arr.size == 3, "Please only pass 3D arrays"
+	
+	slcx,slcy,slcz = np.array(arr.shape)//2
+
+	f, axs = plt.subplots(1,3)
+	axs[0].imshow(arr[:,:,slcz])
+	axs[0].set_ylabel("L-R")
+	axs[0].set_xlabel("P-A")
+	axs[0].set_xticks([])
+	axs[0].set_yticks([])
+	axs[0].xaxis.label.set_color(textcolor)
+	axs[0].yaxis.label.set_color(textcolor)
+
+	axs[1].imshow(arr[:,slcy,:])
+	axs[1].set_ylabel("L-R")
+	axs[1].set_xlabel("S-I")
+	axs[1].set_xticks([])
+	axs[1].set_yticks([])
+	axs[1].xaxis.label.set_color(textcolor)
+	axs[1].yaxis.label.set_color(textcolor)
+
+
+	axs[2].imshow(arr[slcx,:,:])
+	axs[2].set_ylabel("P-A")
+	axs[2].set_xlabel("S-I")
+	axs[2].set_xticks([])
+	axs[2].set_yticks([])
+	axs[2].xaxis.label.set_color(textcolor)
+	axs[2].yaxis.label.set_color(textcolor)
+
+	plt.show()
 
 
 def read_motionfields(fpath_prefix):
@@ -46,7 +83,42 @@ def unity_coilmaps_from_rawdata(ad):
 
 	return csm
 
+def gaussian_2D_coilmaps(ad):
 
+    csm = pMR.CoilSensitivityData()
+    csm.smoothness = 1
+    csm.calculate(ad)
+
+    csm_arr = csm.as_array()
+    img_size = csm_arr.shape[2:]
+
+    assert len(img_size) == 2, "Only ask for a 2D coilmap please."
+
+    X,Y = np.meshgrid(np.linspace(-img_size[0]/2,img_size[0]/2, img_size[0]), np.linspace(-img_size[1]/2,img_size[1]/2, img_size[1]))
+
+    num_coils = csm_arr.shape[0]
+    # put the centers fo gaussian coil profiles in a circle around the image center 
+    coil_center_rad = img_size[0]/3
+    coil_centers = [coil_center_rad*np.array([np.cos(2*np.pi*i/num_coils), np.sin(2*np.pi*i/num_coils)]) for i in range(num_coils)]
+
+    csm_gauss = np.zeros(csm_arr.shape)
+    # fix some arbitary width
+    coilmap_width_pix = np.max(img_size)
+    for ic in range(num_coils):
+        csm_gauss[ic, ...] = np.exp( -((X-coil_centers[ic][0])**2 + (Y-coil_centers[ic][1])**2) / coilmap_width_pix**2)
+
+    # do an SVD to extrac the principal components to avoid normalisation problems
+    csm_flat = np.reshape(csm_gauss, (csm_gauss.shape[0], -1))
+    __,__,V = np.linalg.svd(csm_flat, full_matrices=False)
+
+    csm_flat = np.reshape(V, csm_gauss.shape)
+
+    csm_norm = np.sum( np.conj(csm_flat) * csm_flat,axis=0)[np.newaxis,...]
+
+    csm_flat = csm_flat / csm_norm
+    csm.fill(csm_flat.astype(np.complex64))
+
+    return csm
 
 
 def reconstruct_data(ad, csm=None):
@@ -138,6 +210,29 @@ def set_motionfields_from_path(modyn, fpath_prefix):
 ## mrf matching
 # from PTBPyRecon
 
+def match_dict(dict_sig, dict_theta, im_sig_1d, magnitude = False):
+
+	output = np.zeros((im_sig_1d.shape[0], dict_theta.shape[1]), dtype=im_sig_1d.dtype)
+	print(output.shape)
+
+	num_subranges = 1
+
+	try:
+
+		subranges = np.arange(im_sig_1d.shape)
+		subranges = np.array_split(subranges, num_subranges)
+		print(subranges)
+
+		for sr in subranges:
+			dot_prod = np.dot(np.conj(dict_sig), im_sig_1d[:,sr].transpose())
+
+	except MemoryError:
+		print("Memory error, we will split the task into more sets.")
+		num_subranges += 1
+
+	return False
+
+
 def match_dict_1d(dict_sig, dict_theta, im_sig_1d, magnitude = False):
 
     # Calculate dot-product between signal and dictionary
@@ -210,7 +305,7 @@ def set_encodingLimits_repetition(ad, num_recon_imgs):
 def activate_timeresolved_reconstruction(ad, num_recon_imgs):
 
 	assert_validity(ad, pMR.AcquisitionData)
-	set_encodingLimits_repetition(ad_resolved, num_recon_imgs)
+	set_encodingLimits_repetition(ad, num_recon_imgs)
 
 	ad_resolved = ad.new_acquisition_data()
 
@@ -243,5 +338,49 @@ def apply_databased_sliding_window(ad, data):
     
     return avg_data
 
-# use CG solver for quick iterative reconstruction
+# match dictionary 
+def match_dict_1d(dict_sig, dict_theta, im_sig_1d, magnitude = False):
 
+    # Calculate dot-product between signal and dictionary
+    if magnitude:
+        dot_prod = np.dot(np.abs(dict_sig), np.abs(im_sig_1d.transpose()))
+    else:
+        dot_prod = np.dot(np.conj(dict_sig), im_sig_1d.transpose())
+
+    # Find maximum
+    idx = np.nanargmax(np.abs(dot_prod), axis=0)
+
+    # Get T1 and T2
+    match_theta = dict_theta[idx, :]
+
+    # Get Rho and iRho
+    dot_prod = np.sum(np.multiply(dict_sig[idx,:], im_sig_1d), axis=1)
+    match_theta[:, 0] = np.real(dot_prod)
+    match_theta[:, 3] = np.imag(dot_prod)
+
+    return (match_theta, dict_sig[idx, :]*(match_theta[:,0] + 1j*match_theta[:,3])[:,np.newaxis])
+
+
+# do pixel-wise matching on lower memory by splitting it up 
+def match_dict(dict_sig, dict_theta, im_sig_1d, magnitude = False):
+
+    output = np.zeros((im_sig_1d.shape[0], dict_theta.shape[1]), dtype=im_sig_1d.dtype)
+
+    num_subsets = 16
+    success = False
+    while not success:
+        try:
+            subranges = np.arange(im_sig_1d.shape[0])
+            subranges = np.array_split(subranges, num_subsets)
+
+            for sr in subranges:
+                match_subrange = match_dict_1d(dict_sig, dict_theta, im_sig_1d[sr,:])
+                output[sr,:] = match_subrange[0]
+                
+            success = True
+
+        except MemoryError:
+            num_subsets *= 2
+            print("Memory error, we will split the task into {} sets.".format(num_subsets))
+
+    return output
