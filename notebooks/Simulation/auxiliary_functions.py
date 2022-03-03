@@ -180,7 +180,32 @@ def iterative_reconstruct_data(ad, csm=None, num_iter=10):
 	x0 = am.backward(ad)
 	return conjGrad(E,x0,x0, tol=0, N=num_iter)
 
-	
+def iterative_reconstruct_timeresolved(ad, num_time_points, num_cg_iterations):
+    
+    # first compute the CSM based on all data
+    csm = pMR.CoilSensitivityData()
+    csm.smoothness = 50
+    csm.calculate(ad)
+    csm_arr = csm.as_array()
+    
+    # then activate the time-resolved reconstruction in repetition dimension
+    ad = activate_timeresolved_reconstruction(ad, num_time_points)
+
+    # set up a new CSM based on the time-resolved acquisition data
+    csm = pMR.CoilSensitivityData()
+    
+    # this step sets up a time-resolved coilmap. The reconstruction checks if for each
+    # time point a coilmap is present. 
+    csm.calculate(ad) 
+    # But we want to use the coilmap that was computed from the entire dataset
+    # so we give every repetition the same coilmap
+    num_reps = csm.as_array().shape[1]
+    csm_arr = np.tile(csm_arr, (1,num_reps,1,1))
+    csm_arr = np.swapaxes(csm_arr, 0, 1)# unfortunately these two axes have to be swapped.
+    csm = csm.fill(csm_arr.astype(csm.as_array().dtype))
+    recon = iterative_reconstruct_data(ad, csm, num_cg_iterations)
+
+    return recon, ad
 
 def get_normed_sinus_signal(t0_s, tmax_s, Nt, f_Hz):
 
@@ -191,7 +216,6 @@ def get_normed_sinus_signal(t0_s, tmax_s, Nt, f_Hz):
 def get_normed_sawtooth_signal(t0_s, tmax_s, Nt, f_Hz):
 
 	t_s = np.linspace(t0_s, tmax_s, Nt)
-	
 	sig = 0.5*(1 + scisig.sawtooth(2*np.pi*f_Hz*t_s))
 	return t_s, sig
 
@@ -384,3 +408,19 @@ def match_dict(dict_sig, dict_theta, im_sig_1d, magnitude = False):
             print("Memory error, we will split the task into {} sets.".format(num_subsets))
 
     return output
+
+
+def dictionary_matching(recon, dict_sig, dict_theta):
+
+	assert_validity(recon, pMR.ImageData)
+	
+	img_series = recon.as_array()
+	img_shape = img_series.shape[1:]
+	img_series_1d = np.transpose(np.reshape(img_series,(img_series.shape[0], -1)))
+	
+	# this checks the largest overlap between time-profile and dictionary entries
+	# if the RAM overflows this will catch it and perform the task in multiple sets.
+	dict_match = match_dict(dict_sig, dict_theta, img_series_1d)
+
+	dict_match = np.reshape(dict_match, (*img_shape, -1))
+	return dict_match
