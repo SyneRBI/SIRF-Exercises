@@ -111,11 +111,15 @@ def gaussian_2D_coilmaps(ad):
     csm_flat = np.reshape(csm_gauss, (csm_gauss.shape[0], -1))
     __,__,V = np.linalg.svd(csm_flat, full_matrices=False)
 
-    csm_flat = np.reshape(V, csm_gauss.shape)
+	
+
+    # csm_flat = np.reshape(V, csm_gauss.shape)
+    csm_flat = np.reshape(csm_flat, csm_gauss.shape)
 
     csm_norm = np.sum( np.conj(csm_flat) * csm_flat,axis=0)[np.newaxis,...]
 
     csm_flat = csm_flat / csm_norm
+    csm_flat = np.swapaxes(csm_flat,0,1)
     csm.fill(csm_flat.astype(np.complex64))
 
     return csm
@@ -179,6 +183,29 @@ def iterative_reconstruct_data(ad, csm=None, num_iter=10):
 	E = EncOp(am)
 	x0 = am.backward(ad)
 	return conjGrad(E,x0,x0, tol=0, N=num_iter)
+
+def reconstruct_timeresolved(ad, num_time_points):
+    # first compute the CSM based on all data
+    csm = pMR.CoilSensitivityData()
+    csm.smoothness = 50
+    csm.calculate(ad)
+    csm_arr = csm.as_array()
+    
+    # then activate the time-resolved reconstruction in repetition dimension
+    ad = activate_timeresolved_reconstruction(ad, num_time_points)
+
+     # this step sets up a time-resolved coilmap. The reconstruction checks if for each
+    # time point a coilmap is present. 
+    csm.calculate(ad) 
+    # But we want to use the coilmap that was computed from the entire dataset
+    # so we give every repetition the same coilmap
+    num_reps = csm.as_array().shape[1]
+    csm_arr = np.tile(csm_arr, (1,num_reps,1,1))
+    csm_arr = np.swapaxes(csm_arr, 0, 1)# unfortunately these two axes have to be swapped.
+    csm = csm.fill(csm_arr.astype(csm.as_array().dtype))
+    recon = reconstruct_data(ad, csm, num_cg_iterations)
+
+    return recon, ad
 
 def iterative_reconstruct_timeresolved(ad, num_time_points, num_cg_iterations):
     
@@ -390,7 +417,7 @@ def match_dict(dict_sig, dict_theta, im_sig_1d, magnitude = False):
 
     output = np.zeros((im_sig_1d.shape[0], dict_theta.shape[1]), dtype=im_sig_1d.dtype)
 
-    num_subsets = 16
+    num_subsets = 32
     success = False
     while not success:
         try:
