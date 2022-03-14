@@ -2,6 +2,7 @@ from pathlib import Path
 import numpy as np
 import xmltodict
 import scipy.signal as scisig
+import nibabel as nib
 
 from sirf.Utilities import assert_validity
 
@@ -10,6 +11,13 @@ import sirf.Gadgetron as pMR
 import sirf.DynamicSimulation as pDS
 
 import matplotlib.pyplot as plt
+
+def write_nii(fname, img):
+
+	assert_validity(img, pMR.ImageData)
+
+	nii = nib.Nifti1Image(np.squeeze(np.abs(img.as_array())), np.eye(4))
+	nib.save(nii, fname)
 
 
 def plot_array(arr):
@@ -60,6 +68,33 @@ def read_motionfields(fpath_prefix):
 
 	data = np.array(temp, dtype=object)
 	return data
+
+def deform_segmentation(fname_segmentation, fpath_mvf, prefix_output_without_extension):
+	# as a crosscheck you can store the motion in 3D and look at it and see if it needs tweaking
+	resp_mvfs = read_motionfields(fpath_mvf)
+
+	resampler = pReg.NiftyResampler()
+	resampler.set_padding_value(0)
+	resampler.set_interpolation_type_to_nearest_neighbour()
+
+	segmentation = pReg.NiftiImageData3D(fname_segmentation)
+	resampler.set_floating_image(segmentation)
+	resampler.set_reference_image(segmentation)
+
+	ci=0
+	for mvf in resp_mvfs:
+		print("Generating motionstate {}.".format(ci))
+		resampler.clear_transformations()
+		resampler.add_transformation(mvf)
+		resampler.process()
+
+		resampled_img = resampler.get_output()
+		resampled_img = pReg.NiftiImageData3D(resampled_img.abs())
+		tmp_name_output = prefix_output_without_extension + "{}.nii".format(ci)
+		resampled_img.write(tmp_name_output)
+
+		ci += 1
+
 
 def coilmaps_from_rawdata(ad):
 
@@ -203,7 +238,7 @@ def reconstruct_timeresolved(ad, num_time_points):
     csm_arr = np.tile(csm_arr, (1,num_reps,1,1))
     csm_arr = np.swapaxes(csm_arr, 0, 1)# unfortunately these two axes have to be swapped.
     csm = csm.fill(csm_arr.astype(csm.as_array().dtype))
-    recon = reconstruct_data(ad, csm, num_cg_iterations)
+    recon = reconstruct_data(ad, csm)
 
     return recon, ad
 
