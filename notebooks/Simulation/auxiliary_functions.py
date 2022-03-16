@@ -219,55 +219,62 @@ def iterative_reconstruct_data(ad, csm=None, num_iter=10):
 	x0 = am.backward(ad)
 	return conjGrad(E,x0,x0, tol=0, N=num_iter)
 
+def gate_acquisition_data(ad, idx_corr, keep_bins):
+	assert_validity(ad, pMR.AcquisitionData)
+	assert np.max(keep_bins) < len(idx_corr), "You ask for bins ({})that have not been defined in idx_corr of length {}.".format(np.max(keep_bins), len(idx_corr))
+
+	keep_idx = []
+
+	for bin in keep_bins:
+		keep_idx = np.append(keep_idx, sorted(idx_corr[bin]))
+	
+	keep_idx = np.unique(keep_idx)
+	return ad.get_subset(keep_idx)
+
+def prep_time_resolved_recon(ad,num_time_points):
+	assert_validity(ad, pMR.AcquisitionData)
+	# first compute the CSM based on all data
+	csm = pMR.CoilSensitivityData()
+	csm.smoothness = 50
+	csm.calculate(ad)
+	csm_arr = csm.as_array()
+
+	# then activate the time-resolved reconstruction in repetition dimension
+	ad = activate_timeresolved_reconstruction(ad, num_time_points)
+
+		# this step sets up a time-resolved coilmap. The reconstruction checks if for each
+	# time point a coilmap is present. 
+	csm.calculate(ad) 
+	# But we want to use the coilmap that was computed from the entire dataset
+	# so we give every repetition the same coilmap
+	num_reps = csm.as_array().shape[1]
+	csm_arr = np.tile(csm_arr, (1,num_reps,1,1))
+	csm_arr = np.swapaxes(csm_arr, 0, 1)# unfortunately these two axes have to be swapped.
+	csm = csm.fill(csm_arr.astype(csm.as_array().dtype))
+
+	return ad, csm
+
 def reconstruct_timeresolved(ad, num_time_points):
-    # first compute the CSM based on all data
-    csm = pMR.CoilSensitivityData()
-    csm.smoothness = 50
-    csm.calculate(ad)
-    csm_arr = csm.as_array()
     
-    # then activate the time-resolved reconstruction in repetition dimension
-    ad = activate_timeresolved_reconstruction(ad, num_time_points)
+	ad, csm = prep_time_resolved_recon(ad,num_time_points)
+	recon = reconstruct_data(ad, csm)
 
-     # this step sets up a time-resolved coilmap. The reconstruction checks if for each
-    # time point a coilmap is present. 
-    csm.calculate(ad) 
-    # But we want to use the coilmap that was computed from the entire dataset
-    # so we give every repetition the same coilmap
-    num_reps = csm.as_array().shape[1]
-    csm_arr = np.tile(csm_arr, (1,num_reps,1,1))
-    csm_arr = np.swapaxes(csm_arr, 0, 1)# unfortunately these two axes have to be swapped.
-    csm = csm.fill(csm_arr.astype(csm.as_array().dtype))
-    recon = reconstruct_data(ad, csm)
+	return recon, ad
 
-    return recon, ad
+def reconstruct_timeresolved_gated(ad, num_time_points, idx_corr, keep_bins):
+	
+	ad, csm = prep_time_resolved_recon(ad,num_time_points)
+	ad = gate_acquisition_data(ad,idx_corr,keep_bins)
+	recon = reconstruct_data(ad, csm)
+
+	return recon, ad
 
 def iterative_reconstruct_timeresolved(ad, num_time_points, num_cg_iterations):
     
-    # first compute the CSM based on all data
-    csm = pMR.CoilSensitivityData()
-    csm.smoothness = 50
-    csm.calculate(ad)
-    csm_arr = csm.as_array()
-    
-    # then activate the time-resolved reconstruction in repetition dimension
-    ad = activate_timeresolved_reconstruction(ad, num_time_points)
+	ad, csm = prep_time_resolved_recon(ad,num_time_points)
+	recon = iterative_reconstruct_data(ad, csm, num_cg_iterations)
 
-    # set up a new CSM based on the time-resolved acquisition data
-    csm = pMR.CoilSensitivityData()
-    
-    # this step sets up a time-resolved coilmap. The reconstruction checks if for each
-    # time point a coilmap is present. 
-    csm.calculate(ad) 
-    # But we want to use the coilmap that was computed from the entire dataset
-    # so we give every repetition the same coilmap
-    num_reps = csm.as_array().shape[1]
-    csm_arr = np.tile(csm_arr, (1,num_reps,1,1))
-    csm_arr = np.swapaxes(csm_arr, 0, 1)# unfortunately these two axes have to be swapped.
-    csm = csm.fill(csm_arr.astype(csm.as_array().dtype))
-    recon = iterative_reconstruct_data(ad, csm, num_cg_iterations)
-
-    return recon, ad
+	return recon, ad
 
 def get_normed_sinus_signal(t0_s, tmax_s, Nt, f_Hz):
 
@@ -396,7 +403,7 @@ def activate_timeresolved_reconstruction(ad, num_recon_imgs):
 	ad_resolved = ad.new_acquisition_data()
 
 	# this way we will reconstruct one image per readout
-	for ia in range(ad.number()):    
+	for ia in range(ad.number()):
 		acq = ad.acquisition(ia)
 		acq.set_repetition(int(np.floor(ia / ad.number()* num_recon_imgs)))
 		ad_resolved.append_acquisition(acq)
