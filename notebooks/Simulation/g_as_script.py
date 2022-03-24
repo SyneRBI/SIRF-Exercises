@@ -29,7 +29,7 @@ fpath_input = root_path / "Input"
 
 
 # %%
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from pathlib import Path
 
 fpath_epg_result = Path("/media/sf_CCPPETMR/TestData/Input/xDynamicSimulation/pDynamicSimulation/Fingerprints/")
@@ -70,8 +70,7 @@ acquisition_template = acquisition_template.get_subset(subset_idx)
 
 acquisition_template = pMR.set_goldenangle2D_trajectory(acquisition_template)
 
-simulation.set_acquisition_template_data(acquisition_template)
-simulation.set_contrast_template_data(acquisition_template)
+simulation.set_template_data(acquisition_template)
 
 csm = aux.gaussian_2D_coilmaps(acquisition_template)
 simulation.set_csm(csm)
@@ -80,7 +79,7 @@ simulation.set_csm(csm)
 # we add the usual offset transformation
 offset_x_mm = 0
 offset_y_mm = 0
-offset_z_mm = -4.5
+offset_z_mm = -14
 rotation_angles_deg = [0,0,0]
 translation = np.array([offset_x_mm, offset_y_mm, offset_z_mm])
 euler_angles_deg = np.array(rotation_angles_deg)
@@ -114,7 +113,6 @@ simulation.add_external_contrast_dynamic(mrf_dynamic)
 Nt = 10000
 t0_s = 0
 tmax_s = 60*10
-
 
 # %%
 
@@ -154,7 +152,7 @@ t_card, sig_card = aux.get_normed_sawtooth_signal(t0_s, tmax_s, Nt, f_Hz_card)
 num_sim_card_states = 1
 card_motion = pDS.MRMotionDynamic( num_sim_card_states )
 card_motion.set_dynamic_signal(t_card, sig_card)
-card_motion.set_cyclicality(True)
+card_motion.set_cyclicality(False)
 card_motion.set_groundtruth_folder_prefix(str(root_path / "Output/gt_card_mrf/"))
 
 aux.set_motionfields_from_path(card_motion, str(fpath_input / 'mvfs_card/'))
@@ -172,7 +170,13 @@ if not fname_output.parent.is_dir():
 
 simulation.write_simulation_results(str(fname_output))
 
-# %%
+# %% [markdown]
+# ### Recap 
+# In this notebook we combined motion dynamics with external contrast dynamics to simulate motion during MRF.
+# 
+# _Up next: dictionary matching for the simulated data._
 
+# %% [markdown]
+# 
 
 

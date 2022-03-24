@@ -220,16 +220,19 @@ def iterative_reconstruct_data(ad, csm=None, num_iter=10):
 	return conjGrad(E,x0,x0, tol=0, N=num_iter)
 
 def gate_acquisition_data(ad, idx_corr, keep_bins):
-	assert_validity(ad, pMR.AcquisitionData)
-	assert np.max(keep_bins) < len(idx_corr), "You ask for bins ({})that have not been defined in idx_corr of length {}.".format(np.max(keep_bins), len(idx_corr))
+    assert_validity(ad, pMR.AcquisitionData)
+    assert np.max(keep_bins) < len(idx_corr), "You ask for bins ({})that have not been defined in idx_corr of length {}.".format(np.max(keep_bins), len(idx_corr))
 
-	keep_idx = []
+    keep_idx = []
 
-	for bin in keep_bins:
-		keep_idx = np.append(keep_idx, sorted(idx_corr[bin]))
-	
-	keep_idx = np.unique(keep_idx)
-	return ad.get_subset(keep_idx)
+    for bin in keep_bins:
+        keep_idx = np.append(keep_idx, sorted(idx_corr[bin]))
+
+    keep_idx = np.unique(keep_idx)
+    if not np.size(keep_idx):
+        raise AssertionError("The keep index is empty. Gating removed all acquisitions")
+
+    return ad.get_subset(keep_idx)
 
 def prep_time_resolved_recon(ad,num_time_points):
 	assert_validity(ad, pMR.AcquisitionData)
@@ -412,24 +415,38 @@ def activate_timeresolved_reconstruction(ad, num_recon_imgs):
 
 	return ad_resolved
 
-
-
 def apply_databased_sliding_window(ad, data):
     
     assert_validity(ad, pMR.AcquisitionData)
 	
-    assert data.shape[0] == ad.number(), "Please give a dataset with the same data size in the 0th dimension as there are acquisitions."
+    assert data.shape[0] >= ad.number(), "Please give a dataset with the same data size in the 0th dimension as there are acquisitions."
 
     repetition_number = np.array(ad.get_ISMRMRD_info('repetition'), dtype=np.intc)
     unique_reps = np.unique(repetition_number)
     repetition_number.shape[0]
     
-    avg_data = np.zeros(shape=(len(unique_reps), data.shape[1]))
+    avg_data = np.zeros(shape=(len(unique_reps), data.shape[1]), dtype=data.dtype)
 
-    for ur in unique_reps:
-        avg_data[ur,:] = np.mean( data[np.where( repetition_number==ur)[0],...], axis=0)
+    for ur in range(unique_reps.size):
+        avg_data[ur,:] = np.mean( data[np.where( repetition_number==unique_reps[ur])[0],...], axis=0)
     
     return avg_data
+
+
+def gate_data(data, idx_corr, keep_bins):
+    
+    keep_idx = []
+
+    for bin in keep_bins:
+        keep_idx = np.append(keep_idx, sorted(idx_corr[bin]))
+
+    keep_idx = np.array(np.unique(keep_idx), dtype=int)
+    if not np.size(keep_idx):
+        raise AssertionError("The keep index is empty. Gating removed all data.")
+     
+    rd = data[keep_idx,...]
+    
+    return rd
 
 # match dictionary 
 def match_dict_1d(dict_sig, dict_theta, im_sig_1d, magnitude = False):
