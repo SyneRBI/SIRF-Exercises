@@ -13,31 +13,21 @@ class TissueParameterList:
             msg = "We have extracted {} for label {}.".format(tp.name, tp.label)
             print(msg)
 
-    def parse_xml(self, xml_path):
-
-        xml_dict = TissueParameterList._read_xml_to_dict(xml_path)
-        self._extract_dictionary(xml_dict)
-    
-
-    def _read_xml_to_dict(xml_path):
+    def read_xml_to_dict(xml_path):
 
         with open(xml_path, 'r') as file:
             xml_data = file.read()
         xml_dict = xmltodict.parse(xml_data)
     
         return xml_dict
-        
-    def mr_as_array(self):
 
-        arr = np.empty( shape=(self.tissue_parameters.size, 5))
+    def parse_xml(self, xml_path):
 
-        for i in range(self.tissue_parameters.size):
-            arr[i,:] = self.tissue_parameters[i].mr_as_array()
-        
-        return arr
+        xml_dict = TissueParameterList.read_xml_to_dict(xml_path)
+        self.extract_dictionary(xml_dict)
+    
 
-
-    def _extract_dictionary(self, xml_dict):
+    def extract_dictionary(self, xml_dict):
 
         parameter_list = xml_dict['TissueParameterList']['TissueParameter']
 
@@ -58,7 +48,24 @@ class TissueParameterList:
 
             tp = self.TissueParameter(label, name, rho, t1, t2, cs, mu, act)
             self.tissue_parameters = np.append(self.tissue_parameters, tp)
+        
+    def get_labels_and_names(self):
+        
+        label_dict = {}
 
+        for tp in self.tissue_parameters:
+            label_dict[tp.name] = tp.label
+
+        return label_dict
+
+    def mr_as_array(self):
+
+        arr = np.empty( shape=(self.tissue_parameters.size, 5))
+
+        for i in range(self.tissue_parameters.size):
+            arr[i,:] = self.tissue_parameters[i].mr_as_array()
+        
+        return arr
 
     class TissueParameter:
 
