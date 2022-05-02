@@ -1,20 +1,20 @@
 #! /bin/bash
-# A script to download all data for the SIRF-Exercises course
+# A script to download specified data for the SIRF-Exercises course
 #
 # Author: Kris Thielemans, Richard Brown, Ashley Gillman
 # Copyright (C) 2018-2021 University College London
 # Copyright (C) 2021 CSIRO
 
 set -e
-trap "echo some error occured. Retry" ERR
+trap "echo some error occurred. Retry" ERR
 
 
 print_usage() {
     echo "Usage: $0 [-p] [-m] [-o] [-d DEST_DIR] [-D DOWNLOAD_DIR] | -h"
-    echo "A script to download all data for the SIRF-Exercises course"
-    echo "  -p        Download only PET data"
-    echo "  -m        Download only MR data"
-    echo "  -o        Download only old notebook data"
+    echo "A script to download specified data for the SIRF-Exercises course"
+    echo "  -p        Download  PET data"
+    echo "  -m        Download  MR data"
+    echo "  -o        Download old notebook data"
     echo "  -h        Print this help"
     echo "  -d DEST_DIR  Optional destination directory."
     echo "               If not supplied, \"SIRF_Exercises/data\" will be used, i.e., a subdirectory to the repository."
@@ -26,6 +26,7 @@ print_usage() {
     echo ""
     echo "Please note that if you run the script multiple times with different values"
     echo "for the -d or -D options, you might end up with multiple copies of the files."
+    Echo "Running the script without flags will not download data."
 }
 
 # get the real, absolute path
@@ -234,4 +235,4 @@ cat <<EOF >"${REPO_DIR}/lib/sirf_exercises/data_path.py"
 data_path = '${DATA_PATH}'
 EOF
 
-echo "All done!"
+echo "download_data.sh script completed."
