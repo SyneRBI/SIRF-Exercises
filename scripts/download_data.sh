@@ -26,7 +26,7 @@ print_usage() {
     echo ""
     echo "Please note that if you run the script multiple times with different values"
     echo "for the -d or -D options, you might end up with multiple copies of the files."
-    Echo "Running the script without flags will not download data."
+    echo "Running the script without flags will not download data."
 }
 
 # get the real, absolute path
