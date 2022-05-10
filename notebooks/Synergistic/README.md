@@ -8,6 +8,8 @@ You should find in this directory a few notebooks that are designed to give you 
 3. [Dual PET](#dual_pet)
 4. [HKEM](#HKEM)
 5. [Joint-TV for MR](#Joint-TV)
+6. [Joint-TV for PET](#Joint-TV)
+7. [Joint-TV for PET/SPECT](#Joint-TV)
 
 ## 0. Gradient descent/ascent for MR, PET and CT<a name="gradient-descent-for-MR-PET-CT"></a>
 
