@@ -24,8 +24,8 @@ imagedata byte order := LITTLEENDIAN
 
 !SPECT STUDY (acquired data) :=
 !direction of rotation := CW
-start angle := 0
+start angle := 180
 orbit := circular
-radius := 256
+radius := 150
 
 !END OF INTERFILE :=
