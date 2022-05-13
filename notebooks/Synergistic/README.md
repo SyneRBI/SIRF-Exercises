@@ -8,8 +8,6 @@ You should find in this directory a few notebooks that are designed to give you 
 3. [Dual PET](#dual_pet)
 4. [HKEM](#HKEM)
 5. [Joint-TV for MR](#Joint-TV)
-6. [Joint-TV for PET](#Joint-TV_P)
-7. [Joint-TV for PET/SPECT](#Joint-TV_PS)
 
 ## 0. Gradient descent/ascent for MR, PET and CT<a name="gradient-descent-for-MR-PET-CT"></a>
 
@@ -61,11 +59,3 @@ The hybrid kernel EM method is explored in [HKEM_reconstruction.ipynb](HKEM_reco
 ## 5. Joint-TV for MR <a name="Joint-TV"></a>
 
 A joint total variation regulariser is explored in [cil_joint_tv_mr.ipynb](cil_joint_tv_mr.ipynb) for the purpose of multi-modal MR reconstruction.
-
-## 6. Joint-TV for PET <a name="Joint-TV_P"></a>
-
-A joint total variation regulariser is explored in [cil_joint_tv_PET.ipynb](cil_joint_tv_PET.ipynb) for the purpose of multi-modal PET reconstruction.
-
-## 7. Joint-TV for PET/SPECT <a name="Joint-TV_PS"></a>
-
-A joint total variation regulariser is explored in [cil_joint_tv_PET_SPECT.ipynb](cil_joint_tv_PET_SPECT.ipynb) for the purpose of multi-modal reconstruction.
