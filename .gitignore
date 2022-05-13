@@ -54,10 +54,8 @@ errr.txt
 
 *_out.txt
 
-# no data in this repo
-data/
+# no data in this rep
 *.h5
-*.s
 *.l
 *.v
 *.dat
@@ -65,6 +63,8 @@ data/
 *.gz
 *.npz
 
+# no tmp images / data
+tmp*
 # Auto-generated data path scripts
 lib/sirf_exercises/data_path.py
 
