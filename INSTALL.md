@@ -29,12 +29,10 @@ adjusting the path to where you want to install the SIRF-Exercises of course.
 You will need to install the additional Python dependencies needed for the
 exercises also
 
-    $SIRF_PYTHON_EXECUTABLE -m pip install --user -r requirements.txt
+    $SIRF_PYTHON_EXECUTABLE -m pip install -r requirements.txt
 
 where we used the environment variable created when you follow the `SIRF-SuperBuild` instructions to make
 sure that you use a Python version which is compatible with how you compiled SIRF.
-This will do a "user" install - if you'd prefer a system install omit the
-`--user` flag. If you don't know what this means, use the above command.
 
 Of course, if you've used (Ana)conda to install Python etc (and are sure
 SIRF was compiled with that Python version), you can use conda to install
@@ -61,3 +59,7 @@ due to the file format used by jupyter notebooks. The following should work
     git pull
 
 (You do not have to write the `nbstripout` lines on the VM, and on other systems you have to write those only once).
+
+### Contributing to the SIRF-Exercises
+
+Follow the guidelines given in https://github.com/SyneRBI/SIRF/blob/master/CONTRIBUTING.md. Please do follow the `nbstripout` instructions above **before** commiting any changes.
