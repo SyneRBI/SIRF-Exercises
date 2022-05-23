@@ -26,18 +26,18 @@ class EllipsesDataset(torch.utils.data.Dataset):
         The forward operator
     image template : `SIRF image data`
         needed to project and to get shape
-    n_iters : `int`
-        Number of iterations    
+    n_samples : `int`
+        Number of samples    
     mode : `string`
         Type of data: training, validation and testing
     seed : `int`
         The seed used for the random ellipses
     """
   
-    def __init__(self, fwd_op, image_template, n_iters = 100, mode="train", seed = 1):
+    def __init__(self, fwd_op, image_template, n_samples = 100, mode="train", seed = 1):
         self.fwd_op = fwd_op
         self.image_template = image_template
-        self.n_iters = n_iters
+        self.n_samples = n_samples
                 
         if mode == 'valid':
             self.x_gt = shepp_logan(self.image_template.shape)
@@ -55,7 +55,7 @@ class EllipsesDataset(torch.utils.data.Dataset):
 
     def __len__(self):
         # Denotes the total number of iters
-        return self.n_iters
+        return self.n_samples
 
     def __getitem__(self, index):
         # Generates one sample of data
