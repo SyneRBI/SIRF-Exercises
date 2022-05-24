@@ -1,5 +1,3 @@
-# Simple PyTorch dataset for simulated ellipses
-
 # Author: Imraj Singh
 
 # First version: 21st of May 2022
@@ -15,10 +13,10 @@
 import torch
 import numpy as np
 from .misc import random_phantom, shepp_logan
-from tqdm.notebook import trange, tqdm
 
 class EllipsesDataset(torch.utils.data.Dataset):
-    """Pytorch Dataset for simulated ellipses
+
+    """ Pytorch Dataset for simulated ellipses
 
     Initialisation
     ----------
@@ -33,16 +31,16 @@ class EllipsesDataset(torch.utils.data.Dataset):
     seed : `int`
         The seed used for the random ellipses
     """
-  
+
     def __init__(self, fwd_op, image_template, n_samples = 100, mode="train", seed = 1):
         self.fwd_op = fwd_op
         self.image_template = image_template
         self.n_samples = n_samples
-                
+
         if mode == 'valid':
             self.x_gt = shepp_logan(self.image_template.shape)
             self.y = self.__get_measured__(self.x_gt)
-            
+
         self.primal_op_layer = fwd_op
         self.mode = mode
         np.random.seed(seed)
@@ -66,9 +64,7 @@ class EllipsesDataset(torch.utils.data.Dataset):
         elif self.mode == "valid":
             x_gt = self.x_gt
             y = self.y
-            
-        elif self.mode == "test":
-            NotImplementedError
+
         else:
             NotImplementedError
 

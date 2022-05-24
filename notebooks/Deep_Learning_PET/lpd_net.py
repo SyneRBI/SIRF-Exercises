@@ -1,5 +1,4 @@
-"""
-Taken (and lightly modified) from https://github.com/cetmann/pytorch-primaldual
+""" Taken (and lightly modified) from https://github.com/cetmann/pytorch-primaldual
 
 MIT License
 
@@ -23,31 +22,25 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-
-Simple implementation of the learned primal-dual approach by 
+Simple implementation of the learned primal-dual approach by
 Adler & Öktem (2017), https://arxiv.org/abs/1707.06474
 """
-
 
 import torch
 import torch.nn as nn
 from sirf_torch import primal_op, dual_op
 
-
 class ConcatenateLayer(nn.Module):
     def __init__(self):
         super(ConcatenateLayer, self).__init__()
-    
     def forward(self, *x):
         return torch.cat(list(x), dim=1)
-
+    
 class DualNet(nn.Module):
     def __init__(self, n_dual):
         super(DualNet, self).__init__()
-        
         self.n_dual = n_dual
         self.n_channels = n_dual + 2
-        
         self.input_concat_layer = ConcatenateLayer()
         layers = [
             nn.Conv2d(self.n_channels, 128, kernel_size=3, padding=1),
@@ -105,7 +98,7 @@ class LearnedPrimalDual(nn.Module):
         self.n_dual = n_dual
         
         self.primal_shape = (n_primal,) + image_template.shape[1:]
-        self.dual_shape = (n_dual,) + sinogram_template.shape[2:] 
+        self.dual_shape = (n_dual,) + sinogram_template.shape[2:]
         
         self.primal_op_layer = primal_op(image_template, sinogram_template, acq_model)
         self.dual_op_layer = dual_op(image_template, sinogram_template, acq_model)
@@ -115,7 +108,7 @@ class LearnedPrimalDual(nn.Module):
         
         self.concatenate_layer = ConcatenateLayer()
         
-        for i in range(n_iter):
+        for _ in range(n_iter):
             self.primal_nets.append(
                 primal_architecture(n_primal)
             )

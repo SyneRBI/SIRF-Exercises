@@ -1,7 +1,7 @@
 # This is functionality extracted from [Operator Discretization Library (ODL)]
 # (https://odlgroup.github.io/odl/index.html) and changed somewhat for our needs.
 # The appropriate pieces of code that are used are: [here]
-# (https://github.com/odlgroup/odl/blob/master/odl/phantom/transmission.py) 
+# (https://github.com/odlgroup/odl/blob/master/odl/phantom/transmission.py)
 # and [here](https://github.com/odlgroup/odl/blob/master/odl/phantom/geometric.py).
 
 # Copyright 2014-2020 The ODL contributors
@@ -29,6 +29,7 @@ def _getshapes_2d(center, max_radius, shape):
     return tuple(idx), tuple(shapes)
 
 def ellipse_phantom(shape, ellipses):
+    
     """Create a phantom of ellipses in 2d space.
 
     Parameters
@@ -150,15 +151,15 @@ def random_phantom(space, n_ellipse=20):
 def shepp_logan(space):
     rad18 = np.deg2rad(18.0)
     #            value  axisx  axisy     x       y  rotation
-    ellipsoids= [[0.55, 0.69, 0.92, 0.0, 0.0, 0], 
-                [0.60, 0.6624, 0.874, 0.0, -0.0184, 0], 
-                [0.50, 0.11, 0.31, 0.22, 0.0, -rad18], 
-                [0.51, 0.16, 0.41, -0.22, 0.0, rad18], 
-                [0.05, 0.21, 0.25, 0.0, 0.35, 0], 
-                [0.11, 0.046, 0.046, 0.0, 0.1, 0], 
-                [0.48, 0.046, 0.046, 0.0, -0.1, 0], 
-                [0.34, 0.046, 0.023, -0.08, -0.605, 0], 
-                [0.14, 0.023, 0.023, 0.0, -0.606, 0], 
+    ellipsoids= [[0.55, 0.69, 0.92, 0.0, 0.0, 0],
+                [0.60, 0.6624, 0.874, 0.0, -0.0184, 0],
+                [0.50, 0.11, 0.31, 0.22, 0.0, -rad18],
+                [0.51, 0.16, 0.41, -0.22, 0.0, rad18],
+                [0.05, 0.21, 0.25, 0.0, 0.35, 0],
+                [0.11, 0.046, 0.046, 0.0, 0.1, 0],
+                [0.48, 0.046, 0.046, 0.0, -0.1, 0],
+                [0.34, 0.046, 0.023, -0.08, -0.605, 0],
+                [0.14, 0.023, 0.023, 0.0, -0.606, 0],
                 [1.28, 0.023, 0.046, 0.06, -0.605, 0]]
     x = ellipse_phantom(space[1:], ellipsoids)
     x = [x]

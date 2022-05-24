@@ -51,8 +51,7 @@ class primal_op(torch.nn.Module):
             sinogram_nc_flat.append(sym_sinogram_i)
         sinogram = torch.cat(sinogram_nc_flat)
         return sinogram
-    
-    
+
 class _dual_op(torch.autograd.Function):
     
     @staticmethod
