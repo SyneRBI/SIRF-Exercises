@@ -54,7 +54,7 @@ class primal_op(torch.nn.Module):
     
     
 class _dual_op(torch.autograd.Function):
-
+    
     @staticmethod
     def forward(ctx, sinogram, image_template, sinogram_template, sirf_obj):
         ctx.sirf_obj = sirf_obj
