@@ -123,6 +123,11 @@ class LearnedPrimalDual(nn.Module):
         
         self.concatenate_layer = ConcatenateLayer()
         
+        def init_weights(m):
+            if isinstance(m, nn.Conv2d):
+                torch.nn.init.dirac_(m.weight)
+                m.bias.data.fill_(0.0)
+        
         for i in range(n_iter):
             self.primal_nets.append(
                 primal_architecture(n_primal, n_layers, n_feature_channels)
@@ -130,7 +135,9 @@ class LearnedPrimalDual(nn.Module):
             self.dual_nets.append(
                 dual_architecture(n_dual, n_layers, n_feature_channels)
             )
-        
+        self.primal_nets.apply(init_weights)
+        self.dual_nets.apply(init_weights)
+
     def forward(self, g, intermediate_values = False):
         
         h = torch.zeros(g.shape[0:1] + (self.dual_shape), device=g.device)
