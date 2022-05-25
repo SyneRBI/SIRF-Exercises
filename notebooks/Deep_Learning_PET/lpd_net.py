@@ -1,4 +1,5 @@
-""" Taken (and lightly modified) from https://github.com/cetmann/pytorch-primaldual
+"""
+Taken (and lightly modified) from https://github.com/cetmann/pytorch-primaldual
 
 MIT License
 
@@ -22,33 +23,42 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Simple implementation of the learned primal-dual approach by
+
+Simple implementation of the learned primal-dual approach by 
 Adler & Öktem (2017), https://arxiv.org/abs/1707.06474
 """
+
 
 import torch
 import torch.nn as nn
 from sirf_torch import primal_op, dual_op
 
+
 class ConcatenateLayer(nn.Module):
     def __init__(self):
         super(ConcatenateLayer, self).__init__()
+    
     def forward(self, *x):
         return torch.cat(list(x), dim=1)
-    
+
 class DualNet(nn.Module):
-    def __init__(self, n_dual):
+    def __init__(self, n_dual, n_layers, n_feature_channels):
         super(DualNet, self).__init__()
+        
         self.n_dual = n_dual
         self.n_channels = n_dual + 2
+        self.n_layers = n_layers
+        self.n_feature_channels = n_feature_channels
+        
         self.input_concat_layer = ConcatenateLayer()
-        layers = [
-            nn.Conv2d(self.n_channels, 128, kernel_size=3, padding=1),
-            nn.PReLU(),
-            nn.Conv2d(128, 128, kernel_size=3, padding=1),
-            nn.PReLU(),
-            nn.Conv2d(128, self.n_dual, kernel_size=3, padding=1),
-        ]
+        
+        layers = [nn.Conv2d(self.n_channels, self.n_feature_channels, kernel_size=3, padding=1),]
+        for _ in range(self.n_layers):
+            layers.append(nn.PReLU())
+            layers.append(nn.Conv2d(self.n_feature_channels, self.n_feature_channels, kernel_size=3, padding=1))
+        layers.append(nn.PReLU())
+        layers.append( nn.Conv2d(self.n_feature_channels, self.n_dual, kernel_size=3, padding=1))
+        
         self.block = nn.Sequential(*layers)
         
     def forward(self, h, Op_f, g):
@@ -57,20 +67,21 @@ class DualNet(nn.Module):
         return x
     
 class PrimalNet(nn.Module):
-    def __init__(self, n_primal):
+    def __init__(self, n_primal, n_layers, n_feature_channels):
         super(PrimalNet, self).__init__()
         
         self.n_primal = n_primal
         self.n_channels = n_primal + 1
+        self.n_layers = n_layers
+        self.n_feature_channels = n_feature_channels
         
         self.input_concat_layer = ConcatenateLayer()
-        layers = [
-            nn.Conv2d(self.n_channels, 128, kernel_size=3, padding=1),
-            nn.PReLU(),
-            nn.Conv2d(128, 128, kernel_size=3, padding=1),
-            nn.PReLU(),
-            nn.Conv2d(128, self.n_primal, kernel_size=3, padding=1),
-        ]
+        layers = [nn.Conv2d(self.n_channels, self.n_feature_channels, kernel_size=3, padding=1),]
+        for _ in range(self.n_layers):
+            layers.append(nn.PReLU())
+            layers.append(nn.Conv2d(self.n_feature_channels, self.n_feature_channels, kernel_size=3, padding=1))
+        layers.append(nn.PReLU())
+        layers.append( nn.Conv2d(self.n_feature_channels, self.n_primal, kernel_size=3, padding=1))
         self.block = nn.Sequential(*layers)
         
     def forward(self, f, OpAdj_h):
@@ -87,7 +98,9 @@ class LearnedPrimalDual(nn.Module):
                 dual_architecture = DualNet,
                 n_iter = 10,
                 n_primal = 5,
-                n_dual = 5):
+                n_dual = 5,
+                n_layers = 5,
+                n_feature_channels = 128):
         
         super(LearnedPrimalDual, self).__init__()
         
@@ -96,9 +109,11 @@ class LearnedPrimalDual(nn.Module):
         self.n_iter = n_iter
         self.n_primal = n_primal
         self.n_dual = n_dual
+        self.n_layers = n_layers
+        self.n_feature_channels = n_feature_channels
         
         self.primal_shape = (n_primal,) + image_template.shape[1:]
-        self.dual_shape = (n_dual,) + sinogram_template.shape[2:]
+        self.dual_shape = (n_dual,) + sinogram_template.shape[2:] 
         
         self.primal_op_layer = primal_op(image_template, sinogram_template, acq_model)
         self.dual_op_layer = dual_op(image_template, sinogram_template, acq_model)
@@ -108,12 +123,12 @@ class LearnedPrimalDual(nn.Module):
         
         self.concatenate_layer = ConcatenateLayer()
         
-        for _ in range(n_iter):
+        for i in range(n_iter):
             self.primal_nets.append(
-                primal_architecture(n_primal)
+                primal_architecture(n_primal, n_layers, n_feature_channels)
             )
             self.dual_nets.append(
-                dual_architecture(n_dual)
+                dual_architecture(n_dual, n_layers, n_feature_channels)
             )
         
     def forward(self, g, intermediate_values = False):
@@ -148,4 +163,3 @@ class LearnedPrimalDual(nn.Module):
             return f[:,0:1], f_values, h_values
 
         return f[:,0:1]
-    
