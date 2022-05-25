@@ -18,6 +18,7 @@ Authors:
 - Daniel Deidda and Palak Wadhwa (HKEM exercise)
 - Ashley Gillman (overall check, scripts and clean-up)
 - Imraj Singh (Deep Learning for PET exercise)
+- Daniel Deidda and Sam Porter (Synergistic SPECT/PET Reconstruction Exercises)
 
 This software is distributed under an open source license, see [LICENSE.txt](LICENSE.txt)
 for details.
