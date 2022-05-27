@@ -150,6 +150,8 @@ then
         echo "Unpacking ${filename}"
         unzip -o "${DOWNLOAD_DIR}/${filename}"
     popd
+else
+    echo "PET data NOT downloaded. If you need it, rerun this script with the -h option to get help."
 fi
 
 #
@@ -177,6 +179,8 @@ then
         echo "Unpacking ${filenameGRAPPA}"
         unzip -o "${DOWNLOAD_DIR}/${filenameGRAPPA}"
     popd
+else
+    echo "MR data NOT downloaded. If you need it, rerun this script with the -h option to get help."
 fi
 
 #
@@ -215,6 +219,8 @@ then
         echo "Unpacking ${filename2}"
         cp "${DOWNLOAD_DIR}/${filename2}" .
     popd
+else
+    echo "Old MR data NOT downloaded. If you need it (unlikely!), rerun this script with the -h option to get help."
 fi
 
 if [[ -n "${WORKING_DIR}" ]]
@@ -227,10 +233,11 @@ EOF
 fi
 
 # make sure we created DATA_PATH, even if nothing was downloaded
+echo "Creating ${DATA_PATH}"
 mkdir -p "${DATA_PATH}"
 
 # create the data_path.py files in Python library
-echo "creating data_path.py in ${REPO_DIR}/lib/sirf_exercises/data_path.py"  
+echo "Creating data_path.py in ${REPO_DIR}/lib/sirf_exercises/data_path.py"  
 cat <<EOF >"${REPO_DIR}/lib/sirf_exercises/data_path.py" 
 data_path = '${DATA_PATH}'
 EOF
