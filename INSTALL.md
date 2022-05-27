@@ -1,3 +1,8 @@
+# Note to participants of one of our courses
+
+We provide online access to cloud resources. There is no need to follow any
+installation process therefore. Instructions below are for setting it up yourself.
+
 # Installation instructions
 
 Author: Kris Thielemans

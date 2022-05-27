@@ -19,7 +19,7 @@ This instruction contain documentation and links to get started with the exercis
 - [Appendix of useful info](#appendix)
 
 The SIRF documentation can be found [here](https://github.com/SyneRBI/SIRF/wiki/Software-Documentation).
-***The current version of these exercises needs SIRF v3.1.0***
+***The current version of these exercises needs SIRF v3.2.0 (SPECT needs v3.3.0 (pre-)release)***
 
 Documentation is in the form of MarkDown files (`*.md`), which are simple text files which you open from the Jupyter notebook, but they look nicer when browsing to [GitHub](https://github.com/SyneRBI/SIRF-Exercises/tree/master/).
 
@@ -145,6 +145,7 @@ All notebooks are located in several subdirectories of [`notebooks`](./notebooks
 - [Introductory](./notebooks/Introductory/) notebooks are designed to familiarise you with Python, Jupyter, SIRF, and patterns seen in the other notebooks.
 - [Geometry](./notebooks/Geometry/) notebooks contain lessons on how SIRF deals with spatial geometry of images.
 - [PET](./notebooks/PET/) notebooks contain lessons on using SIRF for PET reconstruction and simulation.
+- [SPECT](./notebooks/SPECT/) notebooks contain lessons on using SIRF for SPECT reconstruction and simulation.
 - [MR](./notebooks/MR/) notebooks contain lessons on using SIRF for MR reconstruction and simulation.
 - [Reg](./notebooks/Reg/) notebooks contain lessons on using SIRF's image registration and resampling tools.
 - [Synergistic](./notebooks/Synergistic/) notebooks contain lessons demonstrating more advanced features of SIRF for synergistic image reconstruction.
@@ -214,9 +215,14 @@ to what you would use in the terminal. (*Note*: these commands do not work in a 
     ```
 
     - inline in the notebook but with extra options for the figures (required for animations)
-    ```     
-     %matplotlib notebook
-    ```
+       - when using a Jupyter Notebook server ("classic" mode)
+         ```     
+         %matplotlib notebook
+         ```
+       - when using a JupyterLab server
+         ```     
+         %matplotlib widget
+         ```
 
 -   change to a new directory
 ```python
@@ -284,7 +290,7 @@ but not on the VM, so start it again as above).
 - `.ahv`: (ignore) old-style Interfile header for an image
 - `.v`: raw data of an image (in floats)
 - `.nii` or `.nii.gz`: image files in Nifti format.
-- `.hs`: Interfile header for PET acquisition data (sinograms)
+- `.hs`: Interfile header for PET or SPECT acquisition data (sinograms)
 - `.s`: raw data of PET acquisition data (in floats)
 - `.py`: Python file
 - `.ipynb`: jupyter notebook
