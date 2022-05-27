@@ -39,7 +39,7 @@ The only work-around is to use “File->Close and halt”  after you’ve finish
 but not on the VM).
 
 ## Get started with the course!
-Start with the [notebooks/Introductory/](introductory notebooks) and the associated [README.md](notebooks/Introductory/README.md).
+Start with the [introductory notebooks](notebooks/Introductory/) and the associated [README.md](notebooks/Introductory/README.md).
 
 
 
