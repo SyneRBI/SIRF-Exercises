@@ -1,6 +1,7 @@
 # Notebook dependencies
 jupyter
 ipywidgets
+ipympl
 numpy --only-binary=numpy
 scipy --only-binary=scipy
 matplotlib --only-binary=matplotlib
