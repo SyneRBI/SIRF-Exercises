@@ -5,44 +5,27 @@
 # Goals:
 # - we want to run the simulation with different motion patterns and analyse the effect on resulting T1 maps
 
-# In[1]:
+# In[ ]:
 
 
-from pathlib import Path
-import os, time
 import numpy as np
 import auxiliary_functions as aux
+
+import matplotlib.pyplot as plt
+from pathlib import Path
+import os, time
 
 import sirf.DynamicSimulation as pDS
 import sirf.Reg as pReg
 import sirf.Gadgetron as pMR
 
 # this is where we store the properly formatted data
-root_path = Path(os.getenv("SIRF_INSTALL_PATH"))
-root_path = root_path / "share/SIRF-3.1/Simulation/"
+root_path = aux.root_path
 fpath_input = root_path / "Input"
-
-fname_cardiac_sim = root_path / "Output/output_i_simulate_card.h5"
-fname_half_resp_sim = root_path / "Output/output_i_simulate_half_resp_amplitude.h5"
+fpath_output = root_path / "Output"
 
 
-# In[2]:
-
-
-# load dictionary
-fname_dict = Path("/media/sf_CCPPETMR/TestData/Input/xDynamicSimulation/pDynamicSimulation/Fingerprints/dict_70_1500.npz")
-mrfdict = np.load(fname_dict)
-
-dict_theta = mrfdict['dict_theta']
-dict_mrf = mrfdict['dict_norm']
-
-# otherwise it's too annoying to wait for this
-subsample_dict_factor = 10
-dict_theta = dict_theta[0:-1:subsample_dict_factor,:]
-dict_mrf= dict_mrf[0:-1:subsample_dict_factor,:]
-
-
-# In[3]:
+# In[ ]:
 
 
 # we always need the same MRF signal
@@ -78,7 +61,7 @@ def get_preconfigured_mrfsignal(fpath_epg_result, subset_idx=None):
     return mrf_dynamic
 
 
-# In[4]:
+# In[ ]:
 
 
 # we always need the same     
@@ -107,8 +90,8 @@ def get_preconfigured_MRF_simulation_object(fpath_input, num_acquisitions=None):
     simulation.set_csm(csm)
 
     # add MRF
-    fpath_epg_result = Path("/media/sf_CCPPETMR/TestData/Input/xDynamicSimulation/pDynamicSimulation/Fingerprints/")
-    mrf_dynamic = get_preconfigured_mrfsignal(fpath_epg_result, subset_idx)
+    fpath_fingerprinting = fpath_input / "Fingerprinting"
+    mrf_dynamic = get_preconfigured_mrfsignal(fpath_fingerprinting, subset_idx)
     simulation.add_external_contrast_dynamic(mrf_dynamic)
 
     # we add the usual offset transformation
@@ -125,7 +108,7 @@ def get_preconfigured_MRF_simulation_object(fpath_input, num_acquisitions=None):
     return simulation, acquisition_template
 
 
-# In[5]:
+# In[ ]:
 
 
 # we always need this setup for the motion, the surrogate will dictate what happens
@@ -141,11 +124,29 @@ def get_preconfigured_motiondynamic(fpath_mvfs, surrogate_time, surrogate_signal
     return motion
 
 
-# In[6]:
+# In[ ]:
 
 
-#
-num_simul_acquisitions = None
+num_simul_acquisitions = None 
+fname_static_sim =  fpath_output / "output_i_simulate_static.h5"
+
+simulation, acquisition_template = get_preconfigured_MRF_simulation_object(fpath_input, num_acquisitions=num_simul_acquisitions)
+
+tstart = time.time()
+
+prefix_ground_truth = fpath_output / "output_i_gt_stat"
+fnames_stat_gt = simulation.save_parametermap_ground_truth(str(prefix_ground_truth))
+
+if not fname_static_sim.exists():
+    simulation.simulate_data()
+
+    print("--- Required {} minutes for the simulation.".format( (time.time()-tstart)/60))
+    fname_static_sim.parent.mkdir(parents=True, exist_ok=True)
+    simulation.write_simulation_results(str(fname_static_sim))
+
+
+# In[ ]:
+
 
 # General time axis, let the guy move for 10 minutes
 Nt = 10000
@@ -156,10 +157,40 @@ fpath_resp_mvfs = str(fpath_input / 'mvfs_resp/')
 fpath_card_mvfs = str(fpath_input / 'mvfs_card/')
 
 
-# In[7]:
+# In[ ]:
 
 
 ## and the same drill for the respiration
+fname_resp_sim = fpath_output / "output_i_simulate_resp.h5"
+
+f_Hz_resp = 0.25
+t_resp, sig_resp = aux.get_normed_sinus_signal(t0_s, tmax_s, Nt, f_Hz_resp)
+
+resp_motion = get_preconfigured_motiondynamic(fpath_resp_mvfs, t_resp, sig_resp)
+simulation, acquisition_template = get_preconfigured_MRF_simulation_object(fpath_input, num_acquisitions=num_simul_acquisitions)
+
+simulation.add_motion_dynamic(resp_motion)
+
+prefix_ground_truth = fpath_output / "output_i_gt_resp"
+fnames_resp_gt = simulation.save_parametermap_ground_truth(str(prefix_ground_truth))
+
+tstart = time.time()
+
+if not fname_resp_sim.exists():
+    simulation.simulate_data()
+
+    print("--- Required {} minutes for the simulation.".format( (time.time()-tstart)/60))
+    fname_resp_sim.parent.mkdir(parents=True, exist_ok=True)
+
+    simulation.write_simulation_results(str(fname_resp_sim))
+
+
+# In[ ]:
+
+
+## and the same drill for the respiration
+fname_half_resp_sim = fpath_output / "output_i_simulate_half_resp_amplitude.h5"
+
 f_Hz_resp = 0.25
 t_resp, sig_resp = aux.get_normed_sinus_signal(t0_s, tmax_s, Nt, f_Hz_resp)
 
@@ -168,27 +199,25 @@ simulation, acquisition_template = get_preconfigured_MRF_simulation_object(fpath
 
 simulation.add_motion_dynamic(half_resp_motion)
 
-
-# In[8]:
-
+prefix_ground_truth = fpath_output / "output_i_gt_halfresp"
+fnames_halfresp_gt = simulation.save_parametermap_ground_truth(str(prefix_ground_truth))
 
 tstart = time.time()
-simulation.simulate_data()
 
-print("--- Required {} minutes for the simulation.".format( (time.time()-tstart)/60))
+if not fname_half_resp_sim.exists():
+    simulation.simulate_data()
 
-if not fname_half_resp_sim.parent.is_dir():
+    print("--- Required {} minutes for the simulation.".format( (time.time()-tstart)/60))
     fname_half_resp_sim.parent.mkdir(parents=True, exist_ok=True)
 
-simulation.write_simulation_results(str(fname_half_resp_sim))
+    simulation.write_simulation_results(str(fname_half_resp_sim))
 
 
-# In[9]:
+# In[ ]:
 
 
-import scipy.signal as scisig
-import matplotlib.pyplot as plt
-## and the same drill for the respiration
+fname_card_sim = fpath_output / "output_i_simulate_card.h5"
+
 f_Hz_card = 1.25
 t_card, sig_card = aux.get_normed_sawtooth_signal(t0_s, tmax_s, Nt, f_Hz_card)
 
@@ -197,122 +226,144 @@ simulation, acquisition_template = get_preconfigured_MRF_simulation_object(fpath
 
 simulation.add_motion_dynamic(card_motion)
 
-
-# In[ ]:
-
+prefix_ground_truth = fpath_output / "output_i_gt_card"
+fnames_card_gt = simulation.save_parametermap_ground_truth(str(prefix_ground_truth))
 
 tstart = time.time()
-simulation.simulate_data()
-print("--- Required {} minutes for the simulation.".format( (time.time()-tstart)/60))
+if not fname_card_sim.exists():
+    simulation.simulate_data()
+    print("--- Required {} minutes for the simulation.".format( (time.time()-tstart)/60))
+    fname_card_sim.parent.mkdir(parents=True, exist_ok=True)
 
-if not fname_cardiac_sim.parent.is_dir():
-    fname_cardiac_sim.parent.mkdir(parents=True, exist_ok=True)
-
-simulation.write_simulation_results(str(fname_cardiac_sim))
-
-
-# In[ ]:
-
-
-resp_data = pMR.AcquisitionData(str(fname_half_resp_sim))
-
-num_time_points = 75
-recon_halfresp, __ = aux.reconstruct_timeresolved(resp_data, num_time_points)
-aux.write_nii('/media/sf_CCPPETMR/tmp_halfresp.nii', recon_halfresp)
+    simulation.write_simulation_results(str(fname_card_sim))
 
 
 # In[ ]:
 
 
-cardiac_data = pMR.AcquisitionData(str(fname_cardiac_sim))
-num_time_points = 75
+fname_cardioresp_sim = fpath_output / "output_i_simulate_cardioresp.h5"
+
+
+simulation, acquisition_template = get_preconfigured_MRF_simulation_object(fpath_input, num_acquisitions=num_simul_acquisitions)
+
+simulation.add_motion_dynamic(resp_motion)
+simulation.add_motion_dynamic(card_motion)
+
+prefix_ground_truth = fpath_output / "output_i_gt_cardioresp"
+fnames_cardioresp_gt = simulation.save_parametermap_ground_truth(str(prefix_ground_truth))
+
+tstart = time.time()
+if not fname_cardioresp_sim.exists():
+    simulation.simulate_data()
+    print("--- Required {} minutes for the simulation.".format( (time.time()-tstart)/60))
+    fname_cardioresp_sim.parent.mkdir(parents=True, exist_ok=True)
+
+    simulation.write_simulation_results(str(fname_cardioresp_sim))
 
 
 # In[ ]:
 
 
-recon_card, ad_card = aux.reconstruct_timeresolved(cardiac_data, num_time_points)
-aux.write_nii('/media/sf_CCPPETMR/tmp_card.nii', recon_card)
+# load dictionary
+fname_dict = fpath_fingerprinting / "dict_70_1500.npz"
+mrfdict = np.load(fname_dict)
+
+dict_theta = mrfdict['dict_theta']
+dict_mrf = mrfdict['dict_norm']
+
+# otherwise it's too annoying to wait for this
+subsample_dict_factor = 1
+dict_theta = dict_theta[0:-1:subsample_dict_factor,:]
+dict_mrf= dict_mrf[0:-1:subsample_dict_factor,:]
 
 
 # In[ ]:
 
 
-dict_card = np.transpose(aux.apply_databased_sliding_window(ad_card, np.transpose(dict_mrf)))
-match_card = aux.dictionary_matching(recon_card, dict_card, dict_theta)
+
+def perform_matching(fname_rawdata, num_recon_recon_states, dictionary, dictionary_parameters):
+    
+    ad = pMR.AcquisitionData(str(fname_rawdata))
+    recon, ad = aux.reconstruct_timeresolved(ad, num_recon_recon_states)
+    dict_sliding = np.transpose(aux.apply_databased_sliding_window(ad, np.transpose(dictionary)))
+    match = aux.dictionary_matching(recon, dict_sliding, dictionary_parameters)
+    
+    return match
+
+def perform_gated_matching(fname_rawdata, num_recon_recon_states, dictionary, dictionary_parameters, motiondyn, keep_bins):
+    
+    ad = pMR.AcquisitionData(str(fname_rawdata))
+    idx_corr = motiondyn.get_idx_corr(ad)
+    
+    recon_gated, ad_gated = aux.reconstruct_timeresolved_gated(ad, num_recon_recon_states, idx_corr, keep_bins)
+    
+    dict_gated = np.transpose(aux.gate_data(np.transpose(dictionary), idx_corr, keep_bins))
+    dict_gated = np.transpose(aux.apply_databased_sliding_window(ad_gated, np.transpose(dict_gated)))
+
+    match = aux.dictionary_matching(recon_gated, dict_gated, dictionary_parameters)
+    return match
 
 
 # In[ ]:
 
 
-f,ax = plt.subplots(1,2)
+import nibabel as nib
 
-ax[0].imshow(np.abs(match_card[:,:,1]),cmap='jet',vmin=0,vmax=2500)
-ax[0].axis('off')
-ax[0].set_title("T1 Card")
+def load_gt(fnames_gt):
+    print(fnames_gt)
+    t1 = np.transpose(np.squeeze(nib.load(fnames_gt[0]).get_fdata()))
+    t2 = np.transpose(np.squeeze(nib.load(fnames_gt[1]).get_fdata()))
+    labels =  np.transpose(np.squeeze(nib.load(fnames_gt[3]).get_fdata()))
+    
+    return labels, t1, t2
 
-ax[1].imshow(np.abs(match_card[:,:,2]),cmap='magma',vmin=0,vmax=150)
-ax[1].axis('off')
-ax[1].set_title("T2 Card")
-
-
-# In[ ]:
-
-
-cardiac_data = pMR.AcquisitionData(str(fname_cardiac_sim))
-idx_corr = card_motion.get_idx_corr(cardiac_data)
-keep_bins =np.arange(5,10)
-
-recon_card_gated, ad_cardgated = aux.reconstruct_timeresolved_gated(cardiac_data, num_time_points, idx_corr, keep_bins)
-aux.write_nii('/media/sf_CCPPETMR/tmp_cardgated.nii', recon_card_gated)
-
-
-# In[ ]:
-
-
-gated_dict = np.transpose(aux.gate_data(np.transpose(dict_mrf), idx_corr, keep_bins))
-dict_card_gated = np.transpose(aux.apply_databased_sliding_window(ad_cardgated, np.transpose(gated_dict)))
-
-
-# In[ ]:
-
-
-match_cardiogated = aux.dictionary_matching(recon_card_gated, dict_card_gated, dict_theta)
+def compute_and_store_maps(fname_output, fnames_gt, fname_rawdata, dictionary, dictionary_parameters, gated=False, motiondyn=None, keep_bins=None):
+    if gated:
+        assert motiondyn is not None, "Please pass a motiondynamic"
+        assert keep_bins is not None, "Please pass bins to keep"
+        
+    num_recon_states = 75
+    if gated:
+        match = perform_gated_matching(fname_rawdata, num_recon_states, dictionary, dictionary_parameters, motiondyn, keep_bins)
+    else:
+        match = perform_matching(fname_rawdata, num_recon_states, dictionary, dictionary_parameters)
+    
+    labels, gt_t1, gt_t2 = load_gt(fnames_gt)
+    
+    
+    match_t1 = np.abs(np.squeeze(match[...,1]))
+    match_t2 = np.abs(np.squeeze(match[...,2]))
+    
+    np.savez(str(fname_output), labels=labels, gt_t1=gt_t1, gt_t2=gt_t2, match_t1=match_t1, match_t2=match_t2)
+    
 
 
 # In[ ]:
 
 
-f,ax = plt.subplots(1,2)
 
-ax[0].imshow(np.abs(match_cardiogated[:,:,1]),cmap='jet',vmin=0,vmax=2500)
-ax[0].axis('off')
+fname_output = fpath_output / "output_i_fitresults_stat.npz"
+if not fname_output.is_file():
+    compute_and_store_maps(fname_output, fnames_stat_gt, fname_static_sim, dict_mrf, dict_theta)
 
-ax[1].imshow(np.abs(match_cardiogated[:,:,2]),cmap='magma',vmin=0,vmax=150)
-ax[1].axis('off')
+fname_output = fpath_output / "output_i_fitresults_resp.npz"
+if not fname_output.is_file():
+    compute_and_store_maps(fname_output, fnames_resp_gt, fname_resp_sim, dict_mrf, dict_theta)
 
-
-# In[ ]:
-
-
-f,ax = plt.subplots(2,2)
-
-ax[0,0].imshow(np.abs(match_card[:,:,1]),cmap='jet',vmin=0,vmax=2500)
-ax[0,0].axis('off')
-ax[0,0].set_title('T1')
-
-
-ax[1,0].imshow(np.abs(match_card[:,:,2]),cmap='magma',vmin=0,vmax=150)
-ax[1,0].axis('off')
-ax[1,0].set_title('T2')
-
-ax[0,1].imshow(np.abs(match_cardiogated[:,:,1]),cmap='jet',vmin=0,vmax=2500)
-ax[0,1].axis('off')
-ax[0,1].set_title('T1 Gated')
-
-ax[1,1].imshow(np.abs(match_cardiogated[:,:,2]),cmap='magma',vmin=0,vmax=150)
-ax[1,1].axis('off')
-ax[1,1].set_title('T2 Gated')
-
-plt.savefig("/media/sf_CCPPETMR/fig_i_gating.png", dpi=300)
+fname_output = fpath_output / "output_i_fitresults_card.npz"
+if not fname_output.is_file():
+    compute_and_store_maps(fname_output, fnames_card_gt, fname_card_sim, dict_mrf, dict_theta)
+    
+fname_output = fpath_output / "output_i_fitresults_cardioresp.npz"
+if not fname_output.is_file():
+    compute_and_store_maps(fname_output, fnames_cardioresp_gt, fname_cardioresp_sim, dict_mrf, dict_theta)
+    
+fname_output = fpath_output / "output_i_fitresults_half_resp.npz"
+if not fname_output.is_file():
+    compute_and_store_maps(fname_output, fnames_halfresp_gt, fname_half_resp_sim, dict_mrf, dict_theta)
+    
+fname_output = fpath_output / "output_i_fitresults_gated_card.npz"
+if not fname_output.is_file():
+    keep_bins =np.arange(5,10)
+    compute_and_store_maps(fname_output, fnames_card_gt, fname_card_sim, dict_mrf, dict_theta, gated=True, motiondyn=card_motion, keep_bins=keep_bins)    
 
