@@ -12,6 +12,8 @@ import sirf.DynamicSimulation as pDS
 
 import matplotlib.pyplot as plt
 
+root_path = Path("/media/sf_CCPPETMR/QUIERO")
+
 def write_nii(fname, img):
 
 	assert_validity(img, pMR.ImageData)
