@@ -11,6 +11,7 @@ import sirf.Gadgetron as pMR
 import sirf.DynamicSimulation as pDS
 
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 root_path = Path("/media/sf_CCPPETMR/QUIERO")
 
@@ -56,20 +57,51 @@ def plot_array(arr):
 	axs[2].yaxis.label.set_color(textcolor)
 
 	plt.show()
+    
+    
+def read_nii_motionfields(fpath_prefix):
+    p = sorted( Path(fpath_prefix).glob('mvf*') )
+    files = [x for x in p if x.is_file()]
+
+    mf = []
+    print(f'Reading mvf from {fpath_prefix} ', end='')
+    for i,f in enumerate(files):
+        cmf = nib.load(str(f))
+        mf.append(cmf.get_fdata()[np.newaxis,...])
+        print(f' {i}', end='')
+    print('')
+    return np.concatenate(mf, axis=0)
 
 
 def read_motionfields(fpath_prefix):
-	p = sorted( Path(fpath_prefix).glob('mvf*') )
-	files = [x for x in p if x.is_file()]
-	
-	temp = []
-	for f in files:
-		print("Reading from {} ... ".format(f))
-		img = pReg.NiftiImageData3DDisplacement(str(f))
-		temp.append(img)
+    p = sorted( Path(fpath_prefix).glob('mvf*') )
+    files = [x for x in p if x.is_file()]
+    
+    temp = []
+    print(f'Reading mvf from {fpath_prefix} ', end='')
+    for fnd, f in enumerate(files):
+        print(f' {fnd}', end='')
+        img = pReg.NiftiImageData3DDisplacement(str(f))
+        temp.append(img)
+    print('\n')
+    data = np.array(temp, dtype=object)
+    return data
 
-	data = np.array(temp, dtype=object)
-	return data
+
+def store_nii_mvfs(fpath_mvf_output, mvfs, affine):
+
+    print(f'Storing mvf in {str(fpath_mvf_output)}: ', end='')    
+    for i in range(mvfs.shape[0]):
+        fname_mvf_output = fpath_mvf_output + "/mvf_{}".format(i)
+        tmp = mvfs[i,:].astype(np.float32)
+        img = nib.Nifti1Image(tmp, affine)
+        img.set_qform(affine) # crucial!
+        img.header.set_intent('vector')  # we need to say that these are vectors
+        img.header['intent_p1'] = int(1) # we need to specify it's a displacement
+        
+        print(f' {i}', end='')
+        nib.save(img, fname_mvf_output)
+    print('')
 
 def deform_segmentation(fname_segmentation, fpath_mvf, prefix_output_without_extension):
 	# as a crosscheck you can store the motion in 3D and look at it and see if it needs tweaking
@@ -83,19 +115,32 @@ def deform_segmentation(fname_segmentation, fpath_mvf, prefix_output_without_ext
 	resampler.set_floating_image(segmentation)
 	resampler.set_reference_image(segmentation)
 
-	ci=0
-	for mvf in resp_mvfs:
-		print("Generating motionstate {}.".format(ci))
+	print('Generating motionstate ', end='')
+	for mnd, mvf in enumerate(resp_mvfs):
+		print(f' {mnd}', end='')
 		resampler.clear_transformations()
 		resampler.add_transformation(mvf)
 		resampler.process()
 
 		resampled_img = resampler.get_output()
 		resampled_img = pReg.NiftiImageData3D(resampled_img.abs())
-		tmp_name_output = prefix_output_without_extension + "{}.nii".format(ci)
+		tmp_name_output = prefix_output_without_extension + "{}.nii".format(mnd)
 		resampled_img.write(tmp_name_output)
+	print('\n')
 
-		ci += 1
+
+def read_deformed_nii_image(fpath_prefix, fprefix):
+    p = sorted( Path(fpath_prefix).glob(fprefix + "*.nii") )
+    files = [x for x in p if x.is_file()]
+    
+    im = []
+    print(f'Reading from {fpath_prefix} ', end='')
+    for fnd, f in enumerate(files):
+        print(f' {fnd}', end='')
+        cim = nib.load(str(f))
+        im.append(cim.get_fdata()[np.newaxis,...])
+    print('\n')
+    return np.concatenate(im, axis=0)
 
 
 def coilmaps_from_rawdata(ad):
