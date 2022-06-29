@@ -15,6 +15,7 @@ import sirf.Gadgetron as pMR
 from cil.utilities.jupyter import islicer, link_islicer
 
 import auxiliary_functions as aux
+import TissueParameterList as TPL
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -112,9 +113,6 @@ def prep_sim(fpath_segmentation_nii, fpath_resp_mvf, fpath_card_mvf, fpath_in, n
     segmentation_nii = nib.load(str(fpath_segmentation_nii))
     segmentation = segmentation_nii.get_fdata()
     
-    segmentation[segmentation==100] = 75
-    print('ERROR FOR SCAR TISSUE')
-    
     # Select small number of slices to speed up simulation
     slice_end = slice_start + num_slices
     slice_subset = range(slice_start,slice_end)
@@ -161,8 +159,11 @@ def set_up_mrf_sim(fname_acquisition_template, fname_segmentation, fname_xml, fn
     # Load precalculated MRF signals
     epg_input = np.load(fname_epg_par)
     inverse_idx = epg_input["unique_idx_inverse"]
+    signal_labels = epg_input["labels"]
     epg_output = np.load(fname_epg_sig)
-    magnetisation = epg_output[:, inverse_idx]
+    magnetisation = epg_output[inverse_idx, :]
+    
+    magnetisation = np.moveaxis(magnetisation, (0,1), (1,0))
     
     # Set up the simulation with the segmentation and corresponding XML filename.
     if fname_xml.exists():
@@ -201,7 +202,6 @@ def set_up_mrf_sim(fname_acquisition_template, fname_segmentation, fname_xml, fn
     mrsim.set_csm(csm)
     
     # MRF signal dynamic
-    signal_labels = np.arange(magnetisation.shape[1])
     magnetisation = np.transpose(magnetisation[0:num_acquisitions:acq_step,:])
 
     mrf_signal = pDS.ExternalMRSignal(signal_labels, magnetisation)
@@ -267,5 +267,20 @@ def match_sig(recon, simulated_data, fname_dict, dict_us_factor = 10, num_acquis
     
     return(dict_match)
 
+    
+def get_t1_t2_for_epg(fname_xml, fname_par_epg):
+    # Load xml parameter file
+    tpl = TPL.TissueParameterList()
+    tpl.parse_xml(str(fname_xml))
+
+    tplist = tpl.mr_as_array()
+    
+    # Get only unique parameter combinations
+    tpunique, inverse_idx = np.unique(tplist[:,1:], axis=0, return_inverse=True)
+    
+    # Save as npz array
+    np.savez(fname_par_epg, mr_parameters=tpunique, unique_idx_inverse=inverse_idx, mr_params_full=tplist, labels=tplist[:,0]) 
+    
+    return(tpunique, inverse_idx)
     
     
