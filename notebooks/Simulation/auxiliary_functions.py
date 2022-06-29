@@ -120,8 +120,13 @@ def unity_coilmaps_from_rawdata(ad):
 
 	return csm
 
-def gaussian_2D_coilmaps(ad):
+def blob_2D(X,Y,centreX,centreY,coilmap_width_pix):
+    return 1 - np.exp( -coilmap_width_pix**2 / np.abs( (X-centreX)**2 + (Y-centreY)**2))
 
+def gauss_2D(X,Y,centreX,centreY,coilmap_width_pix):
+    return np.exp( -((X-centreX)**2 + (Y-centreY)**2) / coilmap_width_pix**2)
+
+def create_2D_coilmaps(ad,csmfunc):
     csm = pMR.CoilSensitivityData()
     csm.smoothness = 1
     csm.calculate(ad)
@@ -138,29 +143,27 @@ def gaussian_2D_coilmaps(ad):
     coil_center_rad = img_size[0]/3
     coil_centers = [coil_center_rad*np.array([np.cos(2*np.pi*i/num_coils), np.sin(2*np.pi*i/num_coils)]) for i in range(num_coils)]
 
-    csm_gauss = np.zeros(csm_arr.shape)
+    csm_model = np.zeros(csm_arr.shape)
     # fix some arbitary width
-    coilmap_width_pix = np.max(img_size)
+    coilmap_width_pix = np.max(img_size)/2.5
     for ic in range(num_coils):
-        csm_gauss[ic, ...] = np.exp( -((X-coil_centers[ic][0])**2 + (Y-coil_centers[ic][1])**2) / coilmap_width_pix**2)
+        csm_model[ic, ...] = csmfunc(X,Y,coil_centers[ic][0],coil_centers[ic][1], coilmap_width_pix)
 
-    # do an SVD to extrac the principal components to avoid normalisation problems
-    csm_flat = np.reshape(csm_gauss, (csm_gauss.shape[0], -1))
-    __,__,V = np.linalg.svd(csm_flat, full_matrices=False)
-
-	
-
-    # csm_flat = np.reshape(V, csm_gauss.shape)
-    csm_flat = np.reshape(csm_flat, csm_gauss.shape)
+    csm_flat = np.reshape(csm_model, (csm_model.shape[0], -1))
+    csm_flat = np.reshape(csm_flat, csm_model.shape)
 
     csm_norm = np.sum( np.conj(csm_flat) * csm_flat,axis=0)[np.newaxis,...]
 
-    csm_flat = csm_flat / csm_norm
+#     csm_flat = csm_flat / csm_norm
     csm_flat = np.swapaxes(csm_flat,0,1)
     csm.fill(csm_flat.astype(np.complex64))
 
     return csm
 
+def gaussian_2D_coilmaps(ad):
+    return create_2D_coilmaps(ad, gauss_2D)
+def blob_2D_coilmaps(ad):
+    return create_2D_coilmaps(ad, blob_2D)
 
 def reconstruct_data(ad, csm=None):
 	assert_validity(ad, pMR.AcquisitionData)
