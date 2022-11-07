@@ -214,7 +214,7 @@ def set_up_mrf_sim(fname_acquisition_template, fname_segmentation, fname_xml, fn
 
 def rec_mrf_im(fname_sim_data, num_recon_imgs=250):
     simulated_data = pMR.AcquisitionData(str(fname_sim_data))
-
+    print(f"We have {simulated_data.number()} acquisitions")
     # First compute the CSM based on all data
     csm = pMR.CoilSensitivityData()
     csm.smoothness = 50
