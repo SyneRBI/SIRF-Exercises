@@ -19,3 +19,6 @@ Main contributors:
 - Johannes Mayer (MR exercises)
 - Richard Brown (PET and registration exercises)
 - Daniel Deidda and Palak Wadhwa (HKEM exercise)
+- Ashley Gillman (overall check, scripts and clean-up)
+- Imraj Singh (Deep Learning for PET exercise)
+- Daniel Deidda and Sam Porter (Synergistic SPECT/PET Reconstruction Exercises)
