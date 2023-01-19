@@ -1,7 +1,10 @@
 # Notebook dependencies
 jupyter
+jupyterlab
 ipywidgets
 ipympl
+widgetsnbextension
+nodejs
 numpy
 scipy
 matplotlib
