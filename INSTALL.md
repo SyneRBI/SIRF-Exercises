@@ -41,7 +41,8 @@ sure that you use a Python version which is compatible with how you compiled SIR
 
 Of course, if you've used (Ana)conda to install Python etc (and are sure
 SIRF was compiled with that Python version), you can use conda to install
-dependencies as well. Or you could still choose to use conda's `pip` after
+dependencies as well (except the brainweb module, at the time of writing).
+Or you could still choose to use conda's `pip` after
 
     conda install pip
 
