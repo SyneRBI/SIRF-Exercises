@@ -91,7 +91,7 @@ If this fails, you could try to use web browser in the VM instead.
 The instructions to start Docker and SIRF are documented in the [Docker instructions at SIRF](https://github.com/SyneRBI/SIRF-SuperBuild/blob/master/docker/README.md), please follow those to start it. 
 Docker is easiest in Linux, so if you are not familiar with Docker and are running on Windows, we suggest using the VM instead. 
 
-Please note that for SIRF 3.1, you need to point your (host) web-browser to http://localhost:9999 (fill in the `virtual` password).
+Please note that for at present (at least up to SIRF 3.4), you need to point your (host) web-browser to http://localhost:9999 (fill in the `virtual` password).
 
 ### Using your own installed SIRF and SIRF-exercises 
 
