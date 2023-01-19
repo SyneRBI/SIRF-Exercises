@@ -20,7 +20,7 @@ print_usage() {
     echo "               If not supplied, \"SIRF_Exercises/data\" will be used, i.e., a subdirectory to the repository."
     echo "  -D DOWNLOAD_DIR  Optional download directory. Useful if you have the files already downloaded."
     echo "                   If not supplied, DEST_DIR will be used."
-    echo "  -w WORKING_DIR  Optional working directory. Defaults to DEST_DIR"
+    echo "  -w WORKING_DIR  Optional working directory. Defaults to DEST_DIR/working_folder"
     echo
     echo "Flags must be before positional arguments."
     echo ""
