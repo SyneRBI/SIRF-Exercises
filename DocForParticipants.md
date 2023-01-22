@@ -294,7 +294,7 @@ Use the `File` menu ("classic": `Close and halt`, JupyterLab: `Close and shutdow
 
 ***Warning:*** Due to a limitation in SIRF (and ISMRMRD) you cannot have 2 Python sessions simultaneously accessing
 the same MR HDF5 file.
-You have to use “File->Close and ...”  after you’ve finished with a notebook (or just “Kernel->Shutdown”).
+You have to use “File->Close and ...”  after you’ve finished with a notebook (or just “Kernel->Shutdown”). In JupyterLab, you can also use the [Running panel in the sidebar](https://jupyterlab.readthedocs.io/en/stable/user/running.html).
 
 ***Warning:*** Clicking `Logout` will mean all sessions are closed and you will have to start again. Clicking 
 `Quit` means the server will quit and you will be in trouble. (On Azure, the server should restart after a few seconds,
