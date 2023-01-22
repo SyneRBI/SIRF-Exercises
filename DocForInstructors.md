@@ -24,18 +24,17 @@ Then open a web-browser on your local laptop and point it to http://localhost:99
 
 ## Basic jupyter notebook manipulations
 1. Open notebook and tell them about execution and keyboard shortcuts (via menu).
-3. Show how to create a terminal ("Launcher" (or first "+"), `Terminal`). Use this to start the Gadgetron. Say this is not necessary on Docker as already started.
+2. Show how to create a terminal ("Launcher" (or first "+"), `Terminal`). Use this to start the Gadgetron. Say this is not necessary on Docker as already started.
    ```bash
    gadgetron&
    ```
-4. Warn that you cannot have 2 Python sessions simultaneously accessing
-the same MR HDF5 file, and that closing a notebook does not stop its kernel.
- Work-arounds:
+3. Warn that you cannot have 2 Python sessions simultaneously accessing
+the same MR HDF5 file, and that closing a notebook does not stop its kernel. Work-arounds:
  - use “Kernel -> "Shutdown kernel" in one notebook
  - use "File" -> "Close and Shutdown Notebook"
  - go to the [Running panel in the sidebar](https://jupyterlab.readthedocs.io/en/stable/user/running.html).
 
-5. Warn that pressing `Logout` will mean all sessions are closed and you will have to start again. Warn that pressing
+4. Warn that pressing `Logout` will mean all sessions are closed and you will have to start again. Warn that pressing
 `Quit` means the server will quit and they will be in trouble. (On Azure, the server should restart after a few seconds,
 but not on the VM).
 
