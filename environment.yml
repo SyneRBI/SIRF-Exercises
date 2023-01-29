@@ -10,6 +10,8 @@ dependencies:
   - widgetsnbextension
   - nodejs
   - numpy
+  - cil # make synergistic notebooks work
+  - astra-toolbox # needed for ct examples
   - scipy
   - matplotlib
   - numba
@@ -21,6 +23,7 @@ dependencies:
   - imageio # nibabel dependency
   - tqdm
   - docopt
+  - pip
   - pip:
      - brainweb>=1.5.1
   # Developer dependencies
