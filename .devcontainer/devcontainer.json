@@ -1,8 +1,13 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/miniconda
 {
+	"hostRequirements": {
+ 	  "cpus": 4,
+   	  "memory": "8gb",
+   	  "storage": "64gb"
+	},
 	"name": "SIRF-Exercises",
-	"initializeCommand": "docker system prune --force",
+	#"initializeCommand": "docker system prune --force",
 	"overrideCommand": false,
 	"build": { 
 		"context": "..",
