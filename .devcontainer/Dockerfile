@@ -1,4 +1,4 @@
-FROM synerbi/sirf:devel
+FROM synerbi/sirf:devel-service
 
 # Copy environment.yml (if found) to a temp location so we update the environment. Also
 COPY environment.yml /tmp/conda-tmp/
