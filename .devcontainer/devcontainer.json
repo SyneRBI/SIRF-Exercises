@@ -27,7 +27,7 @@
 	// Comment to connect as root instead.
 	"remoteUser": "jovyan",
 
-        "postCreateCommand": "mamba env update --file requirements.yml && pwd",
+        "postCreateCommand": "mamba env update --file environment.yml && scripts/download_data.sh",
         "postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'"
 
 	// Configure tool-specific properties.
