@@ -7,7 +7,7 @@
    	  "storage": "64gb"
 	},
 	"name": "SIRF-Exercises",
-	#"initializeCommand": "docker system prune --force",
+	// "initializeCommand": "docker system prune --all --force",
 	"overrideCommand": false,
 	"build": { 
 		"context": "..",
