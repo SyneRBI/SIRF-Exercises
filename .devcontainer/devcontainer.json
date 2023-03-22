@@ -20,10 +20,11 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
+	// Comment to connect as root instead.
+	"remoteUser": "jovyan"
+
         "postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'"
 	// Configure tool-specific properties.
 	// "customizations": {},
 
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
 }
