@@ -21,7 +21,7 @@
 	// "forwardPorts": [],
 
 	// Comment to connect as root instead.
-	"remoteUser": "jovyan"
+	"remoteUser": "jovyan",
 
         "postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'"
 	// Configure tool-specific properties.
