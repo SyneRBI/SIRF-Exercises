@@ -2,7 +2,8 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/miniconda
 {
 	"name": "SIRF-Exercises",
-	"initializeCommand": "docker system prune --all --force",
+	"initializeCommand": "docker system prune --force",
+	"overrideCommand": false,
 	"build": { 
 		"context": "..",
 		"dockerfile": "Dockerfile"
