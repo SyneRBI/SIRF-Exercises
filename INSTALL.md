@@ -32,20 +32,18 @@ The SIRF-exercises themselves can just be downloaded, preferably via
 adjusting the path to where you want to install the SIRF-Exercises of course.
 
 You will need to install the additional Python dependencies needed for the
-exercises also
+exercises. If you've installed SIRF using a `conda` python environment, we recommend
+
+    conda env update -n <your_env_name> --file environment.yml
+
+If you didn't use `conda`, use
 
     $SIRF_PYTHON_EXECUTABLE -m pip install -r requirements.txt
 
 where we used the environment variable created when you follow the `SIRF-SuperBuild` instructions to make
-sure that you use a Python version which is compatible with how you compiled SIRF.
-
-Of course, if you've used (Ana)conda to install Python etc (and are sure
-SIRF was compiled with that Python version), you can use conda to install
-dependencies as well (except the brainweb module, at the time of writing).
-Or you could still choose to use conda's `pip` after
-
-    conda install pip
-
+sure that you use a Python version which is compatible with how you compiled SIRF. Please note that the
+`conda` environment includes dependencies (in particular [`cil`](https://github.com/TomographicImaging/CIL))
+which are not available with `pip`.
 
 After all this, you will need to do the steps indicated in the instructions above for the VM, after the `update_VM.sh` step.
 
