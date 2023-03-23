@@ -23,6 +23,7 @@ dependencies:
   - imageio # nibabel dependency
   - tqdm
   - docopt
+  - pip
   - pip:
      - brainweb>=1.5.1
   # Developer dependencies
