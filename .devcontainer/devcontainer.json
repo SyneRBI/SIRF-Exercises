@@ -28,7 +28,8 @@
 	"remoteUser": "jovyan",
 
         "postCreateCommand": "mamba env update --file environment.yml && scripts/download_data.sh",
-        "postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'"
+	// manual start of gadgetron, but commented-out as this is done in the service image
+        // "postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
