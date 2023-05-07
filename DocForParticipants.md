@@ -10,6 +10,8 @@ This instruction contain documentation and links to get started with the exercis
     - [Using Docker](#using-docker)
     - [Using your own installed SIRF and SIRF-exercises](#using-your-own-installed-sirf-and-sirf-exercises )
 
+- [Starting a terminal via Jupyter](#starting-a-terminal-via-jupyter)
+
 - [Start a Gadgetron server](#start-a-gadgetron-server)
 
 - [Getting the Data](#getting-the-data)
@@ -19,7 +21,7 @@ This instruction contain documentation and links to get started with the exercis
 - [Appendix of useful info](#appendix)
 
 The SIRF documentation can be found [here](https://github.com/SyneRBI/SIRF/wiki/Software-Documentation).
-***The current version of these exercises needs SIRF v3.1.0***
+***The current version of these exercises needs SIRF v3.2.0 (SPECT needs v3.3.0 (pre-)release)***
 
 Documentation is in the form of MarkDown files (`*.md`), which are simple text files which you open from the Jupyter notebook, but they look nicer when browsing to [GitHub](https://github.com/SyneRBI/SIRF-Exercises/tree/master/).
 
@@ -54,6 +56,12 @@ The next sections contain instructions to start the Jupyter notebook server with
 
 ## Start a jupyter notebook server for the SIRF exercises
 
+***Warning:** these instructions are when using JupyterLab as opposed to the "classic" notebook
+interface. If you choose to use the classic interface, you will have to modify the notebooks
+marginally by replacing `%matplotlib widget` with `%matplotlib notebook`.
+See also the [iPython section](#ipython) below.
+
+
 ### Using an Azure client (if available)
 
 The web-address should be something like https://sirf1....cloudapp.azure.com:9999/. See local instructions of your training sessoin.
@@ -73,7 +81,7 @@ Follow instructions given elsewhere.
   ```bash
   # optionally update to the latest release of SIRF and the SIRF-Exercises
   update_VM.sh
-  jupyter notebook
+  jupyter lab
   ```
 
 Then open a web-browser on your computer (i.e. the host) and point it to http://localhost:8888 (fill in the password or the token).
@@ -81,7 +89,7 @@ Then open a web-browser on your computer (i.e. the host) and point it to http://
 If this fails, you could try to use web browser in the VM instead.
 ```bash
    sudo apt install firefox
-   jupyter notebook --browser firefox
+   jupyter lab --browser firefox
 ```
 
 ### Using Docker
@@ -89,27 +97,36 @@ If this fails, you could try to use web browser in the VM instead.
 The instructions to start Docker and SIRF are documented in the [Docker instructions at SIRF](https://github.com/SyneRBI/SIRF-SuperBuild/blob/master/docker/README.md), please follow those to start it. 
 Docker is easiest in Linux, so if you are not familiar with Docker and are running on Windows, we suggest using the VM instead. 
 
-Please note that for SIRF 3.1, you need to point your (host) web-browser to http://localhost:9999 (fill in the `virtual` password).
+Please note that for at present (at least up to SIRF 3.4), you need to point your (host) web-browser to http://localhost:9999 (fill in the `virtual` password).
 
 ### Using your own installed SIRF and SIRF-exercises 
 
 You have a jupyter server (as you followed the [installation instructions](INSTALL.md)) so just use
    ```bash
    cd /wherever/you/installed/it/SIRF-Exercises
-   jupyter notebook
+   jupyter lab
    ```
+
+## Starting a terminal via Jupyter
+
+It is often useful to run commands in a shell where the Python kernels run (i.e. on Azure/VM/STFC cloud/docker).
+- Jupyter "classic": on the "Home" tab, click on `New` on the right, and choose `Terminal`
+- JupyterLab: go to the Launcher (click on the `+` sign top-left), and choose `Terminal`.
+
+Copy-paste in the terminal window can be tricky. Normally, you can shift+right click in the terminal and then select from th epop-up menu. See also the [JupyterLab doc](https://jupyterlab.readthedocs.io/en/stable/user/terminal.html#copy-paste).
 
 ## Start a Gadgetron server
 
 SIRF uses Gadgetron for MR reconstruction. You will need to start a "server" such that SIRF can communicate to it. Docker already starts this automatically, but if you are using anything else you need to start Gadgetron yourself.
-You can do this from in the Jupyter interface by creating a terminal that runs on Azure/VM (on the "Home" tab, click on `New` on the right, and choose `Terminal`) and typing
-```bash
-gadgetron&
-```
-This starts `gadgetron` and runs it in the "background". You can leave the terminal window open and navigate
-back to "Home".
 
-You can kill it at the end by going back to the terminal and pressing `Ctrl-C`.
+Open a new terminal (for the Jupyter interface, see above) and type
+```bash
+gadgetron
+```
+This starts `gadgetron`. Leave the terminal window open.
+
+You can kill the server at the end by going back to the terminal and pressing `Ctrl-C`.
+
 
 ## Getting the Data
 
@@ -145,6 +162,7 @@ All notebooks are located in several subdirectories of [`notebooks`](./notebooks
 - [Introductory](./notebooks/Introductory/) notebooks are designed to familiarise you with Python, Jupyter, SIRF, and patterns seen in the other notebooks.
 - [Geometry](./notebooks/Geometry/) notebooks contain lessons on how SIRF deals with spatial geometry of images.
 - [PET](./notebooks/PET/) notebooks contain lessons on using SIRF for PET reconstruction and simulation.
+- [SPECT](./notebooks/SPECT/) notebooks contain lessons on using SIRF for SPECT reconstruction and simulation.
 - [MR](./notebooks/MR/) notebooks contain lessons on using SIRF for MR reconstruction and simulation.
 - [Reg](./notebooks/Reg/) notebooks contain lessons on using SIRF's image registration and resampling tools.
 - [Synergistic](./notebooks/Synergistic/) notebooks contain lessons demonstrating more advanced features of SIRF for synergistic image reconstruction.
@@ -163,7 +181,7 @@ Start with the [introductory notebooks](notebooks/Introductory/) and the associa
 - [File extensions](#file-extensions)
 - [A note on keyboard short-cuts inside a VirtualBox VM](#a-note-on-keyboard-short-cuts-inside-a-virtualbox-vm)
 - [The Linux terminal](#linux-terminal)
-- [Minimal info on Jupyter Lab](#jupyter-lab)
+
 
 ## Python Basics
 
@@ -214,9 +232,14 @@ to what you would use in the terminal. (*Note*: these commands do not work in a 
     ```
 
     - inline in the notebook but with extra options for the figures (required for animations)
-    ```     
-     %matplotlib notebook
-    ```
+       - when using a Jupyter Notebook server ("classic" mode)
+         ```     
+         %matplotlib notebook
+         ```
+       - when using a JupyterLab server
+         ```     
+         %matplotlib widget
+         ```
 
 -   change to a new directory
 ```python
@@ -249,7 +272,7 @@ The initial web-page that you will see looks like a file browser
 (the *Jupyter Notebook dashboard*).
 Click on `notebooks`, and drill down until you find a file with the extension `.ipynb`
 that looks of interest, and click on that. This should open a new tab in your
-web browser with the notebook open, all ready to run.
+web browser (or JupyterLab window) with the notebook open, all ready to run.
 
 You will normally work by executing each *cell*
 bit by bit, and then editing it to do some more work. Useful 
@@ -259,17 +282,19 @@ shortcuts:
 -   `SHIFT + <RETURN>` executes the current cell and advances the cursor to the next cell.
 -   `TAB` tries to complete the word/command you have just typed.
 -   `Enter` edits "edit" mode to change a cell, `Esc` exits "edit" mode to "command" mode.
--    In "command" mode, press `A` to create a new cell Above, or `B` below your current cell. You can also use `C`, `X`, `V`. Check the Jupyter help for more info.
--    When using Jupyter "classic" mode, pressing `H` in "command" mode gives you a useful list of shortcuts.
+-    In "command" mode, press `A` to create a new cell Above, or `B` below your current cell. You can also use `C`, `X`, `V`.
+-    Other keyboard shortcuts:
+     - When using Jupyter "classic" mode, pressing `H` in "command" mode gives you a useful list of shortcuts.
+     - When using JupyterLab, you need to go to the Advanced Settings Editor item in the Settings menu, then select Keyboard Shortcuts in the Settings tab. You probably want to check the `notebook` category. See the [JupyterLab doc](https://jupyterlab.readthedocs.io/en/stable/user/interface.html#keyboard-shortcuts)/
 
 Jupyter notebooks (normally) run iPython, [see the section below](#iPython) for some useful commands.
 
-Check the [jupyter doc on closing a notebook](https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/execute.html#close-a-notebook-kernel-shut-down).
-(Note: it is *not* just closing the browser tab).
+Every open notebook has its own kernel. Closing a notebook tab does **not** stop its kernel.
+Use the `File` menu ("classic": `Close and halt`, JupyterLab: `Close and shutdown notebook`).
 
 ***Warning:*** Due to a limitation in SIRF (and ISMRMRD) you cannot have 2 Python sessions simultaneously accessing
 the same MR HDF5 file.
-You have to use “File->Close and halt”  after you’ve finished with a notebook (or just “Kernel->Shutdown”).
+You have to use “File->Close and ...”  after you’ve finished with a notebook (or just “Kernel->Shutdown”). In JupyterLab, you can also use the [Running panel in the sidebar](https://jupyterlab.readthedocs.io/en/stable/user/running.html).
 
 ***Warning:*** Clicking `Logout` will mean all sessions are closed and you will have to start again. Clicking 
 `Quit` means the server will quit and you will be in trouble. (On Azure, the server should restart after a few seconds,
@@ -284,7 +309,7 @@ but not on the VM, so start it again as above).
 - `.ahv`: (ignore) old-style Interfile header for an image
 - `.v`: raw data of an image (in floats)
 - `.nii` or `.nii.gz`: image files in Nifti format.
-- `.hs`: Interfile header for PET acquisition data (sinograms)
+- `.hs`: Interfile header for PET or SPECT acquisition data (sinograms)
 - `.s`: raw data of PET acquisition data (in floats)
 - `.py`: Python file
 - `.ipynb`: jupyter notebook
@@ -308,7 +333,7 @@ Always pass the header files to SIRF, not the name of the data file.
 
 On Windows and Linux, VirtualBox sets the "host-key" by default to `Right-CTRL` on Windows/Linux, so
 unless you change this, you have to use `Left-CTRL` to "send" the `CTRL`-keystroke
-to the Virtual Machine. So, below we will always type `Left-CTRL`.
+to the Virtual Machine. This is why we wrote to use `Left-CTRL`.
 
 ## Linux Terminal
 
@@ -317,6 +342,3 @@ If you have never used a Linux/Unix terminal before, have a look at
 
 You can use `UPARROW` to go to previous commands, and use copy-paste shortcuts 
 `Left-CTRL-SHIFT-C` and `Left-CTRL-SHIFT-V`.
-
-## Jupyter Lab
-If you are more familiar with the Jupyter Lab interface, rather than the Jupyter Notebook one, you can access this by navigating to `<IP>:<port>/lab` (i.e., changing the path part of the url to `/lab`). We don't yet recommend this unless you know what you are doing as we cannot support both interfaces.

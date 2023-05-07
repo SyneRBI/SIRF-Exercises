@@ -1,3 +1,8 @@
+# Note to participants of one of our courses
+
+We provide online access to cloud resources. There is no need to follow any
+installation process therefore. Instructions below are for setting it up yourself.
+
 # Installation instructions
 
 Author: Kris Thielemans
@@ -29,16 +34,15 @@ adjusting the path to where you want to install the SIRF-Exercises of course.
 You will need to install the additional Python dependencies needed for the
 exercises also
 
-    $SIRF_PYTHON_EXECUTABLE -m pip install --user -r requirements.txt
+    $SIRF_PYTHON_EXECUTABLE -m pip install -r requirements.txt
 
 where we used the environment variable created when you follow the `SIRF-SuperBuild` instructions to make
 sure that you use a Python version which is compatible with how you compiled SIRF.
-This will do a "user" install - if you'd prefer a system install omit the
-`--user` flag. If you don't know what this means, use the above command.
 
 Of course, if you've used (Ana)conda to install Python etc (and are sure
 SIRF was compiled with that Python version), you can use conda to install
-dependencies as well. Or you could still choose to use conda's `pip` after
+dependencies as well (except the brainweb module, at the time of writing).
+Or you could still choose to use conda's `pip` after
 
     conda install pip
 
@@ -61,3 +65,7 @@ due to the file format used by jupyter notebooks. The following should work
     git pull
 
 (You do not have to write the `nbstripout` lines on the VM, and on other systems you have to write those only once).
+
+### Contributing to the SIRF-Exercises
+
+Follow the guidelines given in https://github.com/SyneRBI/SIRF/blob/master/CONTRIBUTING.md. Please do follow the `nbstripout` instructions above **before** commiting any changes.

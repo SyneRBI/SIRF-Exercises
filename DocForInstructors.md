@@ -13,7 +13,7 @@ This is a basic list of things to do and tell people during the course.
   update_VM.sh # if required
   cd ~/devel/SIRF-Exercises/
   scripts/download_data.sh -m -p
-  jupyter notebook
+  jupyter lab
   ```
   Then open a web-browser on your local laptop and point it to http://localhost:8888 (fill in the password or the token).
 
@@ -24,22 +24,22 @@ Then open a web-browser on your local laptop and point it to http://localhost:99
 
 ## Basic jupyter notebook manipulations
 1. Open notebook and tell them about execution and keyboard shortcuts (via menu).
-2. Warn that closing the tab leaves a python session running. This can be surprising (for instance with read/write access).
-Show how to close the session (either `File->Close and halt` or go "home" and click on the `Running` tab.
-3. Show how to create a terminal ("home", `New` on the right, `Terminal`). Use this to start the Gadgetron. Say this is not necessary on Docker as already started.
+2. Show how to create a terminal ("Launcher" (or first "+"), `Terminal`). Use this to start the Gadgetron. Say this is not necessary on Docker as already started.
    ```bash
    gadgetron&
    ```
-4. Warn that you cannot have 2 Python sessions simultaneously accessing
-the same MR HDF5 file.
-The only work-around is to use “File->Close and halt”  after you’ve finished with a notebook (or just “Kernel->Shutdown”).
+3. Warn that you cannot have 2 Python sessions simultaneously accessing
+the same MR HDF5 file, and that closing a notebook does not stop its kernel. Work-arounds:
+ - use “Kernel -> "Shutdown kernel" in one notebook
+ - use "File" -> "Close and Shutdown Notebook"
+ - go to the [Running panel in the sidebar](https://jupyterlab.readthedocs.io/en/stable/user/running.html).
 
-5. Warn that pressing `Logout` will mean all sessions are closed and you will have to start again. Warn that pressing
+4. Warn that pressing `Logout` will mean all sessions are closed and you will have to start again. Warn that pressing
 `Quit` means the server will quit and they will be in trouble. (On Azure, the server should restart after a few seconds,
 but not on the VM).
 
 ## Get started with the course!
-Start with the [notebooks/Introductory/](introductory notebooks) and the associated [README.md](notebooks/Introductory/README.md).
+Start with the [introductory notebooks](notebooks/Introductory/) and the associated [README.md](notebooks/Introductory/README.md).
 
 
 

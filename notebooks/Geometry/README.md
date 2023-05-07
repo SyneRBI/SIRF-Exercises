@@ -1,5 +1,7 @@
 ## Notebooks related to the geometry information in SIRF and NIfTI Files.
 
+If this is the first time using the Notebooks on this VM/Cloud instance, you need to run the `download_data.sh` bash script without the `-h` flag. See the [../Introductory/introduction.ipynb](../Introductory/introduction.ipynb) notebook for details.
+
 [a_geometry.ipynb](a_geometry.ipynb) Introduction to geometry in SIRF and NIfTI
 
 [b_geom_resamp.ipynb](b_geom_resamp.ipynb) Demonstration of use of SIRF for image resampling.

@@ -1,8 +1,8 @@
 CCP SyneRBI Synergistic Image Reconstruction Framework (SIRF).
-Copyright 2015-2019 Rutherford Appleton Laboratory, UK (STFC)
-Copyright 2015-2019, 2021 University College London. UK (UCL)
+Copyright 2015-2019, 2021-2022 Rutherford Appleton Laboratory, UK (STFC)
+Copyright 2015-2019, 2021-2023 University College London. UK (UCL)
 Copyright 2017-2019, 2021 Physikalisch-Technische Bundesanstalt, Germany (PTB)
-Copyright 2019, 2021 National Physical Laboratory, UK (NPL)
+Copyright 2019, 2021-2022 National Physical Laboratory, UK (NPL)
 Copyright 2019 University of Leeds, UK
 
 This software product is developed for the Collaborative Computational 
@@ -11,11 +11,14 @@ Project in Synergistic Reconstruction for Biomedical Imaging
 and other contributing institutions.
 
 Main contributors:
-- Kris Thielemans (this document and PET exercises)
-- Christoph Kolbitsch (MR exercises)
-- David Atkinson (MR exercises)
+- Kris Thielemans (this document, PET exercises, overall QA)
+- Christoph Kolbitsch (MR exercises, Introductory notebooks)
+- David Atkinson (MR exercises, geometry notebooks, overall QA)
 - Evgueni Ovtchinnikov (PET and MR exercises)
 - Edoardo Pasca (overall check and clean-up)
 - Johannes Mayer (MR exercises)
 - Richard Brown (PET and registration exercises)
 - Daniel Deidda and Palak Wadhwa (HKEM exercise)
+- Ashley Gillman (overall check, scripts and clean-up)
+- Imraj Singh (Deep Learning for PET exercise)
+- Daniel Deidda and Sam Porter (Synergistic SPECT/PET Reconstruction Exercises)

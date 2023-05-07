@@ -1,10 +1,10 @@
 # SIRF-Exercises
 
 This material is intended for practical demonstrations using 
-[SIRF](https://github.com/CCPPETMR/SIRF/wiki/Software-Documentation) on PET and MR Image Reconstruction.
+[SIRF](https://github.com/SyneRBI/SIRF/wiki/Software-Documentation) on PET, SPECT and MR Image Reconstruction, including synergistic aspects.
 
 This repository contains exercises to get you going
-with SIRF. Please check the [INSTALL.md](INSTALL.md) first.
+with SIRF. 
 There is also some basic information on [CIL](https://www.ccpi.ac.uk/CIL) functionality to show similarities with SIRF.
 
 Authors:
@@ -17,6 +17,8 @@ Authors:
 - Richard Brown (PET and registration exercises)
 - Daniel Deidda and Palak Wadhwa (HKEM exercise)
 - Ashley Gillman (overall check, scripts and clean-up)
+- Imraj Singh (Deep Learning for PET exercise)
+- Daniel Deidda and Sam Porter (Synergistic SPECT/PET Reconstruction Exercises)
 
 This software is distributed under an open source license, see [LICENSE.txt](LICENSE.txt)
 for details.
@@ -29,7 +31,7 @@ If you are attending a course, ***please read this before the course.***
 
 Instructors should check our [documentation for instructors](https://github.com/SyneRBI/SIRF-Exercises/blob/master/DocForInstructors.md).
 
-Installation instructions when you install these exercises outside a binary distribution are in [INSTALL.md](INSTALL.md), but read the above links first.
+Installation instructions when you do not use our cloud resources are in [INSTALL.md](INSTALL.md), but read the above links first.
 
 
 
