@@ -7,14 +7,14 @@ installation process therefore. Instructions below are for setting it up yoursel
 
 Author: Kris Thielemans
 
-An easy way to run the exercises is to use the SIRF Virtual Machine or a Docker image where
-SIRF has already been installed for you. To install SIRF and SIRF-Exercises with these methods, please read https://github.com/SyneRBI/SIRF/wiki/How-to-obtain-SIRF.
-
-Alternatively you can install SIRF yourself. Below are some brief instructions.
-
 The exercises use [Jupyter notebooks](http://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html).
-These provide a nice GUI interface to Python. You need 2 components:
-The jupyter notebook server and a web browser to open it.
+These provide a nice GUI interface to Python. You need a few components:
+The jupyter notebook server and a web browser to open it, SIRF and the SIRF-Exercises.
+
+An easy way to run the exercises is to use a GitHub Codespace, the SIRF Virtual Machine or a Docker image where
+SIRF has already been installed for you. Please read https://github.com/SyneRBI/SIRF/wiki/How-to-obtain-SIRF.
+
+Alternatively you can install SIRF and the SIRF-Exercises yourself. Below are some brief instructions.
 
 
 ## Installing SIRF and the exercises yourself
@@ -32,7 +32,8 @@ The SIRF-exercises themselves can just be downloaded, preferably via
 adjusting the path to where you want to install the SIRF-Exercises of course.
 
 You will need to install the additional Python dependencies needed for the
-exercises. If you've installed SIRF using a `conda` python environment, we recommend
+exercises. This includes a Jupyter notebook server.
+If you've installed SIRF using a `conda` python environment, we recommend
 
     conda env update -n <your_env_name> --file environment.yml
 
@@ -45,7 +46,9 @@ sure that you use a Python version which is compatible with how you compiled SIR
 `conda` environment includes dependencies (in particular [`cil`](https://github.com/TomographicImaging/CIL))
 which are not available with `pip`.
 
-After all this, you will need to do the steps indicated in the instructions above for the VM, after the `update_VM.sh` step.
+**Warning:** At present, SIRF is not yet available via conda or pip. The above instructions therefore do not install SIRF itself.
+
+Next steps are in the [DocForParticipants.md](DocForParticipants.md).
 
 ### Updating the exercises after installation
 

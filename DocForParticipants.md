@@ -5,7 +5,10 @@ This instruction contain documentation and links to get started with the exercis
 - [Start Here](#start-here)
 
 - [Start a jupyter notebook server for the SIRF exercises](#Start-a-jupyter-notebook-server-for-the-SIRF-exercises)
-    - [Using an Azure Client](#using-and-azure-client-(if-available))
+    - [Using the Cloud](#using-the-cloud)
+        - [Using GitHub Codespaces](#using-github-codespaces)
+        - [Using an Azure Client](#using-an-azure-client-if-available)
+        - [Using the STFC cloud](#using-an-stfc-cloud-instance-if-available)
     - [Using the VM](#using-the-vm)
     - [Using Docker](#using-docker)
     - [Using your own installed SIRF and SIRF-exercises](#using-your-own-installed-sirf-and-sirf-exercises )
@@ -21,7 +24,7 @@ This instruction contain documentation and links to get started with the exercis
 - [Appendix of useful info](#appendix)
 
 The SIRF documentation can be found [here](https://github.com/SyneRBI/SIRF/wiki/Software-Documentation).
-***The current version of these exercises needs SIRF v3.2.0 (SPECT needs v3.3.0 (pre-)release)***
+***The current version of these exercises needs SIRF v3.4.0.*** Some exercises could still work on SIRF v3.2.0 (SPECT needs v3.3.0).
 
 Documentation is in the form of MarkDown files (`*.md`), which are simple text files which you open from the Jupyter notebook, but they look nicer when browsing to [GitHub](https://github.com/SyneRBI/SIRF-Exercises/tree/master/).
 
@@ -54,15 +57,33 @@ Once you have SIRF and the exercises on your system, or access to a server with 
 
 The next sections contain instructions to start the Jupyter notebook server with the SIRF exercises for all the different installation options. In following steps, we will start a Gadgetron server and download data.
 
-## Start a jupyter notebook server for the SIRF exercises
-
 ***Warning:** these instructions are when using JupyterLab as opposed to the "classic" notebook
 interface. If you choose to use the classic interface, you will have to modify the notebooks
 marginally by replacing `%matplotlib widget` with `%matplotlib notebook`.
 See also the [iPython section](#ipython) below.
 
+## Start a jupyter notebook server for the SIRF exercises
 
-### Using an Azure client (if available)
+### Using the Cloud
+
+#### Using GitHub Codespaces
+
+GitHub allows creating a container in the cloud which you can access via your web browser, see the
+[GitHub Codespaces documentation](https://docs.github.com/en/codespaces/overview) for full information.
+The free allocation should be enough to get you familiar with SIRF.
+
+Note that the creation of the codespace will take around 5 minutes. This includes creation of the container,
+installation of all dependencies and downloading the example data.
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/SyneRBI/SIRF-Exercises)
+
+Some notes:
+- When selecting a kernel, please use the `conda` python (not `/usr/bin/python3`).
+- You might want to conserve some resources by manually
+[stopping a code space](https://docs.github.com/en/codespaces/developing-in-codespaces/stopping-and-starting-a-codespace),
+otherwise GitHub will stop it for you after a certain time-out. You can then restart the codespace to resume your work.
+
+#### Using an Azure client (if available)
 
 The web-address should be something like https://sirf1....cloudapp.azure.com:9999/. See local instructions of your training sessoin.
 *Do not forget the `https`*. You will need to accept the secure exception. The Jupyter notebook password is `virtual`.
@@ -70,7 +91,7 @@ The web-address should be something like https://sirf1....cloudapp.azure.com:999
 If the instructors tell you, you might have to create a terminal via the jupyter notebook and type `update_VM.sh`.
 Later in the course, you can use this terminal to start `gadgetron`.
 
-### Using an STFC Cloud instance (if available)
+#### Using an STFC Cloud instance (if available)
 Follow instructions given elsewhere.
 
 ### Using the VM
@@ -101,7 +122,7 @@ Please note that for at present (at least up to SIRF 3.4), you need to point you
 
 ### Using your own installed SIRF and SIRF-exercises 
 
-You have a jupyter server (as you followed the [installation instructions](INSTALL.md)) so just use
+You have a jupyter server and SIRF (as you followed the [installation instructions](INSTALL.md)), so just use
    ```bash
    cd /wherever/you/installed/it/SIRF-Exercises
    jupyter lab
@@ -117,7 +138,8 @@ Copy-paste in the terminal window can be tricky. Normally, you can shift+right c
 
 ## Start a Gadgetron server
 
-SIRF uses Gadgetron for MR reconstruction. You will need to start a "server" such that SIRF can communicate to it. Docker already starts this automatically, but if you are using anything else you need to start Gadgetron yourself.
+SIRF uses Gadgetron for MR reconstruction. You will need to start a "server" such that SIRF can communicate to it.
+Docker and GitHub Codespaces already start this automatically, but if you are using anything else you need to start Gadgetron yourself.
 
 Open a new terminal (for the Jupyter interface, see above) and type
 ```bash
@@ -130,7 +152,8 @@ You can kill the server at the end by going back to the terminal and pressing `C
 
 ## Getting the Data
 
-Some exercises use data that you will need. In the cloud and in Azure, we provide the data you need for the tests, but otherwise, you will need to download it.
+Some exercises use data that you will need. In the cloud (GitHub Codespaces, STFC cloude, Azure),
+we provide the data you need for the exercises, but otherwise, you will need to download it.
 There are download scripts available for that, available in the `SIRF-Exercises/scripts` folder. The introductory notebooks contain
 cells for running the script, but you can also do this from the command line (see above on how to start a terminal from Jupyter).
 
