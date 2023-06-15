@@ -25,13 +25,19 @@ for details.
 
 # Links to documentation
 
-Full instructions on getting started is in our [documentation for participants](DocForParticipants.md). (Or use [this link to GitHub](https://github.com/SyneRBI/SIRF-Exercises/blob/master/DocForParticipants.md) for nice formatting, but do check which version of the exercises you are using).  
+Full instructions on getting started are in our [documentation for participants](DocForParticipants.md)
+(or use [this link to GitHub](https://github.com/SyneRBI/SIRF-Exercises/blob/master/DocForParticipants.md)
+for nice formatting, but do check which version of the exercises you are using). Despite the name,
+this documentation is also appropriate if you are trying these exercises on your own.
 *Gentle request*:
 If you are attending a course, ***please read this before the course.*** 
 
 Instructors should check our [documentation for instructors](https://github.com/SyneRBI/SIRF-Exercises/blob/master/DocForInstructors.md).
 
 Installation instructions when you do not use our cloud resources are in [INSTALL.md](INSTALL.md), but read the above links first.
+
+You can run the SIRF-Exercises in GitHub Codespaces, see [the section in the documentation](DocForParticipants.md#using-github-codespaces).  
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/SyneRBI/SIRF-Exercises)
 
 
 
