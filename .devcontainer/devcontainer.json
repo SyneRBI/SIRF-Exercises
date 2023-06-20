@@ -1,0 +1,35 @@
+// For format details, see https://aka.ms/devcontainer.json.
+{
+	"hostRequirements": {
+ 	  "cpus": 4,
+   	  "memory": "8gb",
+	  // currently need more than 32gb to get the image to build
+   	  "storage": "64gb"
+	},
+	"name": "SIRF-Exercises",
+
+	// "initializeCommand": "docker system prune --all --force",
+	
+	// make sure we run our entrypoint.sh (to create users etc)
+	"overrideCommand": false,
+	"image": "synerbi/sirf:devel-service",
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Comment to connect as root instead.
+	"remoteUser": "jovyan",
+
+    "postCreateCommand": "bash ./.devcontainer/postCreateCommand.sh",
+	// manual start of gadgetron, but commented-out as this is done in the service image
+        // "postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'"
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+	"extensions": ["ms-python.python",
+		"ms-toolsai.jupyter",
+		"ms-python.vscode-pylance"]
+
+}

@@ -1,0 +1,30 @@
+name: base
+channels:
+  - conda-forge
+  - ccpi
+  - defaults
+dependencies:
+  # Notebook dependencies
+  - ipywidgets
+  - ipympl
+  - widgetsnbextension
+  - nodejs
+  - numpy
+  - cil # make synergistic notebooks work
+  - astra-toolbox # needed for ct examples
+  - scipy
+  - matplotlib
+  - numba
+  - llvmlite  # numba dependency
+  - h5py
+  - nibabel
+  - scikit-image # nibabel dependency
+  - PyWavelets # nibabel dependency
+  - imageio # nibabel dependency
+  - tqdm
+  - docopt
+  - pip
+  - pip:
+     - brainweb>=1.5.1
+  # Developer dependencies
+  - nbstripout
