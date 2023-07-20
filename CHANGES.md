@@ -1,7 +1,8 @@
 # ChangeLog
-## xx.xx.xx
+## v3.5.0
 * added `environment.yml` for `conda` users. This also installs CIL.
 * added a [`.devcontainer` folder](https://containers.dev/) which enables GitHub Codespaces as well as Visual Studio Code devcontainers.
+* minor fixes, such as the `brainweb` notebook writes into `working_folder` and checking if `astra` is installed.
 
 ## v3.4.0
 * change from jupyter notebook to lab
