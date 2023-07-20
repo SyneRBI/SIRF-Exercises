@@ -41,10 +41,11 @@ If you've installed SIRF using a `conda` python environment, we recommend
     # when done
     conda deactivate
 
-If you didn't use `conda`, use something like this
+If you didn't use `conda`, we recommend using [venv](https://docs.python.org/3/library/venv.html), i.e. something like this
 
     $SIRF_PYTHON_EXECUTABLE -m venv ~/devel/SIRFenv
-    source ~/devel/SIRFenv/bin/activate.csh
+    # Activate the venv. Use the appropriate line for your shell, see the venv doc
+    source ~/devel/SIRFenv/bin/activate
     pip install -U pip
     pip install -r requirements.txt
     jupyter lab
