@@ -36,10 +36,20 @@ exercises. This includes a Jupyter notebook server.
 If you've installed SIRF using a `conda` python environment, we recommend
 
     conda env update -n <your_env_name> --file environment.yml
+    conda activate <your_env_name>
+    jupyter lab
+    # when done
+    conda deactivate
 
-If you didn't use `conda`, use
+If you didn't use `conda`, use something like this
 
-    $SIRF_PYTHON_EXECUTABLE -m pip install -r requirements.txt
+    $SIRF_PYTHON_EXECUTABLE -m venv ~/devel/SIRFenv
+    source ~/devel/SIRFenv/bin/activate.csh
+    pip install -U pip
+    pip install -r requirements.txt
+    jupyter lab
+    # when done
+    deactivate
 
 where we used the environment variable created when you follow the `SIRF-SuperBuild` instructions to make
 sure that you use a Python version which is compatible with how you compiled SIRF. Please note that the
