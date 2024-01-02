@@ -1,6 +1,7 @@
 name: base
 channels:
   - conda-forge
+  - intel
   - ccpi
   - defaults
 dependencies:
