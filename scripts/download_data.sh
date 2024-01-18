@@ -1,5 +1,7 @@
 #! /bin/bash
-# A script to download specified data for the SIRF-Exercises course
+# A script to download specified data for the SIRF-Exercises
+# as well as create Python scripts such that the exercises know where
+# the data is. These will be located in ${REPO_DIR}/lib/sirf_exercises
 #
 # Author: Kris Thielemans, Richard Brown, Ashley Gillman
 # Copyright (C) 2018-2021 University College London
@@ -11,7 +13,8 @@ trap "echo some error occurred. Retry" ERR
 
 print_usage() {
     echo "Usage: $0 [-p] [-m] [-o] [-d DEST_DIR] [-D DOWNLOAD_DIR] | -h"
-    echo "A script to download specified data for the SIRF-Exercises course"
+    echo "A script to download specified data for the SIRF-Exercises, as well as"
+    echo "creating Python scripts such that the exercises know where the data is."
     echo "  -p        Download  PET data"
     echo "  -m        Download  MR data"
     echo "  -o        Download old notebook data"
@@ -21,12 +24,11 @@ print_usage() {
     echo "  -D DOWNLOAD_DIR  Optional download directory. Useful if you have the files already downloaded."
     echo "                   If not supplied, DEST_DIR will be used."
     echo "  -w WORKING_DIR  Optional working directory. Defaults to DEST_DIR/working_folder"
-    echo
-    echo "Flags must be before positional arguments."
     echo ""
     echo "Please note that if you run the script multiple times with different values"
     echo "for the -d or -D options, you might end up with multiple copies of the files."
-    echo "Running the script without flags will not download data."
+    echo "Running the script without flags will not download data. However, it will create"
+    echo "the Python scripts."
 }
 
 # get the real, absolute path
