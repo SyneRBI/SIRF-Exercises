@@ -12,7 +12,7 @@
 	
 	// make sure we run our entrypoint.sh (to create users etc)
 	"overrideCommand": false,
-	"image": "ghcr.io/synerbi/sirf:jupyter",
+	"image": "ghcr.io/synerbi/sirf:jupyter-devel",
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 
