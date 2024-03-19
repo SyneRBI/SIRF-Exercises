@@ -48,7 +48,7 @@ There are several ways to get SIRF and its exercises running for the training co
 4. Installing and building SIRF and the SIRF-Exercises on your machine from source.
 
 We recommend that if you are installing this for a training course, you use any of the first three options, as installing SIRF from source is harder than the rest.
-The VM works well in any operating system, Docker works well in Linux and MacOS, (Windows support for our Docker images is currently untested).
+The VM works well in any operating system, Docker works well in Linux and MacOS, or on Windows in a Linux installation under WSL (native Windows support for our Docker images is currently untested).
 
 Instructions for all (except the training course specific server, as this will be given in the training course) can be found at https://github.com/SyneRBI/SIRF/wiki/How-to-obtain-SIRF.
 Instructions to self-build the exercises (once you have SIRF built from source) can be found in this repository at [the installation instructions page](INSTALL.md).
@@ -116,13 +116,14 @@ If this fails, you could try to use web browser in the VM instead.
 ### Using Docker
 
 The instructions to start Docker and SIRF are documented in the [Docker instructions at SIRF](https://github.com/SyneRBI/SIRF-SuperBuild/blob/master/docker/README.md), please follow those to start it. 
-Docker is easiest in Linux, so if you are not familiar with Docker and are running on Windows, we suggest using the VM instead. 
+Docker is easiest in Linux, MacOS or Windows+WSL. If you are not familiar with Docker, you could use the VM instead. 
 
-Please note that for at present (at least up to SIRF 3.4), you need to point your (host) web-browser to http://localhost:9999 (fill in the `virtual` password).
+Please note that for at present (at least up to SIRF 3.6), you need to point your (host) web-browser to http://localhost:9999 (fill in the 
+`virtual` password).
 
 ### Using your own installed SIRF and SIRF-exercises 
 
-You have a jupyter server and SIRF (as you followed the [installation instructions](INSTALL.md)), so just use
+In this case, you should have followed the [installation instructions](INSTALL.md)), so just use
    ```bash
    cd /wherever/you/installed/it/SIRF-Exercises
    jupyter lab
@@ -134,7 +135,7 @@ It is often useful to run commands in a shell where the Python kernels run (i.e.
 - Jupyter "classic": on the "Home" tab, click on `New` on the right, and choose `Terminal`
 - JupyterLab: go to the Launcher (click on the `+` sign top-left), and choose `Terminal`.
 
-Copy-paste in the terminal window can be tricky. Normally, you can shift+right click in the terminal and then select from th epop-up menu. See also the [JupyterLab doc](https://jupyterlab.readthedocs.io/en/stable/user/terminal.html#copy-paste).
+Copy-paste in the terminal window can be tricky. Normally, you can shift+right click in the terminal and then select from the pop-up menu. See also the [JupyterLab doc](https://jupyterlab.readthedocs.io/en/stable/user/terminal.html#copy-paste).
 
 ## Start a Gadgetron server
 
