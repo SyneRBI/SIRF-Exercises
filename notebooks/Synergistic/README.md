@@ -1,8 +1,10 @@
 # Synergistic notebooks
 
 You should find in this directory a few notebooks that are designed to give you a feeling for synergistic reconstructions.
+We recommend that you review the The [gradient_descent_mr_pet_ct notebook](../Introductory/gradient_descent_mr_pet_ct.ipynb)
+notebook first, which shows how to write a simple gradient descent algorithm for MR, PET and CT (using CIL for the latter).
+It is not really a "synergistic" notebook in itself, but can serve as the basis for any synergistic algorithm that uses alternating optimisation between the different modalities.
 
-0. [Gradient descent/ascent for MR, PET and CT](#gradient-descent-for-MR-PET-CT)
 1. [Generate the data](#gen_data)
 2. [de Pierro MAPEM with the Bowsher prior](#de_pierro)
 3. [Dual PET](#dual_pet)
@@ -11,11 +13,6 @@ You should find in this directory a few notebooks that are designed to give you 
 6. [Joint-TV for PET](#Joint-TV_P)
 7. [Joint-TV for PET/SPECT](#Joint-TV_PS)
 
-## 0. Gradient descent/ascent for MR, PET and CT<a name="gradient-descent-for-MR-PET-CT"></a>
-
-The [gradient_descent_mr_pet_ct notebook](gradient_descent_mr_pet_ct.ipynb) shows how to write
-a simple gradient descent (or ascent...) algorithm for MR, PET and CT (using CIL for the latter).
-It is not really a "synergistic" notebook in itself, but can serve as the basis for any synergistic algorithm that uses alternating optimisation between the different modalities.
 
 ## 1. Generate the data <a name="gen_data"></a>
 
