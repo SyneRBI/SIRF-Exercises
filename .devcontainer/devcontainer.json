@@ -4,7 +4,7 @@
  	  "cpus": 4,
    	  "memory": "8gb",
 	  // currently need more than 32gb to get the image to build
-   	  "storage": "64gb"
+   	  "storage": "32gb"
 	},
 	"name": "SIRF-Exercises",
 
