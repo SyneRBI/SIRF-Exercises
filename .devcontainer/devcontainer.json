@@ -13,7 +13,7 @@
 //"postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'" // already done in image
 "remoteUser": "jovyan",
 "portsAttributes": {"8888": {"label": "Jupyter", "onAutoForward": "notify"}},
-"postCreateCommand": "bash ./scripts/download_data.sh -m -p && mamba env update --file environment.yml",
+"postCreateCommand": "bash ./scripts/download_data.sh -m -p && sed -i /astra-toolbox/d environment.yml && mamba env update",
 // "features": {}, // https://containers.dev/features
 "customizations": {"vscode": {"extensions": [
 	"ms-python.python",
