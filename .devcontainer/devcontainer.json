@@ -1,35 +1,22 @@
-// For format details, see https://aka.ms/devcontainer.json.
+/// format: https://aka.ms/devcontainer.json
 {
-	"hostRequirements": {
- 	  "cpus": 4,
-   	  "memory": "8gb",
-	  // currently need more than 32gb to get the image to build
-   	  "storage": "64gb"
-	},
-	"name": "SIRF-Exercises",
-
-	// "initializeCommand": "docker system prune --all --force",
-	
-	// make sure we run our entrypoint.sh (to create users etc)
-	"overrideCommand": false,
-	"image": "ghcr.io/synerbi/sirf:jupyter",
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
-	// Comment to connect as root instead.
-	"remoteUser": "jovyan",
-
-    "postCreateCommand": "bash ./.devcontainer/postCreateCommand.sh",
-	// manual start of gadgetron, but commented-out as this is done in the service image
-        // "postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'"
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-	"extensions": ["ms-python.python",
-		"ms-toolsai.jupyter",
-		"ms-python.vscode-pylance"]
-
+"hostRequirements": {
+	"cpus": 2,
+	"memory": "8gb",
+	"storage": "32gb"
+},
+"name": "SIRF-Exercises",
+//"initializeCommand": "docker system prune --all --force",
+"image": "ghcr.io/synerbi/sirf:jupyter",
+/// use image's entrypoint & user
+"overrideCommand": false,
+//"postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'" // already done in image
+"remoteUser": "jovyan",
+"portsAttributes": {"8888": {"label": "Jupyter", "onAutoForward": "ignore"}},
+"postCreateCommand": "bash ./scripts/download_data.sh -m -p && sed -i /astra-toolbox/d environment.yml && mamba env update",
+// "features": {}, // https://containers.dev/features
+"customizations": {"vscode": {"extensions": [
+	"ms-python.python",
+	"ms-toolsai.jupyter",
+	"ms-python.vscode-pylance"]}}
 }

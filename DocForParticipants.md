@@ -24,7 +24,7 @@ This instruction contain documentation and links to get started with the exercis
 - [Appendix of useful info](#appendix)
 
 The SIRF documentation can be found [here](https://github.com/SyneRBI/SIRF/wiki/Software-Documentation).
-***The current version of these exercises needs SIRF v3.4.0.*** Some exercises could still work on SIRF v3.2.0 (SPECT needs v3.3.0).
+***The current version of these exercises needs SIRF v3.6.0.*** Some exercises could still work on SIRF v3.4.0 (SPECT needs v3.3.0).
 
 Documentation is in the form of MarkDown files (`*.md`), which are simple text files which you open from the Jupyter notebook, but they look nicer when browsing to [GitHub](https://github.com/SyneRBI/SIRF-Exercises/tree/master/).
 
@@ -42,12 +42,12 @@ A useful introduction to the notebook interface [can be found here](http://jupyt
 
 There are several ways to get SIRF and its exercises running for the training course. 
 
-1. Accessing a remote server prepared for the training course (could be Azure, STFC cloud or others). This is specific for organized training courses. Please check with your instructors. 
+1. Accessing a remote server with everything prepared. This is currently continuously available via GitHub Codespaces. However,if you are attending  organized training courses, this will be organised for you(could be Azure, STFC cloud or something else). Please check with your instructors.
 2. Installing and running the SIRF Virtual Machine (VM).
 3. Installing and running the SIRF Docker image.
 4. Installing and building SIRF and the SIRF-Exercises on your machine from source.
 
-We recommend that if you are installing this for a training course, you use any of the first three options, as installing SIRF from source is harder than the rest.
+We recommend that initially you use one of the first three options, as installing SIRF from source is harder than the rest.
 The VM works well in any operating system, Docker works well in Linux and MacOS, or on Windows in a Linux installation under WSL (native Windows support for our Docker images is currently untested).
 
 Instructions for all (except the training course specific server, as this will be given in the training course) can be found at https://github.com/SyneRBI/SIRF/wiki/How-to-obtain-SIRF.
@@ -78,7 +78,7 @@ installation of all dependencies and downloading the example data.
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/SyneRBI/SIRF-Exercises)
 
 Some notes:
-- When selecting a kernel, please use the `conda` python (not `/usr/bin/python3`).
+- You will have to select a Python kernel for each notebook (top-right). Please use the existing `conda` python kernel (**not** `/usr/bin/python3`) listed in "Python environments". Alternatively, you can access the jupyter server running in the codespace via [port forwarding](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace).
 - You might want to conserve some resources by manually
 [stopping a code space](https://docs.github.com/en/codespaces/developing-in-codespaces/stopping-and-starting-a-codespace),
 otherwise GitHub will stop it for you after a certain time-out. You can then restart the codespace to resume your work.
@@ -115,7 +115,7 @@ If this fails, you could try to use web browser in the VM instead.
 
 ### Using Docker
 
-The instructions to start Docker and SIRF are documented in the [Docker instructions at SIRF](https://github.com/SyneRBI/SIRF-SuperBuild/blob/master/docker/README.md), please follow those to start it. 
+The instructions to start Docker and SIRF are documented in the [Docker instructions at SIRF-Superbuild](https://github.com/SyneRBI/SIRF-SuperBuild/blob/master/docker/README.md), please follow those to start it. 
 Docker is easiest in Linux, MacOS or Windows+WSL. If you are not familiar with Docker, you could use the VM instead. 
 
 Please note that for at present (at least up to SIRF 3.6), you need to point your (host) web-browser to http://localhost:9999 (fill in the 
