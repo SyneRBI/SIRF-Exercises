@@ -1,5 +1,14 @@
 # STIR listmode (LM) Deep learning (DL) reconstruction notebooks
 
+## converting .py files to .ipynb
+
+All notebooks are orignally writted and stored as plain python files using the "percent" format.
+You can convert them to jupyer notebooks by running
+```
+jupytext --to ipynb *.py
+```
+See [here](https://jupytext.readthedocs.io/en/latest/) for more details on jupytext.
+
 ## Notebooks
 
 0. Intro / motivation
