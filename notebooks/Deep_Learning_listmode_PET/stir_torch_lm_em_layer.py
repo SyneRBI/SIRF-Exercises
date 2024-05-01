@@ -1,42 +1,18 @@
-"""skeleton for stir-pytorch layer that allows to build a listmode EM update layer"""
+# ---
+# jupyter:
+#   jupytext:
+#     cell_metadata_filter: -all
+#     formats: ipynb,py:percent
+#     text_representation:
+#       extension: .py
+#       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.16.1
+# ---
 
-# Questions 
-# =========  
-#        1) Can we use SIRF or do we need STIR? -> Depends on whether "Hessian applied to input of LM-logL"
-#           is available in SIRF 
-#        2) forward projection of current image x is needed in forward an backward pass
-#           -> can we cache this in a pytorch context (ctx) object to avoid recomputing it in the backward pass?
-
-# INPUT: 1) pytorch tensor containing the current image estimate (x)
-#        2) SIRF or STIR Poisson logL cost function object that can compute the gradient w.r.t. to
-#           the image estimate (x) and the Hessian at x applied to another image x'
-
-
-# SKELETON
-# ========
-
-# (1) setup auto-grad comp. layer that returns grad LM-logL as output (gradient descent step with step size 1)
-#     -> needs "Hessian" of LM-logL applied to x' for back propagation
-
-# (2) setup EM_update module that uses x + x/s * grad logL in forward pass
-#     -> let autograd compute the gradients
-
-
-# PSEUDOCODE FOR (1)
-# ==================
-
-# forward pass
-# INPUT: x (torch tensor), LM-logL (sirf / stir listmode Poisson logL)
-# 1.1: convert x from torch (GPU) tensor to sirf / stir (CPU) image -> probably via numpy
-# 1.2: compute gradient of SIRF/STIR LM-logL
-# 1.3: convert output from sirf / stir image back to (GPU) torch tensor 
-
-# backward pass
-# INPUT: grad_output (torch tensor), LM-logL (sirf / stir listmode Poisson logL)
-# 1.4: convert grad_output from (GPU) torch tensor to (CPU) sirf / stir image (x') -> probably via numpy
-# 1.5: apply Hessianof SIRF/STIR LM-logL at x to x'
-# 1.6: convert output from sirf / stir image back to (GPU) torch tensor -> probably via numpy
-
+# %% [markdown]
+# Skeleton for STIR-based listmode Poisson logL gradient data fidelity layer 
+# ==========================================================================
 
 # %%
 import torch
