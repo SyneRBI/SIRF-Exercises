@@ -1,0 +1,127 @@
+<mxfile host="Electron" modified="2024-05-03T16:02:04.372Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.2.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="ikvXzCrnCoBdRabx3f5P" version="24.2.5" type="device">
+  <diagram name="Page-1" id="8Qw_1hSMklgCle8Wcz-8">
+    <mxGraphModel dx="2146" dy="1535" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="LVMC560kpPJ9mfJXyLy--18" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="716" y="205" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--19" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="733" y="205" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--20" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="750" y="205" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--1" value="&lt;b&gt;&lt;font face=&quot;Helvetica&quot;&gt;(listmode) PET data fidelity &lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;b&gt;&lt;font face=&quot;Helvetica&quot;&gt;update layer&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=0;glass=0;sketch=1;curveFitting=1;jiggle=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="120" y="240" width="200" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--2" value="&lt;b&gt;CNN&lt;br&gt;with trainable parameters&lt;br&gt;(learned regularization)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;shadow=0;glass=0;sketch=1;curveFitting=1;jiggle=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="120" y="90" width="200" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--3" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;rotation=-180;" vertex="1" parent="1">
+          <mxGeometry x="320" y="140" width="60" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--4" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="370" y="140" width="60" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--5" value="&lt;b&gt;&lt;font face=&quot;Helvetica&quot;&gt;(listmode) PET data fidelity &lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;b style=&quot;&quot;&gt;&lt;font face=&quot;Helvetica&quot;&gt;update layer&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=0;glass=0;sketch=1;curveFitting=1;jiggle=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="430" y="240" width="200" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--6" value="&lt;b&gt;CNN&lt;br&gt;with trainable parameters&lt;br&gt;&lt;/b&gt;&lt;div&gt;&lt;b&gt;(learned regularization)&lt;/b&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;shadow=0;glass=0;sketch=1;curveFitting=1;jiggle=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="430" y="90" width="200" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--7" value="&lt;b&gt;&lt;font face=&quot;Helvetica&quot;&gt;(listmode) PET data fidelity &lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;b&gt;&lt;font face=&quot;Helvetica&quot;&gt;update layer&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=0;glass=0;sketch=1;curveFitting=1;jiggle=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="840" y="240" width="200" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--8" value="&lt;b&gt;&lt;font face=&quot;Helvetica&quot;&gt;CNN&lt;br&gt;with trainable parameters&lt;/font&gt;&lt;br&gt;&lt;/b&gt;&lt;div&gt;&lt;b&gt;(learned regularization)&lt;/b&gt;&lt;b&gt;&lt;font face=&quot;Helvetica&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;shadow=0;glass=0;sketch=1;curveFitting=1;jiggle=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="840" y="90" width="200" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--9" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;rotation=-180;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="130" width="60" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--10" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;rotation=-180;" vertex="1" parent="1">
+          <mxGeometry x="630" y="130" width="60" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--11" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="780" y="130" width="60" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--12" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="140" width="60" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--13" value="&lt;b&gt;Layer 1&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="185" y="40" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--14" value="&lt;b&gt;Layer 2&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="490" y="40" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--15" value="&lt;b&gt;Layer n&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="910" y="40" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--16" value="&lt;div&gt;&lt;b&gt;INPUT&lt;/b&gt;&lt;/div&gt;&lt;b&gt;initial image&lt;br&gt;estimate&lt;/b&gt;&lt;div&gt;&lt;b&gt;x&lt;sub&gt;0&lt;/sub&gt;&lt;/b&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-28" y="185" width="90" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--17" value="&lt;div&gt;&lt;b&gt;OUTPUT:&lt;/b&gt;&lt;/div&gt;&lt;b&gt;&quot;high quality&quot;&amp;nbsp;&lt;br&gt;reconstruction&lt;br&gt;(from &quot;low quality&quot; data)&lt;br&gt;x&lt;sub&gt;n&lt;/sub&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1075" y="173" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--21" value="&lt;font color=&quot;#000000&quot;&gt;&lt;b&gt;INPUT: acquired (listmode) PET data + quantitative corrections (attenuation, scatter, randoms, normalization)&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="1">
+          <mxGeometry x="120" y="420" width="920" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--26" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.098;exitY=-0.104;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="LVMC560kpPJ9mfJXyLy--21">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="210" y="410" as="sourcePoint" />
+            <mxPoint x="210" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--27" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.098;exitY=-0.104;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="520" y="420" as="sourcePoint" />
+            <mxPoint x="520" y="363" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--28" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.098;exitY=-0.104;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="960" y="417" as="sourcePoint" />
+            <mxPoint x="960" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--29" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.summing_function;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--31" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.summing_function;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="650" y="200" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--32" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.summing_function;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="200" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--34" value="&lt;b&gt;x&lt;sub&gt;1&lt;/sub&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="356" y="185" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--35" value="&lt;b&gt;x&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;sub&gt;2&lt;/sub&gt;&lt;/span&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="675" y="180" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--36" value="&lt;b&gt;x&lt;sub&gt;d1&lt;/sub&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="320" y="300" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--37" value="&lt;b&gt;x&lt;sub&gt;r1&lt;/sub&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="316" y="110" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--38" value="&lt;b&gt;x&lt;sub&gt;d2&lt;/sub&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="635" y="290" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--39" value="&lt;b&gt;x&lt;sub&gt;r2&lt;/sub&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="631" y="100" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--40" value="&lt;b&gt;x&lt;sub&gt;rn&lt;/sub&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="100" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--41" value="&lt;b&gt;x&lt;span style=&quot;font-size: 10px;&quot;&gt;&lt;sub&gt;dn&lt;/sub&gt;&lt;/span&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="290" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--42" value="&lt;b&gt;&lt;font style=&quot;font-size: 20px;&quot;&gt;Unrolled variational PET listmode network&lt;/font&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="300" y="-5" width="420" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
