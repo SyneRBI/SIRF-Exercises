@@ -1,0 +1,6 @@
+cmake -S ./SIRF-SuperBuild -B ./build \ 
+       -DPYTHON_EXECUTABLE=/home/georg/miniforge3/envs/stir/bin/python \
+       -DBUILD_GADGETRON=OFF \
+       -DBUILD_TESTING_Gadgetron=OFF \
+       -DUSE_SYSTEM_pugixml=OFF \
+       -DUSE_parallelproj=OFF
