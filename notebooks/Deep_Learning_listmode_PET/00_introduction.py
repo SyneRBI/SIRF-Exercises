@@ -8,6 +8,16 @@
 # The general architecture of such network is shown below.
 #
 # ![title](figs/varnet.drawio.svg)
+#
+# The aim of an unrolled variational PET listmode network is to create "high quality" PET reconstructions
+# from "low-quality" input listmode data.
+
+# %% [markdown]
+# Question
+# --------
+#
+# Which (realistic) circumstances can lead to "low-quality" PET listmode data?
+# How can we obtain paired "high-quality" PET reconstructions needed for supervised training?
 
 # %% [markdown]
 # Learning objectives of this notebook
@@ -44,7 +54,7 @@
 # The latter can be represented by a neural network (e.g. a CNN) containing learnable parameters which are optimized
 # during (supervised) training.
 #
-# There are many way of implementing the data fidelity update term.
+# There are many way of implementing the data fidelity update block.
 # One simple possibility is to implement a gradient ascent step with respect to the Poisson log-likelihood.
 # $$ x^+ = x_k + \alpha \nabla_x \log L(y|x) ,$$
 # where the Poisson log-likelihood is given by
@@ -80,3 +90,74 @@
 # - using SIRF with STIR, this gradient can be evaluated in listmode
 # - if the number of listmode events is much smaller compared to the number of (TOF) sinogram bins, evaluating the gradient
 #   in listmode can be more efficient.
+
+# %% [markdown]
+# Training a neural network in pytorch
+# ------------------------------------
+#
+# Pytorch is a popular deep learning framework that provides a flexible and efficient way to build and train neural networks.
+# The essential steps to train a neural network in pytorch are summarized in the train loop, see
+# [here](https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html#optimizing-the-model-parameters) for more details.
+
+
+# %%
+import torch
+
+
+def train(
+    dataloader: torch.utils.data.DataLoader,
+    model: torch.nn.Module,
+    loss_fn: torch.nn.Module,
+    optimizer: torch.optim.Optimizer,
+    device: torch.device,
+):
+    model.train()
+    # loop over the dataset and sample mini-batches
+    for batch_num, (input_data_batch, target_image_batch) in enumerate(dataloader):
+        # move input and target data to device
+        input_data_batch = input_data_batch.to(device)
+        target_image_batch = target_image_batch.to(device)
+
+        # Compute prediction error
+        predicted_image_batch = model(input_data_batch)
+        loss = loss_fn(predicted_image_batch, target_image_batch)
+
+        # calculate gradients using backpropagation
+        loss.backward()
+        # update model parameters
+        optimizer.step()
+        # reset gradients
+        optimizer.zero_grad()
+
+
+# model and data loader to be defined
+my_model = myModel()
+my_data_loader = myDataLoader()
+
+# compute device - use cuda GPU if available
+dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# the loss function we optimize during training
+my_loss_fn = torch.nn.MSELoss()
+# the optimizer we use to update the model parameters
+my_optimizer = torch.optim.Adam(my_model.parameters(), lr=1e-3)
+
+# run a single epoch of training
+train(my_data_loader, my_model, my_loss_fn, my_optimizer, dev)
+
+
+# %% [markdown]
+# **The essential blocks for supervised training a neural network in pytorch are:**
+# 1. Sampling of mini-batches of input and target (label) images from the training dataset.
+# 2. Forward pass: Compute the prediction of the model given the input data.
+# 3. Compute the loss (error) between the prediction and the target images.
+# 4. Backward pass: Compute the gradient of the loss with respect to the model parameters using backpropagation.
+# 5. Update the model parameters using an optimizer.
+#
+# Fortunately, pytorch provides many high-level functions that simplify the implementation of all these steps.
+# (e.g. pytorch's data loader classes, pytorch's convolutional layers and non-linear activation function, pytorch's
+# autograd functionality for backpropagation of gradients, and optimizers like Adam)
+# To train a listmode PET unrolled variational network, the only thing we need to implement ourselves
+# is the forward pass of our model, including the data fidelity update blocks which are not directly available pytorch.
+#
+# The aim of the remaining exercises is to learn how to couple SIRF/STIR's PET listmode classes with pytorch allowing
+# a relatively simple implementation of the forward pass of a listmode PET unrolled variational network.
