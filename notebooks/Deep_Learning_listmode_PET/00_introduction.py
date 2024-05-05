@@ -41,4 +41,42 @@
 # The consist of a series of layers that are repeated multiple times.
 # Each contains an update with respect to the data fidelity term (blue boxes in the figure above)
 # and a regularization term (red boxes in the figure above).
-# The latter can be represented by a neural network containing learnable parameters which are optimized during training.
+# The latter can be represented by a neural network (e.g. a CNN) containing learnable parameters which are optimized
+# during (supervised) training.
+#
+# There are many way of implementing the data fidelity update term.
+# One simple possibility is to implement a gradient ascent step with respect to the Poisson log-likelihood.
+# $$ x^+ = x_k + \alpha \nabla_x \log L(y|x) ,$$
+# where the Poisson log-likelihood is given by
+# $$ \log L(y|x) = \sum_{i} y_i \log(\bar{y}_i(x)) - \bar{y}_i(x) ,$$
+# where $y$ is the measured emission sinogram, and $\bar{y}(x) = Ax + s$ the expectation of the measured data given the current
+# estimate of the image $x$ and a linear (affine) forward model $A$ including the mean of known additive contaminations (randoms and scatter) $s$.
+#
+
+# %% [markdown]
+# Exercise 1.1
+# ------------
+#
+# Given the equations above, derive the update formula for the gradient of the Poisson log-likelihood (using sinogram data)
+#
+# (bonus question) How does the update formula change if we use listmode data instead of sinogram data?
+
+# %% [markdown]
+# Solution 1.1
+# ------------
+#
+# In matrix notation, the gradient of the Poisson log-likelihood is given by:
+# $$ \nabla_x \log L(y|x) = A^T \left( \frac{y}{\bar{y}(x)} - 1 \right) = A^T \left( \frac{y}{Ax + s} - 1 \right) .$$
+#
+# For a given image voxel $j$, the corresponding expression reads:
+# $$ \frac{\partial \log L(y|x)} {\partial x_j} = \sum_{i=1}^m a_{ij} \left( \frac{y_i}{\sum_{k=1}^n a_{ik} x_k + s_i} - 1 \right) .$$
+#
+# Using a list of event "e" instead of a sinogram, the gradient of the Poisson log-likelihood becomes:
+# $$ \frac{\partial \log L(y|x)} {\partial x_j} = \sum_{\text{events} \ e} a_{i_ej} \frac{1}{\sum_{k=1}^n a_{i_ek} x_k + s_{i_e}} -  \sum_{i=1}^m a_{ij} 1.$$
+#
+# **Note:**
+# - SIRF (using the STIR backend) already provides implementations of the (TOF) PET acquisition forward model and
+#   the gradient of the Poisson log-likelihood such that we do not have to re-implement these.
+# - using SIRF with STIR, this gradient can be evaluated in listmode
+# - if the number of listmode events is much smaller compared to the number of (TOF) sinogram bins, evaluating the gradient
+#   in listmode can be more efficient.
