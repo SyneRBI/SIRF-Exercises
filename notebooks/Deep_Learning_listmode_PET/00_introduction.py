@@ -75,21 +75,13 @@
 # Solution 1.1
 # ------------
 #
-# In matrix notation, the gradient of the Poisson log-likelihood is given by:
-# $$ \nabla_x \log L(y|x) = A^T \left( \frac{y}{\bar{y}(x)} - 1 \right) = A^T \left( \frac{y}{Ax + s} - 1 \right) .$$
+# YOUR SOLUTION GOES IN HERE
+
+# %%
+# DO SHOW THE SOLUTION, UNCOMMENT AND RUN THE FOLLOWING LINES
 #
-# For a given image voxel $j$, the corresponding expression reads:
-# $$ \frac{\partial \log L(y|x)} {\partial x_j} = \sum_{i=1}^m a_{ij} \left( \frac{y_i}{\sum_{k=1}^n a_{ik} x_k + s_i} - 1 \right) .$$
-#
-# Using a list of event "e" instead of a sinogram, the gradient of the Poisson log-likelihood becomes:
-# $$ \frac{\partial \log L(y|x)} {\partial x_j} = \sum_{\text{events} \ e} a_{i_ej} \frac{1}{\sum_{k=1}^n a_{i_ek} x_k + s_{i_e}} -  \sum_{i=1}^m a_{ij} 1.$$
-#
-# **Note:**
-# - SIRF (using the STIR backend) already provides implementations of the (TOF) PET acquisition forward model and
-#   the gradient of the Poisson log-likelihood such that we do not have to re-implement these.
-# - using SIRF with STIR, this gradient can be evaluated in listmode
-# - if the number of listmode events is much smaller compared to the number of (TOF) sinogram bins, evaluating the gradient
-#   in listmode can be more efficient.
+# from IPython.display import Markdown, display
+# display(Markdown("snippets/solution_1_1.md"))
 
 # %% [markdown]
 # Training a neural network in pytorch
@@ -101,6 +93,7 @@
 
 
 # %%
+# DO NOT RUN THIS CELL - CODE SNIPPET ONLY
 import torch
 
 
@@ -159,5 +152,10 @@ train(my_data_loader, my_model, my_loss_fn, my_optimizer, dev)
 # To train a listmode PET unrolled variational network, the only thing we need to implement ourselves
 # is the forward pass of our model, including the data fidelity update blocks which are not directly available pytorch.
 #
-# The aim of the remaining exercises is to learn how to couple SIRF/STIR's PET listmode classes with pytorch allowing
-# a relatively simple implementation of the forward pass of a listmode PET unrolled variational network.
+# **The aim of the remaining exercises is:**
+# - to learn how to couple SIRF/STIR's PET listmode classes into a pytorch feedforward model
+# - learn how to backpropagate gradients through our custom model
+#
+# **The following is beyond the scope of the exercises:**
+# - training a real world unrolled variational listmode PET reconstruction network on a
+#   big amount of data
