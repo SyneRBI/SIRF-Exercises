@@ -64,7 +64,7 @@
 #
 
 # %% [markdown]
-# Exercise 1.1
+# Exercise 0.1
 # ------------
 #
 # Given the equations above, derive the update formula for the gradient of the Poisson log-likelihood (using sinogram data)
@@ -72,7 +72,7 @@
 # (bonus question) How does the update formula change if we use listmode data instead of sinogram data?
 
 # %% [markdown]
-# Solution 1.1
+# Solution 0.1
 # ------------
 #
 # YOUR SOLUTION GOES IN HERE
@@ -81,7 +81,7 @@
 # DO SHOW THE SOLUTION, UNCOMMENT AND RUN THE FOLLOWING LINES
 #
 # from IPython.display import Markdown, display
-# display(Markdown("snippets/solution_1_1.md"))
+# display(Markdown("snippets/solution_0_1.md"))
 
 # %% [markdown]
 # Training a neural network in pytorch
