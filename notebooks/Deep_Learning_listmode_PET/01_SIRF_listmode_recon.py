@@ -155,12 +155,12 @@ acq_model.set_background_term(randoms + scatter_estimate)
 
 # define objective function to be maximized as
 # Poisson logarithmic likelihood (with linear model for mean)
-obj_fun = (
+lm_obj_fun = (
     sirf.STIR.PoissonLogLikelihoodWithLinearModelForMeanAndListModeDataWithProjMatrixByBin()
 )
-obj_fun.set_acquisition_model(acq_model)
-obj_fun.set_acquisition_data(listmode_data)
-obj_fun.set_num_subsets(num_subsets)
+lm_obj_fun.set_acquisition_model(acq_model)
+lm_obj_fun.set_acquisition_data(listmode_data)
+lm_obj_fun.set_num_subsets(num_subsets)
 
 # %%
 # calculate the gradient of the (subset) objective function w.r.t. to an image
@@ -168,12 +168,22 @@ obj_fun.set_num_subsets(num_subsets)
 
 print("calculating the gradient of the objective function")
 initial_image = acq_data.create_uniform_image(value=1, xy=nxny)
-obj_fun.set_up(initial_image)
+lm_obj_fun.set_up(initial_image)
 
 # the subset 0 objective function w.r.t. to the initial image
-grad0 = obj_fun.gradient(initial_image, 0)
-#
-sens_img_0 = obj_fun.get_subset_sensitivity(0)
+grad0 = lm_obj_fun.gradient(initial_image, 0)
+# get the sensitivity for subset 0
+sens_img_0 = lm_obj_fun.get_subset_sensitivity(0)
+
+# %%
+# setup singoram Poisson logL
+# ---------------------------
+
+# create objective function
+obj_fun = sirf.STIR.make_Poisson_loglikelihood(acq_data)
+obj_fun.set_acquisition_model(acq_model)
+obj_fun.set_num_subsets(num_subsets)
+obj_fun.set_up(initial_image)
 
 ## %%
 #
@@ -184,7 +194,7 @@ sens_img_0 = obj_fun.get_subset_sensitivity(0)
 ## but is used in practice to speed-up calculations
 ## See the reconstruction demos for more complicated examples
 #reconstructor = sirf.STIR.OSMAPOSLReconstructor()
-#reconstructor.set_objective_function(obj_fun)
+#reconstructor.set_objective_function(lm_obj_fun)
 #reconstructor.set_num_subsets(num_subsets)
 #reconstructor.set_num_subiterations(num_iter)
 #
