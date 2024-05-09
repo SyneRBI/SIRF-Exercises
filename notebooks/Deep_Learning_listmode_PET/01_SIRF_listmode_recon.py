@@ -1,3 +1,15 @@
+# %% [markdown]
+# Sinogram and Listmode OSEM using sirf.STIR
+# ==========================================
+#
+# Using the theory learnings from the previous notebook, we will now show how to perform
+# PET reconstruction of emission data in listmode and sinogram format using (sinogram and listmode)
+# objective function objects of the sirf.STIR library.
+
+# %% [markdown]
+# Import modules and define file names
+# ------------------------------------
+
 # %%
 import sirf.STIR
 import numpy as np
@@ -20,26 +32,28 @@ nxny: tuple[int, int] = (127, 127)
 num_subsets: int = 21
 num_iter: int = 1
 num_scatter_iter: int = 3
-storage: str = "file"
-use_gpu: bool = True
 
 # create the output directory
 output_path.mkdir(exist_ok=True)
 
-# %%
-## engine's messages go to files, except error messages, which go to stdout
-_ = sirf.STIR.MessageRedirector('info.txt', 'warn.txt')
+# engine's messages go to files, except error messages, which go to stdout
+_ = sirf.STIR.MessageRedirector("info.txt", "warn.txt")
 
-# select acquisition data storage scheme
-sirf.STIR.AcquisitionData.set_storage_scheme(storage)
+# %% [markdown]
+# Read the listmode data and create a sinogram template
+# -----------------------------------------------------
+
+# %%
+sirf.STIR.AcquisitionData.set_storage_scheme("file")
 listmode_data = sirf.STIR.ListmodeData(list_file)
 acq_data_template = listmode_data.acquisition_data_template()
 print(acq_data_template.get_info())
 
-# %%
-# listmode to sinogram conversion
-# -------------------------------
+# %% [markdown]
+# Conversion of listmode to sinogram data (needed for scatter estimation)
+# -----------------------------------------------------------------------
 
+# %%
 # create listmode-to-sinograms converter object
 lm2sino = sirf.STIR.ListmodeToSinograms()
 
@@ -49,8 +63,25 @@ lm2sino.set_output_prefix(emission_sinogram_output_prefix)
 lm2sino.set_template(acq_data_template)
 
 # get the start and end time of the listmode data
-frame_start = float([x for x in listmode_data.get_info().split('\n') if x.startswith('Time frame start')][0].split(': ')[1].split('-')[0])
-frame_end = float([x for x in listmode_data.get_info().split('\n') if x.startswith('Time frame start')][0].split(': ')[1].split('-')[1].split('(')[0])
+frame_start = float(
+    [
+        x
+        for x in listmode_data.get_info().split("\n")
+        if x.startswith("Time frame start")
+    ][0]
+    .split(": ")[1]
+    .split("-")[0]
+)
+frame_end = float(
+    [
+        x
+        for x in listmode_data.get_info().split("\n")
+        if x.startswith("Time frame start")
+    ][0]
+    .split(": ")[1]
+    .split("-")[1]
+    .split("(")[0]
+)
 # set interval
 lm2sino.set_time_interval(frame_start, frame_end)
 # set up the converter
@@ -60,10 +91,11 @@ lm2sino.set_up()
 lm2sino.process()
 acq_data = lm2sino.get_output()
 
-# %%
-# randoms estimation
-# ------------------
+# %% [markdown]
+# Estimation of random coincidences
+# ---------------------------------
 
+# %%
 randoms_filepath = Path(f"{randoms_sinogram_output_prefix}.hs")
 
 if not randoms_filepath.exists():
@@ -75,20 +107,22 @@ else:
     randoms = sirf.STIR.AcquisitionData(str(randoms_filepath))
 
 
-# %%
-# setup of attenuation and normalisation factors
-# ----------------------------------------------
+# %% [markdown]
+# Setup of the acquisition model
+# ------------------------------
 
+# %%
 # select acquisition model that implements the geometric
 # forward projection by a ray tracing matrix multiplication
 acq_model = sirf.STIR.AcquisitionModelUsingRayTracingMatrix()
 # acq_model.set_num_tangential_LORs(10)
 acq_model.set_num_tangential_LORs(1)
 
-# %% 
-# calcuate the attenuation sinogram
-# ---------------------------------
+# %% [markdown]
+# Calculation the attenuation sinogram
+# ------------------------------------
 
+# %%
 # read attenuation image and display a single slice
 attn_image = sirf.STIR.ImageData(attn_file)
 
@@ -110,10 +144,11 @@ else:
 
 asm_attn = sirf.STIR.AcquisitionSensitivityModel(ac_factors)
 
-# %%
-# read the normalization sinogram
-# -------------------------------
+# %% [markdown]
+# Creation of the normalization factors (sensitivity sinogram)
+# ------------------------------------------------------------
 
+# %%
 # create acquisition sensitivity model from normalisation data
 asm_norm = sirf.STIR.AcquisitionSensitivityModel(norm_file)
 
@@ -121,10 +156,11 @@ asm = sirf.STIR.AcquisitionSensitivityModel(asm_norm, asm_attn)
 asm.set_up(acq_data)
 acq_model.set_acquisition_sensitivity(asm)
 
-# %%
-# scatter estimation
-# ------------------
+# %% [markdown]
+# Estimation of scattered coincidences
+# ------------------------------------
 
+# %%
 scatter_filepath: Path = Path(f"{scatter_sinogram_output_prefix}_{num_scatter_iter}.hs")
 
 if not scatter_filepath.exists():
@@ -151,10 +187,11 @@ else:
 # chain attenuation and ECAT8 normalisation
 acq_model.set_background_term(randoms + scatter_estimate)
 
-# %%
-# setup singoram Poisson logL
-# ---------------------------
+# %% [markdown]
+# Setup of the Poisson loglikelihood objective function ($logL(y,x)$) in sinogram mode
+# ------------------------------------------------------------------------------------
 
+# %%
 initial_image = acq_data.create_uniform_image(value=1, xy=nxny)
 
 # create objective function
@@ -163,29 +200,16 @@ obj_fun.set_acquisition_model(acq_model)
 obj_fun.set_num_subsets(num_subsets)
 obj_fun.set_up(initial_image)
 
+# %% [markdown]
+# Image reconstruction (optimization of the Poisson logL objective function) using sinogram OSEM
+# ----------------------------------------------------------------------------------------------
 
 # %%
-recon = initial_image.copy()
-#recon.fill(obj_fun.get_subset_sensitivity(0).as_array() > 0)
-#step = acq_data.create_uniform_image(value=1, xy=nxny)
-#
-#for it in range(num_iter):
-#    for i in range(num_subsets):
-#        subset_grad = obj_fun.gradient(recon, i)
-#        tmp = np.zeros(recon.shape, dtype = recon.as_array().dtype)
-#        np.divide(recon.as_array(), obj_fun.get_subset_sensitivity(i).as_array(), out = tmp, where = obj_fun.get_subset_sensitivity(i).as_array() > 0)
-#        step.fill(tmp)
-#        recon = recon +  step * subset_grad
-
-# %%
-# STIR sinogram-based OSEM
-# ------------------------
-
 if not Path(f"{recon_output_file}.hv").exists():
     reconstructor = sirf.STIR.OSMAPOSLReconstructor()
     reconstructor.set_objective_function(obj_fun)
     reconstructor.set_num_subsets(num_subsets)
-    reconstructor.set_num_subiterations(num_iter*num_subsets)
+    reconstructor.set_num_subiterations(num_iter * num_subsets)
     reconstructor.set_input(acq_data)
     reconstructor.set_up(initial_image)
     reconstructor.set_current_estimate(initial_image)
@@ -195,10 +219,89 @@ if not Path(f"{recon_output_file}.hv").exists():
 else:
     ref_recon = sirf.STIR.ImageData(f"{recon_output_file}.hv")
 
+vmax = np.percentile(ref_recon.as_array(), 99.999)
+
+fig, ax = plt.subplots(1, 1, figsize=(4, 4), tight_layout=True)
+ax.imshow(ref_recon.as_array()[71, :, :], cmap="Greys", vmin=0, vmax=vmax)
+fig.show()
+
+# %% [markdown]
+# Exercise 1.1
+# ------------
+#
+# Perform the gradient ascent step
+# $$ x^+ = x + \alpha \nabla_x logL(y,x) $$
+# on the initial image x using a constant scalar step size $\alpha=0.001$ by calling
+# the `gradient()` method of the objective function.
+# Use the first (0th) subset of the data for the gradient calculation.
 
 # %%
-# setup the objective function to be maximised
-# ---------------------------------------------
+new_image = initial_image + 0.001 * obj_fun.gradient(initial_image, 0)
+
+# %% [markdown]
+# Exercise 1.2
+# ------------
+#
+# Given the fact that the OSEM update can be written as
+# $$ x^+ = x + t \nabla_x logL(y,x) $$
+# with the non-scalar step size
+# $$ t = \frac{x}{s} $$
+# where $s$ is the (subset) "sensitivity image", perform an OSEM update on the initial image
+# by using the `get_subset_sensitivity()` method of the objective function and the first subset.
+# Print the maximum value of the updated image. What do you observe?
+
+# %%
+subset = 0
+subset_grad = obj_fun.gradient(initial_image, subset)
+# this is only correct, if the sensitivity image is greater than 0 everywhere
+# (see next exercise for more details)
+step = initial_image / obj_fun.get_subset_sensitivity(subset)
+osem_update = initial_image + step * subset_grad
+
+# maximum value of the updated image is nan, because the sensitivity image is 0 in some places
+# which needs special attention
+print(osem_update.max())
+
+# %% [markdown]
+# Exercise 1.3
+# ------------
+#
+# Implement your own OSEM reconstruction by looping over the subsets and performing the
+# OSEM update for each subset.
+
+# %%
+
+# initialize the reconstruction with ones where the sensitivity image is greater than 0
+# all other values are set to zero and are not updated during reconstruction
+recon = initial_image.copy()
+recon.fill(obj_fun.get_subset_sensitivity(0).as_array() > 0)
+
+# setup an image to store the step size
+step = acq_data.create_uniform_image(value=1, xy=nxny)
+
+for it in range(num_iter):
+    for i in range(num_subsets):
+        subset_grad = obj_fun.gradient(recon, i)
+        tmp = np.zeros(recon.shape, dtype=recon.as_array().dtype)
+        # use np.divide for the element-wise division for all elements where
+        # the sensitivity image is greater than 0
+        np.divide(
+            recon.as_array(),
+            obj_fun.get_subset_sensitivity(i).as_array(),
+            out=tmp,
+            where=obj_fun.get_subset_sensitivity(i).as_array() > 0,
+        )
+        step.fill(tmp)
+        recon = recon + step * subset_grad
+
+fig2, ax2 = plt.subplots(1, 1, figsize=(4, 4), tight_layout=True)
+ax2.imshow(recon.as_array()[71, :, :], cmap="Greys", vmin=0, vmax=vmax)
+fig2.show()
+#
+# %%
+
+# Setup of the Poisson loglikelihood objective function ($logL(y,x)$) in listmode
+# -------------------------------------------------------------------------------
 
 # define objective function to be maximized as
 # Poisson logarithmic likelihood (with linear model for mean)
@@ -209,14 +312,12 @@ lm_obj_fun.set_acquisition_model(acq_model)
 lm_obj_fun.set_acquisition_data(listmode_data)
 lm_obj_fun.set_num_subsets(num_subsets)
 
+# %% [markdown]
+# Reconstruction (optimization of the Poisson logL objective function) using listmode OSEM
+# ----------------------------------------------------------------------------------------
+
+
 # %%
-# calculate the gradient of the (subset) objective function w.r.t. to an image
-# ----------------------------------------------------------------------------
-
-#lm_obj_fun.set_up(initial_image)
-#grad0 = lm_obj_fun.gradient(initial_image, 0)
-#sens_img_0 = lm_obj_fun.get_subset_sensitivity(0)
-
 if not Path(f"{lm_recon_output_file}.hv").exists():
     lm_reconstructor = sirf.STIR.OSMAPOSLReconstructor()
     lm_reconstructor.set_objective_function(lm_obj_fun)
@@ -225,19 +326,48 @@ if not Path(f"{lm_recon_output_file}.hv").exists():
     lm_reconstructor.set_up(initial_image)
     lm_reconstructor.set_current_estimate(initial_image)
     lm_reconstructor.process()
-    lm_recon = lm_reconstructor.get_output()
-    lm_recon.write(lm_recon_output_file)
+    lm_ref_recon = lm_reconstructor.get_output()
+    lm_ref_recon.write(lm_recon_output_file)
 else:
-    lm_recon = sirf.STIR.ImageData(f"{lm_recon_output_file}.hv")
+    lm_ref_recon = sirf.STIR.ImageData(f"{lm_recon_output_file}.hv")
+
+fig3, ax3 = plt.subplots(1, 1, figsize=(4, 4), tight_layout=True)
+ax3.imshow(lm_ref_recon.as_array()[71, :, :], cmap="Greys", vmin=0, vmax=vmax)
+fig3.show()
+
+# %% [markdown]
+# Exercise 1.4
+# ------------
+# Repeat exercise 1.3 (OSEM reconstruction) listmode objective function.
 
 # %%
-# show the results
+lm_obj_fun.set_up(initial_image)
 
-vmax = np.percentile(ref_recon.as_array(), 99.999)
+# initialize the reconstruction with ones where the sensitivity image is greater than 0
+# all other values are set to zero and are not updated during reconstruction
+lm_recon = initial_image.copy()
+lm_recon.fill(obj_fun.get_subset_sensitivity(0).as_array() > 0)
 
-fig, ax = plt.subplots(1, 3, figsize = (12,4), tight_layout=True)
-ax[0].imshow(recon.as_array()[71, :, :], cmap="Greys", vmin = 0, vmax = vmax)
-ax[1].imshow(ref_recon.as_array()[71, :, :], cmap="Greys", vmin = 0, vmax = vmax)
-ax[2].imshow(lm_recon.as_array()[71, :, :], cmap="Greys", vmin = 0, vmax = vmax)
-fig.show()
+# setup an image to store the step size
+step = acq_data.create_uniform_image(value=1, xy=nxny)
 
+for it in range(num_iter):
+    for i in range(num_subsets):
+        subset_grad = lm_obj_fun.gradient(recon, i)
+        tmp = np.zeros(recon.shape, dtype=recon.as_array().dtype)
+        # use np.divide for the element-wise division for all elements where
+        # the sensitivity image is greater than 0
+        np.divide(
+            recon.as_array(),
+            obj_fun.get_subset_sensitivity(
+                i
+            ).as_array(),  ### HACK: lm_obj_fun.get_subset_sensitivity(i) still returns None
+            out=tmp,
+            where=obj_fun.get_subset_sensitivity(i).as_array() > 0,
+        )
+        step.fill(tmp)
+        lm_recon = lm_recon + step * subset_grad
+
+fig4, ax4 = plt.subplots(1, 1, figsize=(4, 4), tight_layout=True)
+ax4.imshow(lm_recon.as_array()[71, :, :], cmap="Greys", vmin=0, vmax=vmax)
+fig4.show()
