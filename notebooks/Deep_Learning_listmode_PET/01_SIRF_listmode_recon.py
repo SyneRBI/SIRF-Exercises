@@ -2,9 +2,15 @@
 # Sinogram and Listmode OSEM using sirf.STIR
 # ==========================================
 #
-# Using the theory learnings from the previous notebook, we will now show how to perform
+# Using the theory learnings from the previous "theory" notebook, we will now learn how to perform
 # PET reconstruction of emission data in listmode and sinogram format using (sinogram and listmode)
 # objective function objects of the sirf.STIR library.
+#
+# We will see that standard OSEM reconstruction can be seen as a sequence of image update block,
+# where the update in each block is related to the gradient of the Poisson loglikelihood objective function.
+#
+# Understanding these OSEM update blocks is the first key step for implementing a pytorch-based feed-forward
+# neural network for PET image reconstruction also containing OSEM-like update blocks.
 
 # %% [markdown]
 # Import modules and define file names
@@ -236,7 +242,15 @@ fig.show()
 # Use the first (0th) subset of the data for the gradient calculation.
 
 # %%
-new_image = initial_image + 0.001 * obj_fun.gradient(initial_image, 0)
+#
+# ==============
+# YOUR CODE HERE
+# ==============
+#
+
+# %%
+# to view the solution, uncomment the line below
+# #%load snippets/solution_1_1.py
 
 # %% [markdown]
 # Exercise 1.2
@@ -251,16 +265,15 @@ new_image = initial_image + 0.001 * obj_fun.gradient(initial_image, 0)
 # Print the maximum value of the updated image. What do you observe?
 
 # %%
-subset = 0
-subset_grad = obj_fun.gradient(initial_image, subset)
-# this is only correct, if the sensitivity image is greater than 0 everywhere
-# (see next exercise for more details)
-step = initial_image / obj_fun.get_subset_sensitivity(subset)
-osem_update = initial_image + step * subset_grad
+#
+# ==============
+# YOUR CODE HERE
+# ==============
+#
 
-# maximum value of the updated image is nan, because the sensitivity image is 0 in some places
-# which needs special attention
-print(osem_update.max())
+# %%
+# to view the solution, uncomment the line below
+# #%load snippets/solution_1_2.py
 
 # %% [markdown]
 # Exercise 1.3
@@ -270,34 +283,21 @@ print(osem_update.max())
 # OSEM update for each subset.
 
 # %%
-
 # initialize the reconstruction with ones where the sensitivity image is greater than 0
 # all other values are set to zero and are not updated during reconstruction
 recon = initial_image.copy()
 recon.fill(obj_fun.get_subset_sensitivity(0).as_array() > 0)
-
-# setup an image to store the step size
-step = acq_data.create_uniform_image(value=1, xy=nxny)
-
-for it in range(num_iter):
-    for i in range(num_subsets):
-        subset_grad = obj_fun.gradient(recon, i)
-        tmp = np.zeros(recon.shape, dtype=recon.as_array().dtype)
-        # use np.divide for the element-wise division for all elements where
-        # the sensitivity image is greater than 0
-        np.divide(
-            recon.as_array(),
-            obj_fun.get_subset_sensitivity(i).as_array(),
-            out=tmp,
-            where=obj_fun.get_subset_sensitivity(i).as_array() > 0,
-        )
-        step.fill(tmp)
-        recon = recon + step * subset_grad
-
-fig2, ax2 = plt.subplots(1, 1, figsize=(4, 4), tight_layout=True)
-ax2.imshow(recon.as_array()[71, :, :], cmap="Greys", vmin=0, vmax=vmax)
-fig2.show()
 #
+# ==============
+# YOUR CODE HERE
+# ==============
+#
+
+# %%
+# to view the solution, uncomment the line below
+# #%load snippets/solution_1_3.py
+
+
 # %%
 
 # Setup of the Poisson loglikelihood objective function ($logL(y,x)$) in listmode
@@ -341,33 +341,11 @@ fig3.show()
 # Repeat exercise 1.3 (OSEM reconstruction) listmode objective function.
 
 # %%
-lm_obj_fun.set_up(initial_image)
+#
+# ==============
+# YOUR CODE HERE
+# ==============
 
-# initialize the reconstruction with ones where the sensitivity image is greater than 0
-# all other values are set to zero and are not updated during reconstruction
-lm_recon = initial_image.copy()
-lm_recon.fill(obj_fun.get_subset_sensitivity(0).as_array() > 0)
-
-# setup an image to store the step size
-step = acq_data.create_uniform_image(value=1, xy=nxny)
-
-for it in range(num_iter):
-    for i in range(num_subsets):
-        subset_grad = lm_obj_fun.gradient(recon, i)
-        tmp = np.zeros(recon.shape, dtype=recon.as_array().dtype)
-        # use np.divide for the element-wise division for all elements where
-        # the sensitivity image is greater than 0
-        np.divide(
-            recon.as_array(),
-            obj_fun.get_subset_sensitivity(
-                i
-            ).as_array(),  ### HACK: lm_obj_fun.get_subset_sensitivity(i) still returns None
-            out=tmp,
-            where=obj_fun.get_subset_sensitivity(i).as_array() > 0,
-        )
-        step.fill(tmp)
-        lm_recon = lm_recon + step * subset_grad
-
-fig4, ax4 = plt.subplots(1, 1, figsize=(4, 4), tight_layout=True)
-ax4.imshow(lm_recon.as_array()[71, :, :], cmap="Greys", vmin=0, vmax=vmax)
-fig4.show()
+# %%
+# to view the solution, uncomment the line below
+# #%load snippets/solution_1_4.py
