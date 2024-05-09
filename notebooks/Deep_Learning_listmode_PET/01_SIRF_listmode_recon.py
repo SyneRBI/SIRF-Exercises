@@ -1,30 +1,34 @@
 # %%
 import sirf.STIR
+import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 from sirf.Utilities import examples_data_path
 
 data_path: Path = Path(examples_data_path("PET")) / "mMR"
+output_path: Path = Path("recons")
 list_file: str = str(data_path / "list.l.hdr")
 norm_file: str = str(data_path / "norm.n.hdr")
 attn_file: str = str(data_path / "mu_map.hv")
-output_file: str = str(data_path / "recon")
-emission_sinogram_output_prefix: str = str(Path("lm_recons") / "emission_sinogram")
-scatter_sinogram_output_prefix: str = str(Path("lm_recons") / "scatter_sinogram")
-randoms_sinogram_output_prefix: str = str(Path("lm_recons") / "randoms_sinogram")
-attenuation_sinogram_output_prefix: str = str(Path("lm_recons") / "acf_sinogram")
+emission_sinogram_output_prefix: str = str(output_path / "emission_sinogram")
+scatter_sinogram_output_prefix: str = str(output_path / "scatter_sinogram")
+randoms_sinogram_output_prefix: str = str(output_path / "randoms_sinogram")
+attenuation_sinogram_output_prefix: str = str(output_path / "acf_sinogram")
+recon_output_file: str = str(output_path / "recon")
+lm_recon_output_file: str = str(output_path / "lm_recon")
 nxny: tuple[int, int] = (127, 127)
-input_interval: tuple[int, int] = (0, 50)
 num_subsets: int = 21
-num_iter: int = 2
+num_iter: int = 1
 num_scatter_iter: int = 3
 storage: str = "file"
 use_gpu: bool = True
 
+# create the output directory
+output_path.mkdir(exist_ok=True)
 
 # %%
 ## engine's messages go to files, except error messages, which go to stdout
-# _ = sirf.STIR.MessageRedirector('info.txt', 'warn.txt')
+_ = sirf.STIR.MessageRedirector('info.txt', 'warn.txt')
 
 # select acquisition data storage scheme
 sirf.STIR.AcquisitionData.set_storage_scheme(storage)
@@ -44,8 +48,11 @@ lm2sino.set_input(listmode_data)
 lm2sino.set_output_prefix(emission_sinogram_output_prefix)
 lm2sino.set_template(acq_data_template)
 
+# get the start and end time of the listmode data
+frame_start = float([x for x in listmode_data.get_info().split('\n') if x.startswith('Time frame start')][0].split(': ')[1].split('-')[0])
+frame_end = float([x for x in listmode_data.get_info().split('\n') if x.startswith('Time frame start')][0].split(': ')[1].split('-')[1].split('(')[0])
 # set interval
-lm2sino.set_time_interval(input_interval[0], input_interval[1])
+lm2sino.set_time_interval(frame_start, frame_end)
 # set up the converter
 lm2sino.set_up()
 
@@ -84,11 +91,6 @@ acq_model.set_num_tangential_LORs(1)
 
 # read attenuation image and display a single slice
 attn_image = sirf.STIR.ImageData(attn_file)
-
-# show the attenuation image
-fig, ax = plt.subplots(1, 1, tight_layout=True)
-ax.imshow(attn_image.as_array()[attn_image.shape[0] // 2, :, :], cmap="Greys")
-fig.show()
 
 # create attenuation factors
 asm_attn = sirf.STIR.AcquisitionSensitivityModel(attn_image, acq_model)
@@ -150,6 +152,51 @@ else:
 acq_model.set_background_term(randoms + scatter_estimate)
 
 # %%
+# setup singoram Poisson logL
+# ---------------------------
+
+initial_image = acq_data.create_uniform_image(value=1, xy=nxny)
+
+# create objective function
+obj_fun = sirf.STIR.make_Poisson_loglikelihood(acq_data)
+obj_fun.set_acquisition_model(acq_model)
+obj_fun.set_num_subsets(num_subsets)
+obj_fun.set_up(initial_image)
+
+
+# %%
+recon = initial_image.copy()
+#recon.fill(obj_fun.get_subset_sensitivity(0).as_array() > 0)
+#step = acq_data.create_uniform_image(value=1, xy=nxny)
+#
+#for it in range(num_iter):
+#    for i in range(num_subsets):
+#        subset_grad = obj_fun.gradient(recon, i)
+#        tmp = np.zeros(recon.shape, dtype = recon.as_array().dtype)
+#        np.divide(recon.as_array(), obj_fun.get_subset_sensitivity(i).as_array(), out = tmp, where = obj_fun.get_subset_sensitivity(i).as_array() > 0)
+#        step.fill(tmp)
+#        recon = recon +  step * subset_grad
+
+# %%
+# STIR sinogram-based OSEM
+# ------------------------
+
+if not Path(f"{recon_output_file}.hv").exists():
+    reconstructor = sirf.STIR.OSMAPOSLReconstructor()
+    reconstructor.set_objective_function(obj_fun)
+    reconstructor.set_num_subsets(num_subsets)
+    reconstructor.set_num_subiterations(num_iter*num_subsets)
+    reconstructor.set_input(acq_data)
+    reconstructor.set_up(initial_image)
+    reconstructor.set_current_estimate(initial_image)
+    reconstructor.process()
+    ref_recon = reconstructor.get_output()
+    ref_recon.write(recon_output_file)
+else:
+    ref_recon = sirf.STIR.ImageData(f"{recon_output_file}.hv")
+
+
+# %%
 # setup the objective function to be maximised
 # ---------------------------------------------
 
@@ -166,51 +213,31 @@ lm_obj_fun.set_num_subsets(num_subsets)
 # calculate the gradient of the (subset) objective function w.r.t. to an image
 # ----------------------------------------------------------------------------
 
-print("calculating the gradient of the objective function")
-initial_image = acq_data.create_uniform_image(value=1, xy=nxny)
-lm_obj_fun.set_up(initial_image)
+#lm_obj_fun.set_up(initial_image)
+#grad0 = lm_obj_fun.gradient(initial_image, 0)
+#sens_img_0 = lm_obj_fun.get_subset_sensitivity(0)
 
-# the subset 0 objective function w.r.t. to the initial image
-grad0 = lm_obj_fun.gradient(initial_image, 0)
-# get the sensitivity for subset 0
-sens_img_0 = lm_obj_fun.get_subset_sensitivity(0)
+if not Path(f"{lm_recon_output_file}.hv").exists():
+    lm_reconstructor = sirf.STIR.OSMAPOSLReconstructor()
+    lm_reconstructor.set_objective_function(lm_obj_fun)
+    lm_reconstructor.set_num_subsets(num_subsets)
+    lm_reconstructor.set_num_subiterations(num_iter * num_subsets)
+    lm_reconstructor.set_up(initial_image)
+    lm_reconstructor.set_current_estimate(initial_image)
+    lm_reconstructor.process()
+    lm_recon = lm_reconstructor.get_output()
+    lm_recon.write(lm_recon_output_file)
+else:
+    lm_recon = sirf.STIR.ImageData(f"{lm_recon_output_file}.hv")
 
 # %%
-# setup singoram Poisson logL
-# ---------------------------
+# show the results
 
-# create objective function
-obj_fun = sirf.STIR.make_Poisson_loglikelihood(acq_data)
-obj_fun.set_acquisition_model(acq_model)
-obj_fun.set_num_subsets(num_subsets)
-obj_fun.set_up(initial_image)
+vmax = np.percentile(ref_recon.as_array(), 99.999)
 
-## %%
-#
-## select Ordered Subsets Maximum A-Posteriori One Step Late as the
-## reconstruction algorithm (since we are not using a penalty, or prior, in
-## this example, we actually run OSEM);
-## this algorithm does not converge to the maximum of the objective function
-## but is used in practice to speed-up calculations
-## See the reconstruction demos for more complicated examples
-#reconstructor = sirf.STIR.OSMAPOSLReconstructor()
-#reconstructor.set_objective_function(lm_obj_fun)
-#reconstructor.set_num_subsets(num_subsets)
-#reconstructor.set_num_subiterations(num_iter)
-#
-## set up the reconstructor based on a sample image
-## (checks the validity of parameters, sets up objective function
-## and other objects involved in the reconstruction, which involves
-## computing/reading sensitivity image etc etc.)
-#print('setting up, please wait...')
-#reconstructor.set_up(initial_image)
-#
-## set the initial image estimate
-#reconstructor.set_current_estimate(initial_image)
-#
-## reconstruct
-#print('reconstructing, please wait...')
-#reconstructor.process()
-#recon = reconstructor.get_output()
-#recon.write(output_file)
+fig, ax = plt.subplots(1, 3, figsize = (12,4), tight_layout=True)
+ax[0].imshow(recon.as_array()[71, :, :], cmap="Greys", vmin = 0, vmax = vmax)
+ax[1].imshow(ref_recon.as_array()[71, :, :], cmap="Greys", vmin = 0, vmax = vmax)
+ax[2].imshow(lm_recon.as_array()[71, :, :], cmap="Greys", vmin = 0, vmax = vmax)
+fig.show()
 
