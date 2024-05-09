@@ -338,7 +338,8 @@ fig3.show()
 # %% [markdown]
 # Exercise 1.4
 # ------------
-# Repeat exercise 1.3 (OSEM reconstruction) listmode objective function.
+# Repeat exercise 1.3 (OSEM reconstruction) using the listmode objective function to
+# learn how to do a listmode OSEM reconstruction.
 
 # %%
 #

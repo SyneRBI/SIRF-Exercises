@@ -16,8 +16,6 @@ for i in range(num_subsets):
 for it in range(num_iter):
     for i in range(num_subsets):
         subset_grad = obj_fun.gradient(recon, i)
-        # use np.divide for the element-wise division for all elements where
-        # the sensitivity image is greater than 0
         recon = recon + recon * inverse_sens_images[i] * subset_grad
 
 fig2, ax2 = plt.subplots(1, 1, figsize=(4, 4), tight_layout=True)
