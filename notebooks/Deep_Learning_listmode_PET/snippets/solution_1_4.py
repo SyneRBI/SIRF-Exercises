@@ -3,7 +3,7 @@ lm_obj_fun.set_up(initial_image)
 # initialize the reconstruction with ones where the sensitivity image is greater than 0
 # all other values are set to zero and are not updated during reconstruction
 lm_recon = initial_image.copy()
-lm_recon.fill(obj_fun.get_subset_sensitivity(0).as_array() > 0)
+lm_recon.fill(lm_obj_fun.get_subset_sensitivity(0).as_array() > 0)
 
 lm_inverse_sens_images = []
 
@@ -13,12 +13,7 @@ for i in range(num_subsets):
         lm_inverse_sens_image.shape, dtype=lm_inverse_sens_image.as_array().dtype
     )
     
-    ########## HACK
-    # lm_sens_image_np = lm_obj_fun.get_subset_sensitivity(i).as_array()
-    lm_sens_image_np = obj_fun.get_subset_sensitivity(
-        i
-    ).as_array()  # LM obj_func.get_subset_sensitivity not working so far ...
-    ########## HACK
+    lm_sens_image_np = lm_obj_fun.get_subset_sensitivity(i).as_array()
 
     np.divide(
         1, lm_sens_image_np, out=lm_inverse_sens_image_np, where=lm_sens_image_np > 0
