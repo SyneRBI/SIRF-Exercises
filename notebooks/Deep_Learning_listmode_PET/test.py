@@ -233,18 +233,39 @@ input_img = acq_data.create_uniform_image(value=1, xy=nxny)
 np.random.seed(0)
 input_img.fill(np.random.rand(*input_img.shape) * (obj_fun.get_subset_sensitivity(0).as_array() > 0) * current_estimate.max())
 
-hess_out_img = acq_data.create_uniform_image(value=1.0, xy=nxny)
+hess_out_img = obj_fun.accumulate_Hessian_times_input(current_estimate, input_img, subset=0)
 
-obj_fun.accumulate_Hessian_times_input(current_estimate, input_img, subset=0, out=hess_out_img)
-hess_out_img2 = obj_fun.accumulate_Hessian_times_input(current_estimate, input_img, subset=0)
+# %%
+# verify hessian calculation
 
-fig, ax = plt.subplots(1, 4, figsize=(16, 4), tight_layout=True)
-ax[0].imshow(current_estimate.as_array()[71, :, :], cmap = 'Greys')
-ax[1].imshow(input_img.as_array()[71, :, :], cmap = 'Greys')
-ax[2].imshow(hess_out_img.as_array()[71, :, :], cmap = 'Greys')
-ax[3].imshow(hess_out_img2.as_array()[71, :, :], cmap = 'Greys')
-ax[0].set_title('current estimate', fontsize = 'medium')
-ax[1].set_title('input', fontsize = 'medium')
-ax[2].set_title('hess_out_img', fontsize = 'medium')
-ax[3].set_title('hess_out_img2', fontsize = 'medium')
+acq_model.set_up(acq_data, initial_image)
+acq_model.num_subsets = num_subsets
+acq_model.subset_num = 0
+
+# get the linear (Ax) part of the Ax + b affine acq. model
+lin_acq_model = acq_model.get_linear_acquisition_model()
+lin_acq_model.num_subsets = num_subsets
+lin_acq_model.subset_num = 0
+
+# for the Hessian "multiply" we need the linear part of the acquisition model applied to the input image
+input_img_fwd = lin_acq_model.forward(input_img)
+current_estimate_fwd = acq_model.forward(current_estimate)
+h = -acq_model.backward(acq_data*input_img_fwd / (current_estimate_fwd*current_estimate_fwd))
+
+
+# %%
+
+fig, ax = plt.subplots(2, 4, figsize=(16, 8), tight_layout=True)
+ax[0,0].imshow(current_estimate.as_array()[71, :, :], cmap = 'Greys')
+ax[0,1].imshow(input_img.as_array()[71, :, :], cmap = 'Greys')
+ax[0,2].imshow(hess_out_img.as_array()[71, :, :], cmap = 'Greys', vmin = -5000, vmax = -1000)
+ax[0,3].imshow(h.as_array()[71, :, :], cmap = 'Greys', vmin = -5000, vmax = -1000)
+ax[1,2].imshow(hess_out_img.as_array()[71, :, :], cmap = 'Greys', vmin = -50000, vmax = hess_out_img.max())
+ax[1,3].imshow(h.as_array()[71, :, :], cmap = 'Greys', vmin = -50000, vmax = hess_out_img.max())
+ax[0,0].set_title('current estimate', fontsize = 'medium')
+ax[0,1].set_title('input', fontsize = 'medium')
+ax[0,2].set_title('SIRF Hessian multiply', fontsize = 'medium')
+ax[0,3].set_title('manual Hessian multiply', fontsize = 'medium')
+ax[1,0].set_axis_off()
+ax[1,1].set_axis_off()
 fig.show()
