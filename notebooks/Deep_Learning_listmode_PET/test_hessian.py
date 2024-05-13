@@ -50,7 +50,7 @@ _ = sirf.STIR.MessageRedirector("info.txt", "warn.txt")
 # -----------------------------------------------------
 
 # %%
-sirf.STIR.AcquisitionData.set_storage_scheme("file")
+sirf.STIR.AcquisitionData.set_storage_scheme("memory")
 listmode_data = sirf.STIR.ListmodeData(list_file)
 acq_data_template = listmode_data.acquisition_data_template()
 print(acq_data_template.get_info())
@@ -121,8 +121,8 @@ else:
 # select acquisition model that implements the geometric
 # forward projection by a ray tracing matrix multiplication
 acq_model = sirf.STIR.AcquisitionModelUsingRayTracingMatrix()
-# acq_model.set_num_tangential_LORs(10)
 acq_model.set_num_tangential_LORs(1)
+
 
 # %% [markdown]
 # Calculation the attenuation sinogram
@@ -265,24 +265,28 @@ lin_acq_model.subset_num = 0
 input_img_fwd = lin_acq_model.forward(input_img)
 current_estimate_fwd = acq_model.forward(current_estimate)
 h = -acq_model.backward(acq_data*input_img_fwd / (current_estimate_fwd*current_estimate_fwd))
+h2 = -acq_model.backward(acq_data*input_img_fwd / (current_estimate_fwd*current_estimate_fwd + 1e-8))
 
 
 # %%
 
-fig, ax = plt.subplots(2, 5, figsize=(15, 6), tight_layout=True)
+fig, ax = plt.subplots(2, 6, figsize=(18, 6), tight_layout=True)
 ax[0,0].imshow(current_estimate.as_array()[71, :, :], cmap = 'Greys')
 ax[0,1].imshow(input_img.as_array()[71, :, :], cmap = 'Greys')
 ax[0,2].imshow(hess_out_img.as_array()[71, :, :], cmap = 'Greys', vmin = -5000, vmax = -1000)
-ax[0,3].imshow(-hess_out_img_lm.as_array()[71, :, :], cmap = 'Greys', vmin = -5000, vmax = -1000)
+ax[0,3].imshow(hess_out_img_lm.as_array()[71, :, :], cmap = 'Greys', vmin = -5000, vmax = -1000)
 ax[0,4].imshow(h.as_array()[71, :, :], cmap = 'Greys', vmin = -5000, vmax = -1000)
+ax[0,5].imshow(h2.as_array()[71, :, :], cmap = 'Greys', vmin = -5000, vmax = -1000)
 ax[1,2].imshow(hess_out_img.as_array()[71, :, :], cmap = 'Greys', vmin = -100000, vmax = hess_out_img.max())
-ax[1,3].imshow(-hess_out_img_lm.as_array()[71, :, :], cmap = 'Greys', vmin = -100000, vmax = hess_out_img.max())
+ax[1,3].imshow(hess_out_img_lm.as_array()[71, :, :], cmap = 'Greys', vmin = -100000, vmax = hess_out_img.max())
 ax[1,4].imshow(h.as_array()[71, :, :], cmap = 'Greys', vmin = -100000, vmax = hess_out_img.max())
+ax[1,5].imshow(h2.as_array()[71, :, :], cmap = 'Greys', vmin = -100000, vmax = hess_out_img.max())
 ax[0,0].set_title('current estimate', fontsize = 'medium')
 ax[0,1].set_title('input', fontsize = 'medium')
 ax[0,2].set_title('sino Hessian multiply', fontsize = 'medium')
 ax[0,3].set_title('neg. LM Hessian multiply', fontsize = 'medium')
 ax[0,4].set_title('manual Hessian multiply', fontsize = 'medium')
+ax[0,5].set_title('manual Hessian multiply + eps', fontsize = 'medium')
 ax[1,0].set_axis_off()
 ax[1,1].set_axis_off()
 fig.show()
