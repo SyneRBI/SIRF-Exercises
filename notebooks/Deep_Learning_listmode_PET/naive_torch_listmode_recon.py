@@ -120,18 +120,18 @@ class PoissonlogLGradientLayer(torch.nn.Module):
         """        
         super().__init__()
         self._obj_fun = obj_fun
-        self._template_image: sirf.STIR.ImageData = template_image.clone()
+        self._template_image: sirf.STIR.ImageData = template_image
         self._subset: int = subset
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # convert torch tensor to numpy array and strip the batch and channel dimensions
-        x_np: np.ndarray = x.numpy(force = True)[0,0,...]
-        x_sirf = self._template_image.clone()
-        x_sirf.fill(x_np)
+        x_np: np.ndarray = x.detach().cpu().numpy()
+        x_sirf = self._template_image
+        x_sirf.fill(x_np[0,0,...])
         g: sirf.STIR.ImageData = self._obj_fun.gradient(x_sirf, subset=self._subset)
+        g_np: np.ndarray = g.as_array()
 
-        # convert to back to torch tensor and add batch and channel dimensions
-        y = torch.tensor(np.nan_to_num(g.as_array()), device=x.device, dtype=x.dtype).unsqueeze(0).unsqueeze(0)
+        # convert back to torch tensor and add batch and channel dimensions
+        y = torch.tensor(g_np, device=x.device, dtype=x.dtype).unsqueeze(0).unsqueeze(0)
 
         return y
 
@@ -155,13 +155,6 @@ batch_size = 1
 
 lm_ref_recon = sirf.STIR.ImageData(f"{lm_recon_output_file}.hv")
 x_t = torch.tensor(lm_ref_recon.as_array(), device=dev, dtype=torch.float32, requires_grad=False).unsqueeze(0).unsqueeze(0)
-
-
-# calculate the FOV mask
-fov_mask = torch.tensor(lm_obj_fun.get_subset_sensitivity(0).as_array() > 0, dtype = torch.float32, device = dev).unsqueeze(0).unsqueeze(0)
-
-# set x_t to 0 outside the FOV
-x_t = x_t * fov_mask
 
 # setup the Poisson logL gradient layer
 grad_layer = PoissonlogLGradientLayer(lm_obj_fun, initial_image, subset=0)
@@ -270,24 +263,22 @@ optimizer = torch.optim.Adam(my_net._conv_net.parameters(), lr = 1e-3)
 
 # %%
 # setup a mini batch of target images
-target = torch.tensor(gaussian_filter(x_t.numpy(force = True)[0,0,...],0.7), dtype = torch.float32, device = dev).unsqueeze(0).unsqueeze(0)
+target = torch.tensor(gaussian_filter(x_t.cpu().numpy()[0,0,...],0.7), dtype = torch.float32, device = dev).unsqueeze(0).unsqueeze(0)
 # setup the MSE loss function
 loss_fct = torch.nn.MSELoss()
 
 
-for i in range(50):
-    print(i)
-    # pass the input mini-batch through the network
-    prediction = my_net(x_t)
-    # calculate the MSE loss between the prediction and the target
-    loss = loss_fct(prediction, target)
-    # backpropagate the gradient of the loss through the network
-    # (needed to update the trainable parameters of the network with an optimizer)
-    loss.backward()
-    # update the trainable parameters of the network with the optimizer
-    optimizer.step()
-    optimizer.zero_grad()
-    print(loss.item())
+# pass the input mini-batch through the network
+prediction = my_net(x_t)
+# calculate the MSE loss between the prediction and the target
+loss = loss_fct(prediction, target)
+# backpropagate the gradient of the loss through the network
+# (needed to update the trainable parameters of the network with an optimizer)
+optimizer.zero_grad()
+loss.backward()
+# update the trainable parameters of the network with the optimizer
+optimizer.step()
+print(loss.item())
 
 ## %% [markdown]
 # Exercise 3.2
