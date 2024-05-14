@@ -18,10 +18,21 @@ import torch
 import numpy as np
 from pathlib import Path
 from sirf.Utilities import examples_data_path
+from scipy.ndimage import gaussian_filter
 
 data_path: Path = Path(examples_data_path("PET")) / "mMR"
+output_path: Path = Path("recons")
 list_file: str = str(data_path / "list.l.hdr")
-nxny: tuple = (25, 25)
+norm_file: str = str(data_path / "norm.n.hdr")
+attn_file: str = str(data_path / "mu_map.hv")
+emission_sinogram_output_prefix: str = str(output_path / "emission_sinogram")
+scatter_sinogram_output_prefix: str = str(output_path / "scatter_sinogram")
+randoms_sinogram_output_prefix: str = str(output_path / "randoms_sinogram")
+attenuation_sinogram_output_prefix: str = str(output_path / "acf_sinogram")
+num_scatter_iter: int = 3
+
+lm_recon_output_file: str = str(output_path / "lm_recon")
+nxny: tuple[int, int] = (127, 127)
 num_subsets: int = 21
 
 # engine's messages go to files, except error messages, which go to stdout
@@ -39,18 +50,27 @@ _ = sirf.STIR.MessageRedirector("info.txt", "warn.txt")
 sirf.STIR.AcquisitionData.set_storage_scheme("memory")
 listmode_data = sirf.STIR.ListmodeData(list_file)
 acq_data_template = listmode_data.acquisition_data_template()
-print(acq_data_template.get_info())
+
+acq_data = sirf.STIR.AcquisitionData(str(Path(f"{emission_sinogram_output_prefix}_f1g1d0b0.hs")))
 
 # select acquisition model that implements the geometric
 # forward projection by a ray tracing matrix multiplication
 acq_model = sirf.STIR.AcquisitionModelUsingRayTracingMatrix()
 acq_model.set_num_tangential_LORs(1)
 
-# ==============================================================
-# In a real world scenario, the effects of attenuation, scatter, 
-# randoms, normalization should be added here.
-# We ignore them for the sake of simplicity in this example.
-# ==============================================================
+randoms = sirf.STIR.AcquisitionData(str(Path(f"{randoms_sinogram_output_prefix}.hs")))
+
+ac_factors = sirf.STIR.AcquisitionData(str(Path(f"{attenuation_sinogram_output_prefix}.hs")))
+asm_attn = sirf.STIR.AcquisitionSensitivityModel(ac_factors)
+
+asm_norm = sirf.STIR.AcquisitionSensitivityModel(norm_file)
+asm = sirf.STIR.AcquisitionSensitivityModel(asm_norm, asm_attn)
+
+asm.set_up(acq_data)
+acq_model.set_acquisition_sensitivity(asm)
+
+scatter_estimate = sirf.STIR.AcquisitionData(str(Path(f"{scatter_sinogram_output_prefix}_{num_scatter_iter}.hs")))
+acq_model.set_background_term(randoms + scatter_estimate)
 
 # setup an initial (template) image based on the acquisition data template 
 initial_image = acq_data_template.create_uniform_image(value=1, xy=nxny)
@@ -70,7 +90,6 @@ lm_obj_fun.set_acquisition_data(listmode_data)
 lm_obj_fun.set_num_subsets(num_subsets)
 print('setting up listmode objective function ...')
 lm_obj_fun.set_up(initial_image)
-
 # %% [markdown]
 # Setup of a pytorch layer that computes the gradient of the Poisson log likelihood objective function
 # ----------------------------------------------------------------------------------------------------
@@ -112,7 +131,7 @@ class PoissonlogLGradientLayer(torch.nn.Module):
         g: sirf.STIR.ImageData = self._obj_fun.gradient(x_sirf, subset=self._subset)
 
         # convert to back to torch tensor and add batch and channel dimensions
-        y = torch.tensor(g.as_array(), device=x.device, dtype=x.dtype).unsqueeze(0).unsqueeze(0)
+        y = torch.tensor(np.nan_to_num(g.as_array()), device=x.device, dtype=x.dtype).unsqueeze(0).unsqueeze(0)
 
         return y
 
@@ -133,12 +152,16 @@ batch_size = 1
 
 # setup a test input mini-batch of images that we use to test our network
 # the dimension are [batch, channel, spatial dimensions]
-x_t = torch.rand(
-    (batch_size, 1) + initial_image.shape,
-    device=dev,
-    dtype=torch.float32,
-    requires_grad=False,
-)
+
+lm_ref_recon = sirf.STIR.ImageData(f"{lm_recon_output_file}.hv")
+x_t = torch.tensor(lm_ref_recon.as_array(), device=dev, dtype=torch.float32, requires_grad=False).unsqueeze(0).unsqueeze(0)
+
+
+# calculate the FOV mask
+fov_mask = torch.tensor(lm_obj_fun.get_subset_sensitivity(0).as_array() > 0, dtype = torch.float32, device = dev).unsqueeze(0).unsqueeze(0)
+
+# set x_t to 0 outside the FOV
+x_t = x_t * fov_mask
 
 # setup the Poisson logL gradient layer
 grad_layer = PoissonlogLGradientLayer(lm_obj_fun, initial_image, subset=0)
@@ -173,15 +196,25 @@ class UnrolledPoissonlogLGradientNet(torch.nn.Module):
         self._poisson_logL_grad_layer1 = PoissonlogLGradientLayer(obj_fun, template_image, subset=1)
         self._poisson_logL_grad_layer2 = PoissonlogLGradientLayer(obj_fun, template_image, subset=2)
 
-        self._fov_mask = torch.tensor(lm_obj_fun.get_subset_sensitivity(0).as_array() > 0, dtype = torch.float32, device = device).unsqueeze(0).unsqueeze(0)
+        self._inv_sens_img0 = torch.tensor(1./lm_obj_fun.get_subset_sensitivity(0).as_array(), dtype = torch.float32, device = device).unsqueeze(0).unsqueeze(0)
+        self._inv_sens_img1 = torch.tensor(1./lm_obj_fun.get_subset_sensitivity(1).as_array(), dtype = torch.float32, device = device).unsqueeze(0).unsqueeze(0)
+        self._inv_sens_img2 = torch.tensor(1./lm_obj_fun.get_subset_sensitivity(2).as_array(), dtype = torch.float32, device = device).unsqueeze(0).unsqueeze(0)
+
+        self._inv_sens_img0 = torch.nan_to_num(self._inv_sens_img0, posinf=0)
+        self._inv_sens_img1 = torch.nan_to_num(self._inv_sens_img0, posinf=1)
+        self._inv_sens_img2 = torch.nan_to_num(self._inv_sens_img0, posinf=2)
+
+        self._fov_mask = (self._inv_sens_img0 > 0).float()
 
         # define a minimal convolutional network consisting of a single 3x3x3 convolutional layer
-        self._conv_net0 = torch.nn.Conv3d(1, 1, (3,3,3), dtype=torch.float32, device = device, padding='same')
-        self._conv_net1 = torch.nn.Conv3d(1, 1, (3,3,3), dtype=torch.float32, device = device, padding='same')
-        self._conv_net2 = torch.nn.Conv3d(1, 1, (3,3,3), dtype=torch.float32, device = device, padding='same')
+        self._conv_net = torch.nn.Sequential(
+            torch.nn.Conv3d(1, 5, (3,3,3), dtype=torch.float32, device = device, padding='same', bias = False),
+            torch.nn.Conv3d(5, 5, (3,3,3), dtype=torch.float32, device = device, padding='same', bias = False),
+            torch.nn.ReLU(),
+            torch.nn.Conv3d(5, 5, (3,3,3), dtype=torch.float32, device = device, padding='same', bias = False),
+            torch.nn.Conv3d(5, 1, (3,3,3), dtype=torch.float32, device = device, padding='same', bias = False),
+        )
         self._relu = torch.nn.ReLU()
-
-        self._step_size = 1e-5
     
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """forward pass of the unrolled network
@@ -197,10 +230,20 @@ class UnrolledPoissonlogLGradientNet(torch.nn.Module):
             output mini-batch of images. every layer in the network is applied is a combination of a 
             Poisson logL gradient step and a pass through a convolutional network.
         """        
-        y0 = self._fov_mask * self._relu(x + self._step_size * self._poisson_logL_grad_layer0(x) + self._conv_net0(x))
-        y1 = self._fov_mask * self._relu(y0 + self._step_size * self._poisson_logL_grad_layer1(y0) + self._conv_net1(y0))
-        y2 = self._fov_mask * self._relu(y1 + self._step_size * self._poisson_logL_grad_layer2(y1) + self._conv_net2(y1))
-        return y2
+
+        x1em = x + x * self._inv_sens_img0 * self._poisson_logL_grad_layer0(x)
+        x1nn = self._conv_net(x)
+        x1 = self._fov_mask * self._relu(x1em + x1nn)
+
+        x2em = x1 + x1 * self._inv_sens_img1 * self._poisson_logL_grad_layer1(x1)
+        x2nn = self._conv_net(x1)
+        x2 = self._fov_mask * self._relu(x2em + x2nn)
+
+        x3em = x2 + x2 * self._inv_sens_img2 * self._poisson_logL_grad_layer2(x2)
+        x3nn = self._conv_net(x2)
+        x3 = self._fov_mask * self._relu(x3em + x3nn)
+
+        return x3
 
 # %% 
 # uncomment the next line and run this cell to see the solution
@@ -209,9 +252,11 @@ class UnrolledPoissonlogLGradientNet(torch.nn.Module):
 # %%
 # define the unrolled network
 my_net = UnrolledPoissonlogLGradientNet(lm_obj_fun, initial_image, device = dev)
-# pass the input mini-batch through the network
-prediction = my_net(x_t)
 
+# %%
+# setup an optimizer
+
+optimizer = torch.optim.Adam(my_net._conv_net.parameters(), lr = 1e-3)
 
 # %% [markdown]
 # Loss computation and gradient backpropagation
@@ -224,15 +269,25 @@ prediction = my_net(x_t)
 # but in real applications, this would contain high-quality target images).
 
 # %%
-# setup a dummy mini batch of target images
-target = torch.ones_like(x_t, requires_grad=False)
+# setup a mini batch of target images
+target = torch.tensor(gaussian_filter(x_t.numpy(force = True)[0,0,...],0.7), dtype = torch.float32, device = dev).unsqueeze(0).unsqueeze(0)
 # setup the MSE loss function
 loss_fct = torch.nn.MSELoss()
-# calculate the MSE loss between the prediction and the target
-loss = loss_fct(prediction, target)
-# backpropagate the gradient of the loss through the network
-# (needed to update the trainable parameters of the network with an optimizer)
-loss.backward()
+
+
+for i in range(50):
+    print(i)
+    # pass the input mini-batch through the network
+    prediction = my_net(x_t)
+    # calculate the MSE loss between the prediction and the target
+    loss = loss_fct(prediction, target)
+    # backpropagate the gradient of the loss through the network
+    # (needed to update the trainable parameters of the network with an optimizer)
+    loss.backward()
+    # update the trainable parameters of the network with the optimizer
+    optimizer.step()
+    optimizer.zero_grad()
+    print(loss.item())
 
 ## %% [markdown]
 # Exercise 3.2
