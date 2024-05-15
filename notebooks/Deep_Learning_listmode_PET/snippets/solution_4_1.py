@@ -83,7 +83,7 @@ class SIRFPoissonlogLGradLayer(torch.autograd.Function):
             ctx.sirf_template_image.fill(grad_output.cpu().numpy()[0, 0, ...])
 
             # calculate the Jacobian vector product (the Hessian applied to an image) using SIRF
-            back_sirf = ctx.objective_function.accumulate_Hessian_times_input(
+            back_sirf = ctx.objective_function.multiply_with_Hessian(
                 ctx.x_sirf, ctx.sirf_template_image, ctx.subset
             )
 

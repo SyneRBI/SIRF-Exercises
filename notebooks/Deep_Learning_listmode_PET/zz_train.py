@@ -188,7 +188,7 @@ class SIRFPoissonlogLGradLayer(torch.autograd.Function):
             ctx.sirf_template_image.fill(grad_output.cpu().numpy()[0, 0, ...])
 
             # calculate the Jacobian vector product (the Hessian applied to an image) using SIRF
-            back_sirf = ctx.objective_function.accumulate_Hessian_times_input(
+            back_sirf = ctx.objective_function.multiply_with_Hessian(
                 ctx.x_sirf, ctx.sirf_template_image, ctx.subset
             )
 
@@ -346,7 +346,7 @@ loss_fct = torch.nn.MSELoss()
 # run 10 updates of the model parameters using backpropagation of the
 # gradient of the loss function and the Adam optimizer
 
-num_epochs = 200
+num_epochs = 20
 training_loss = torch.zeros(num_epochs)
 
 for i in range(num_epochs):
@@ -383,7 +383,8 @@ ax1[1, 0].imshow(
     vmax=0.01,
 )
 ax1[1, 1].imshow(
-    prediction.detach().cpu().numpy()[0, 0, sl, :, :] - target.cpu().numpy()[0, 0, sl, :, :],
+    prediction.detach().cpu().numpy()[0, 0, sl, :, :]
+    - target.cpu().numpy()[0, 0, sl, :, :],
     cmap="seismic",
     vmin=-0.01,
     vmax=0.01,
@@ -397,7 +398,7 @@ ax1[1, 1].set_title("network output - target")
 fig1.show()
 
 fig2, ax2 = plt.subplots()
-ax2.plot(training_loss)
+ax2.plot(training_loss.cpu().numpy())
 ax2.set_xlabel("epoch")
 ax2.set_ylabel("training loss")
 fig2.show()

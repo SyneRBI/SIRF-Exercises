@@ -200,7 +200,7 @@ class SIRFPoissonlogLGradLayer(torch.autograd.Function):
             #
             # calculate the Jacobian-vector product of the Poisson log likelihood gradient layer
             # Hints: (1) try to derive the Jacobian of the gradient of the Poisson log likelihood gradient first
-            #        (2) the sirf.STIR objective function has a method called `accumulate_Hessian_times_input`
+            #        (2) the sirf.STIR objective function has a method called `multiply_with_Hessian`
             #
             # ==============================================================
             # ==============================================================

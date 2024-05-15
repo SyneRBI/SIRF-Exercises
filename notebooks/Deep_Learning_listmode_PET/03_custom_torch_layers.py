@@ -2,9 +2,9 @@
 # Creating custom layers in pytorch
 # =================================
 #
-# In this notebook, we will learn how to create custom layers in pytorch that use functions outside the pytorch framework. 
+# In this notebook, we will learn how to create custom layers in pytorch that use functions outside the pytorch framework.
 # We will create a custom layer that multiplies the input tensor with a square matrix.
-# For demonostration purposes, we will create a simple layer that multiplies a 1D torch input vector with a square matrix, 
+# For demonostration purposes, we will create a simple layer that multiplies a 1D torch input vector with a square matrix,
 # where the matrix multiplication is done using numpy functions.
 #
 # Learning objectives of this notebook

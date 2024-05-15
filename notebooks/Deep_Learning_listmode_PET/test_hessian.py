@@ -237,9 +237,7 @@ input_img.fill(
     * current_estimate.max()
 )
 
-hess_out_img = obj_fun.accumulate_Hessian_times_input(
-    current_estimate, input_img, subset=0
-)
+hess_out_img = obj_fun.multiply_with_Hessian(current_estimate, input_img, subset=0)
 
 # %%
 # repeat the calculation using the LM objective function
@@ -253,7 +251,7 @@ lm_obj_fun.set_acquisition_data(listmode_data)
 lm_obj_fun.set_num_subsets(num_subsets)
 lm_obj_fun.set_up(initial_image)
 
-hess_out_img_lm = lm_obj_fun.accumulate_Hessian_times_input(
+hess_out_img_lm = lm_obj_fun.multiply_with_Hessian(
     current_estimate, input_img, subset=0
 )
 
