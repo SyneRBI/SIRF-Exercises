@@ -15,17 +15,17 @@ torch.manual_seed(0)
 
 # choose the torch device
 if torch.cuda.is_available():
-    dev = 'cuda:0'
+    dev = "cuda:0"
 else:
-    dev = 'cpu'
+    dev = "cpu"
 
 # length of the input vector
 n = 7
 
 # define our square matrix
-A: np.ndarray = np.arange(n**2).reshape(n,n).astype(np.float64) / (n**2)
+A: np.ndarray = np.arange(n ** 2).reshape(n, n).astype(np.float64) / (n ** 2)
 # define the 1D pytorch tensor: not that the shape is (1,1,n) including the batch and channel dimensions
-x_t = torch.tensor(np.arange(n).reshape(1,1,n).astype(np.float64), device = dev) / n
+x_t = torch.tensor(np.arange(n).reshape(1, 1, n).astype(np.float64), device=dev) / n
 
 # %% [markdown]
 # Approach 1: The naive approach
@@ -44,17 +44,18 @@ class SquareMatrixMultiplicationLayer(torch.nn.Module):
         # convert the input tensor to numpy
         x_np = x.detach().cpu().numpy()
         # nympy matrix multiplication
-        y_np = self._mat @ x_np[0,0,...]
+        y_np = self._mat @ x_np[0, 0, ...]
         # convert back to torch tensor
         y = torch.tensor(y_np, device=x.device).unsqueeze(0).unsqueeze(0)
 
         return y
 
+
 # %% [markdown]
 # We setup a simple feedforward network interlacing the 3 minimals convolutional layers and 3 square matrix multiplication layers.
 
 # %%
-class Net1(torch.nn.Module):  
+class Net1(torch.nn.Module):
     def __init__(self, mat, cnn) -> None:
         super().__init__()
         self._matrix_layer = SquareMatrixMultiplicationLayer(mat)
@@ -73,12 +74,14 @@ class Net1(torch.nn.Module):
 
 # %%
 # setup a simple CNN consisting of 2 convolutional layers and 1 ReLU activation
-cnn1 = torch.nn.Sequential(torch.nn.Conv1d(1,3,(3,),padding='same',bias=False,dtype=torch.float64),
-                            torch.nn.ReLU(),
-                            torch.nn.Conv1d(3,1,(3,),padding='same',bias=False,dtype=torch.float64)).to(dev)
+cnn1 = torch.nn.Sequential(
+    torch.nn.Conv1d(1, 3, (3,), padding="same", bias=False, dtype=torch.float64),
+    torch.nn.ReLU(),
+    torch.nn.Conv1d(3, 1, (3,), padding="same", bias=False, dtype=torch.float64),
+).to(dev)
 
 # setup the network
-net1 = Net1(A, cnn1) 
+net1 = Net1(A, cnn1)
 
 # %%
 # forward pass of our input vector through the network
@@ -87,14 +90,14 @@ print(f"pred1: {pred1}\n")
 
 
 # %% [markdown]
-# We see that the forward pass works as expected. Now we will setup a dummy loss and try backpropagate the gradients 
+# We see that the forward pass works as expected. Now we will setup a dummy loss and try backpropagate the gradients
 # using the naive approach for our custom matrix multiplication layer.
-# Baclpropagation of the gradients is the central step in training neural networks. It involves calculating the gradients of 
+# Baclpropagation of the gradients is the central step in training neural networks. It involves calculating the gradients of
 # the loss function with respect to the weights of the network.
 
 # %%
 # setup a dummy target (label / high quality reference image) tensor
-target = 2*x_t
+target = 2 * x_t
 # define an MSE loss
 loss_fct = torch.nn.MSELoss()
 # calculate the loss between the prediction and the target
@@ -108,12 +111,12 @@ print(f"loss1: {loss1.item()}\n")
 try:
     loss1.backward()
 except RuntimeError:
-    print('Error in gradient backpropagation using naive approach\n')
+    print("Error in gradient backpropagation using naive approach\n")
 
 # %% [markdown]
 # Exercise 3.1
 # ------------
-# We see that the backpropagation of the gradients fails with the naive approach. 
+# We see that the backpropagation of the gradients fails with the naive approach.
 # Why is that?
 
 # %% [markdown]
@@ -130,6 +133,7 @@ except RuntimeError:
 # %%
 # define the custom layer by subclassing torch.autograd.Function and implementing the forward and backward pass
 
+
 class NPSquareMatrixMultiplicationLayer(torch.autograd.Function):
     @staticmethod
     def forward(ctx, x: torch.Tensor, mat: np.ndarray) -> torch.Tensor:
@@ -137,13 +141,13 @@ class NPSquareMatrixMultiplicationLayer(torch.autograd.Function):
         # we use the context object ctx to store the matrix and other variables that we need in the backward pass
         ctx.mat = mat
         ctx.device = x.device
-        ctx.shape = x.shape 
-        ctx.dtype = x.dtype 
+        ctx.shape = x.shape
+        ctx.dtype = x.dtype
 
         # convert to numpy
         x_np = x.cpu().numpy()
         # numpy matrix multiplication
-        y_np = mat @ x_np[0,0,...]
+        y_np = mat @ x_np[0, 0, ...]
         # convert back to torch tensor
         y = torch.tensor(y_np, device=ctx.device).unsqueeze(0).unsqueeze(0)
 
@@ -157,15 +161,25 @@ class NPSquareMatrixMultiplicationLayer(torch.autograd.Function):
             # convert to numpy
             grad_output_np = grad_output.cpu().numpy()
             # calculate the Jacobian transpose vector product in numpy and convert back to torch tensor
-            back = torch.tensor(ctx.mat.T @ grad_output_np[0,0,...], device=ctx.device, dtype=ctx.dtype).unsqueeze(0).unsqueeze(0)
+            back = (
+                torch.tensor(
+                    ctx.mat.T @ grad_output_np[0, 0, ...],
+                    device=ctx.device,
+                    dtype=ctx.dtype,
+                )
+                .unsqueeze(0)
+                .unsqueeze(0)
+            )
 
             return back, None
+
 
 # %%
 # define a new network incl. the custom matrix multiplication layer using the "correct" approach
 # To use our custom layer in the network, we have to use the apply method of the custom layer class.
 
-class Net2(torch.nn.Module):  
+
+class Net2(torch.nn.Module):
     def __init__(self, mat, cnn) -> None:
         super().__init__()
         self._matrix_layer = NPSquareMatrixMultiplicationLayer.apply
@@ -183,16 +197,17 @@ class Net2(torch.nn.Module):
         return x6
 
 
-
 # %%
 # setup the same CNN as above
-cnn2 = torch.nn.Sequential(torch.nn.Conv1d(1,3,(3,),padding='same',bias=False,dtype=torch.float64),
-                            torch.nn.ReLU(),
-                            torch.nn.Conv1d(3,1,(3,),padding='same',bias=False,dtype=torch.float64)).to(dev)
+cnn2 = torch.nn.Sequential(
+    torch.nn.Conv1d(1, 3, (3,), padding="same", bias=False, dtype=torch.float64),
+    torch.nn.ReLU(),
+    torch.nn.Conv1d(3, 1, (3,), padding="same", bias=False, dtype=torch.float64),
+).to(dev)
 cnn2.load_state_dict(cnn1.state_dict())
 
 # setup the network - only difference is the custom layer
-net2 = Net2(A, cnn2) 
+net2 = Net2(A, cnn2)
 
 # predict again
 pred2 = net2(x_t)
@@ -208,7 +223,7 @@ print(f"loss2: {loss2.item()}\n")
 loss2.backward()
 
 # print backpropagated gradients that of all parameters of CNN layers of our network
-print('backpropagated gradients using correct approach')
+print("backpropagated gradients using correct approach")
 print([p.grad for p in net2._cnn.parameters()])
 
 # %% [markdown]
@@ -228,7 +243,7 @@ t_t = torch.rand(x_t.shape, device=dev, dtype=torch.float64, requires_grad=True)
 
 # test the gradient backpropagation through the custom numpy matrix multiplication layer
 matrix_layer = NPSquareMatrixMultiplicationLayer.apply
-gradcheck = torch.autograd.gradcheck(matrix_layer, (t_t, A),  fast_mode=True)
+gradcheck = torch.autograd.gradcheck(matrix_layer, (t_t, A), fast_mode=True)
 
 print(f"gradient check of NPSquareMatrixMultiplicationLayer: {gradcheck}")
 

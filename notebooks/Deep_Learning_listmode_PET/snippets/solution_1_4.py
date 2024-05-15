@@ -12,7 +12,7 @@ for i in range(num_subsets):
     lm_inverse_sens_image_np = np.zeros(
         lm_inverse_sens_image.shape, dtype=lm_inverse_sens_image.as_array().dtype
     )
-    
+
     lm_sens_image_np = lm_obj_fun.get_subset_sensitivity(i).as_array()
 
     np.divide(

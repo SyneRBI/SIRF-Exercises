@@ -231,9 +231,15 @@ vmax = np.percentile(ref_recon.as_array(), 99.999)
 current_estimate = ref_recon.copy()
 input_img = acq_data.create_uniform_image(value=1, xy=nxny)
 np.random.seed(0)
-input_img.fill(np.random.rand(*input_img.shape) * (obj_fun.get_subset_sensitivity(0).as_array() > 0) * current_estimate.max())
+input_img.fill(
+    np.random.rand(*input_img.shape)
+    * (obj_fun.get_subset_sensitivity(0).as_array() > 0)
+    * current_estimate.max()
+)
 
-hess_out_img = obj_fun.accumulate_Hessian_times_input(current_estimate, input_img, subset=0)
+hess_out_img = obj_fun.accumulate_Hessian_times_input(
+    current_estimate, input_img, subset=0
+)
 
 # %%
 # repeat the calculation using the LM objective function
@@ -247,7 +253,9 @@ lm_obj_fun.set_acquisition_data(listmode_data)
 lm_obj_fun.set_num_subsets(num_subsets)
 lm_obj_fun.set_up(initial_image)
 
-hess_out_img_lm = lm_obj_fun.accumulate_Hessian_times_input(current_estimate, input_img, subset=0)
+hess_out_img_lm = lm_obj_fun.accumulate_Hessian_times_input(
+    current_estimate, input_img, subset=0
+)
 
 # %%
 # verify hessian calculation
@@ -264,29 +272,49 @@ lin_acq_model.subset_num = 0
 # for the Hessian "multiply" we need the linear part of the acquisition model applied to the input image
 input_img_fwd = lin_acq_model.forward(input_img)
 current_estimate_fwd = acq_model.forward(current_estimate)
-h = -acq_model.backward(acq_data*input_img_fwd / (current_estimate_fwd*current_estimate_fwd))
-h2 = -acq_model.backward(acq_data*input_img_fwd / (current_estimate_fwd*current_estimate_fwd + 1e-8))
+h = -acq_model.backward(
+    acq_data * input_img_fwd / (current_estimate_fwd * current_estimate_fwd)
+)
+h2 = -acq_model.backward(
+    acq_data * input_img_fwd / (current_estimate_fwd * current_estimate_fwd + 1e-8)
+)
 
 
 # %%
 
 fig, ax = plt.subplots(2, 6, figsize=(18, 6), tight_layout=True)
-ax[0,0].imshow(current_estimate.as_array()[71, :, :], cmap = 'Greys')
-ax[0,1].imshow(input_img.as_array()[71, :, :], cmap = 'Greys')
-ax[0,2].imshow(hess_out_img.as_array()[71, :, :], cmap = 'Greys', vmin = -5000, vmax = -1000)
-ax[0,3].imshow(hess_out_img_lm.as_array()[71, :, :], cmap = 'Greys', vmin = -5000, vmax = -1000)
-ax[0,4].imshow(h.as_array()[71, :, :], cmap = 'Greys', vmin = -5000, vmax = -1000)
-ax[0,5].imshow(h2.as_array()[71, :, :], cmap = 'Greys', vmin = -5000, vmax = -1000)
-ax[1,2].imshow(hess_out_img.as_array()[71, :, :], cmap = 'Greys', vmin = -100000, vmax = hess_out_img.max())
-ax[1,3].imshow(hess_out_img_lm.as_array()[71, :, :], cmap = 'Greys', vmin = -100000, vmax = hess_out_img.max())
-ax[1,4].imshow(h.as_array()[71, :, :], cmap = 'Greys', vmin = -100000, vmax = hess_out_img.max())
-ax[1,5].imshow(h2.as_array()[71, :, :], cmap = 'Greys', vmin = -100000, vmax = hess_out_img.max())
-ax[0,0].set_title('current estimate', fontsize = 'medium')
-ax[0,1].set_title('input', fontsize = 'medium')
-ax[0,2].set_title('sino Hessian multiply', fontsize = 'medium')
-ax[0,3].set_title('neg. LM Hessian multiply', fontsize = 'medium')
-ax[0,4].set_title('manual Hessian multiply', fontsize = 'medium')
-ax[0,5].set_title('manual Hessian multiply + eps', fontsize = 'medium')
-ax[1,0].set_axis_off()
-ax[1,1].set_axis_off()
+ax[0, 0].imshow(current_estimate.as_array()[71, :, :], cmap="Greys")
+ax[0, 1].imshow(input_img.as_array()[71, :, :], cmap="Greys")
+ax[0, 2].imshow(hess_out_img.as_array()[71, :, :], cmap="Greys", vmin=-5000, vmax=-1000)
+ax[0, 3].imshow(
+    hess_out_img_lm.as_array()[71, :, :], cmap="Greys", vmin=-5000, vmax=-1000
+)
+ax[0, 4].imshow(h.as_array()[71, :, :], cmap="Greys", vmin=-5000, vmax=-1000)
+ax[0, 5].imshow(h2.as_array()[71, :, :], cmap="Greys", vmin=-5000, vmax=-1000)
+ax[1, 2].imshow(
+    hess_out_img.as_array()[71, :, :],
+    cmap="Greys",
+    vmin=-100000,
+    vmax=hess_out_img.max(),
+)
+ax[1, 3].imshow(
+    hess_out_img_lm.as_array()[71, :, :],
+    cmap="Greys",
+    vmin=-100000,
+    vmax=hess_out_img.max(),
+)
+ax[1, 4].imshow(
+    h.as_array()[71, :, :], cmap="Greys", vmin=-100000, vmax=hess_out_img.max()
+)
+ax[1, 5].imshow(
+    h2.as_array()[71, :, :], cmap="Greys", vmin=-100000, vmax=hess_out_img.max()
+)
+ax[0, 0].set_title("current estimate", fontsize="medium")
+ax[0, 1].set_title("input", fontsize="medium")
+ax[0, 2].set_title("sino Hessian multiply", fontsize="medium")
+ax[0, 3].set_title("neg. LM Hessian multiply", fontsize="medium")
+ax[0, 4].set_title("manual Hessian multiply", fontsize="medium")
+ax[0, 5].set_title("manual Hessian multiply + eps", fontsize="medium")
+ax[1, 0].set_axis_off()
+ax[1, 1].set_axis_off()
 fig.show()

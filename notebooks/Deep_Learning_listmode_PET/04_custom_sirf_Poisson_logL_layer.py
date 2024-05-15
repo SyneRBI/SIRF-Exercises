@@ -2,7 +2,7 @@
 # Learning objectives
 # ===================
 #
-# 1. Implement the forward and backward pass of a custom (pytorch autograd compatible) layer that 
+# 1. Implement the forward and backward pass of a custom (pytorch autograd compatible) layer that
 #    calculates the gradient Poisson log-likelihood.
 # 2. Understand how to test whether the (backward pass) of the custom layer is implemented correctly,
 #    such that gradient backpropagation works as expected.
@@ -50,7 +50,9 @@ sirf.STIR.AcquisitionData.set_storage_scheme("memory")
 listmode_data = sirf.STIR.ListmodeData(list_file)
 acq_data_template = listmode_data.acquisition_data_template()
 
-acq_data = sirf.STIR.AcquisitionData(str(Path(f"{emission_sinogram_output_prefix}_f1g1d0b0.hs")))
+acq_data = sirf.STIR.AcquisitionData(
+    str(Path(f"{emission_sinogram_output_prefix}_f1g1d0b0.hs"))
+)
 
 # select acquisition model that implements the geometric
 # forward projection by a ray tracing matrix multiplication
@@ -59,7 +61,9 @@ acq_model.set_num_tangential_LORs(1)
 
 randoms = sirf.STIR.AcquisitionData(str(Path(f"{randoms_sinogram_output_prefix}.hs")))
 
-ac_factors = sirf.STIR.AcquisitionData(str(Path(f"{attenuation_sinogram_output_prefix}.hs")))
+ac_factors = sirf.STIR.AcquisitionData(
+    str(Path(f"{attenuation_sinogram_output_prefix}.hs"))
+)
 asm_attn = sirf.STIR.AcquisitionSensitivityModel(ac_factors)
 
 asm_norm = sirf.STIR.AcquisitionSensitivityModel(norm_file)
@@ -68,10 +72,12 @@ asm = sirf.STIR.AcquisitionSensitivityModel(asm_norm, asm_attn)
 asm.set_up(acq_data)
 acq_model.set_acquisition_sensitivity(asm)
 
-scatter_estimate = sirf.STIR.AcquisitionData(str(Path(f"{scatter_sinogram_output_prefix}_{num_scatter_iter}.hs")))
+scatter_estimate = sirf.STIR.AcquisitionData(
+    str(Path(f"{scatter_sinogram_output_prefix}_{num_scatter_iter}.hs"))
+)
 acq_model.set_background_term(randoms + scatter_estimate)
 
-# setup an initial (template) image based on the acquisition data template 
+# setup an initial (template) image based on the acquisition data template
 initial_image = acq_data_template.create_uniform_image(value=1, xy=nxny)
 
 # load the reconstructed image from notebook 01
@@ -90,18 +96,18 @@ lm_obj_fun = (
 lm_obj_fun.set_acquisition_model(acq_model)
 lm_obj_fun.set_acquisition_data(listmode_data)
 lm_obj_fun.set_num_subsets(num_subsets)
-print('setting up listmode objective function ...')
+print("setting up listmode objective function ...")
 lm_obj_fun.set_up(initial_image)
 
 # %% [markdown]
 # Setup of a pytorch layer that computes the gradient of the Poisson log likelihood objective function
 # ----------------------------------------------------------------------------------------------------
 #
-# Using our listmode objective function, we can now implement a custom pytorch layer that computes the gradient 
+# Using our listmode objective function, we can now implement a custom pytorch layer that computes the gradient
 # of the Poisson log likelihood using the `gradient()` method using a subset of the listmode data.
 #
 # This layer maps a torch minibatch tensor to another torch tensor of the same shape.
-# The shape of the minibatch tensor is [batch_size=1, channel_size=1, spatial dimensions]. 
+# The shape of the minibatch tensor is [batch_size=1, channel_size=1, spatial dimensions].
 # For the implementation we subclass `torch.autograd.Function` and implement the `forward()` and
 # `backward()` methods.
 
@@ -121,7 +127,13 @@ lm_obj_fun.set_up(initial_image)
 # %%
 class SIRFPoissonlogLGradLayer(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, x: torch.Tensor, objective_function, sirf_template_image: sirf.STIR.ImageData, subset: int) -> torch.Tensor:
+    def forward(
+        ctx,
+        x: torch.Tensor,
+        objective_function,
+        sirf_template_image: sirf.STIR.ImageData,
+        subset: int,
+    ) -> torch.Tensor:
         """(listmode) Poisson loglikelihood gradient layer forward pass
 
         Parameters
@@ -146,19 +158,20 @@ class SIRFPoissonlogLGradLayer(torch.autograd.Function):
         # we use the context object ctx to store objects that we need in the backward pass
         ctx.device = x.device
         ctx.objective_function = objective_function
-        ctx.dtype = x.dtype 
+        ctx.dtype = x.dtype
         ctx.subset = subset
         ctx.sirf_template_image = sirf_template_image
 
-        #==============================================================
-        #==============================================================
+        # ==============================================================
+        # ==============================================================
         # YOUR CODE HERE
-        #==============================================================
-        #==============================================================
-
+        # ==============================================================
+        # ==============================================================
 
     @staticmethod
-    def backward(ctx, grad_output: torch.Tensor | None) -> tuple[torch.Tensor | None, None, None, None]:
+    def backward(
+        ctx, grad_output: torch.Tensor | None
+    ) -> tuple[torch.Tensor | None, None, None, None]:
         """(listmode) Poisson loglikelihood gradient layer backward pass
 
         Parameters
@@ -173,16 +186,15 @@ class SIRFPoissonlogLGradLayer(torch.autograd.Function):
         -------
         tuple[torch.Tensor | None, None, None, None]
             the Jacobian-vector product of the Poisson log likelihood gradient layer
-        """        
-
+        """
 
         if grad_output is None:
             return None, None, None, None
         else:
-            ctx.sirf_template_image.fill(grad_output.cpu().numpy()[0,0,...])
+            ctx.sirf_template_image.fill(grad_output.cpu().numpy()[0, 0, ...])
 
-            #==============================================================
-            #==============================================================
+            # ==============================================================
+            # ==============================================================
             # YOUR CODE HERE
             # --------------
             #
@@ -190,18 +202,25 @@ class SIRFPoissonlogLGradLayer(torch.autograd.Function):
             # Hints: (1) try to derive the Jacobian of the gradient of the Poisson log likelihood gradient first
             #        (2) the sirf.STIR objective function has a method called `accumulate_Hessian_times_input`
             #
-            #==============================================================
-            #==============================================================
+            # ==============================================================
+            # ==============================================================
+
 
 # %% [markdown]
 # To view the solution to the exercise, execute the next cell.
 
 # %%
-# %load snippets/solution_4_1.py 
+# %load snippets/solution_4_1.py
 
 # %%
 # convert to torch tensor and add the minibatch and channel dimensions
-x_t = torch.tensor(lm_ref_recon.as_array(), device=dev, dtype=torch.float32, requires_grad=False).unsqueeze(0).unsqueeze(0)
+x_t = (
+    torch.tensor(
+        lm_ref_recon.as_array(), device=dev, dtype=torch.float32, requires_grad=False
+    )
+    .unsqueeze(0)
+    .unsqueeze(0)
+)
 
 # setup our custom Poisson log likelihood gradient layer
 poisson_logL_grad_layer = SIRFPoissonlogLGradLayer.apply
@@ -227,7 +246,13 @@ grad_x = poisson_logL_grad_layer(x_t, lm_obj_fun, initial_image, 0)
 
 # %%
 class OSEMUpdateLayer(torch.nn.Module):
-    def __init__(self, objective_function, sirf_template_image: sirf.STIR.ImageData, subset: int, device: str) -> None:
+    def __init__(
+        self,
+        objective_function,
+        sirf_template_image: sirf.STIR.ImageData,
+        subset: int,
+        device: str,
+    ) -> None:
         """OSEM update layer
 
         Parameters
@@ -246,7 +271,7 @@ class OSEMUpdateLayer(torch.nn.Module):
         torch.Tensor
             minibatch tensor of shape [1,1,spatial_dimensions] containing the OSEM
             update of the input image using the Poisson log likelihood objective function
-        """        
+        """
         super().__init__()
         self._objective_function = objective_function
         self._sirf_template_image: sirf.STIR.ImageData = sirf_template_image
@@ -255,9 +280,13 @@ class OSEMUpdateLayer(torch.nn.Module):
         self._poisson_logL_grad_layer = SIRFPoissonlogLGradLayer.apply
 
         # setup a tensor containng the inverse of the subset sensitivity image adding the minibatch and channel dimensions
-        self._inv_sens_image: torch.Tensor = 1. / torch.tensor(objective_function.get_subset_sensitivity(subset).as_array(), dtype = torch.float32, device = device).unsqueeze(0).unsqueeze(0)
+        self._inv_sens_image: torch.Tensor = 1.0 / torch.tensor(
+            objective_function.get_subset_sensitivity(subset).as_array(),
+            dtype=torch.float32,
+            device=device,
+        ).unsqueeze(0).unsqueeze(0)
         # replace positive infinity values with 0 (voxels with 0 sensitivity)
-        torch.nan_to_num(self._inv_sens_image, posinf = 0, out = self._inv_sens_image)
+        torch.nan_to_num(self._inv_sens_image, posinf=0, out=self._inv_sens_image)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """forward pass of the OSEM update layer
@@ -271,14 +300,15 @@ class OSEMUpdateLayer(torch.nn.Module):
         -------
         torch.Tensor
             OSEM update image
-        """        
+        """
 
-        #=======================================================================
-        #=======================================================================
+        # =======================================================================
+        # =======================================================================
         # YOUR CODE HERE
         # USE ONLY BASIC ARITHMETIC OPERATIONS BETWEEN TORCH TENSORS!
-        #=======================================================================
-        #=======================================================================
+        # =======================================================================
+        # =======================================================================
+
 
 # %% [markdown]
 # To view the solution to the exercise, execute the next cell.
@@ -295,11 +325,16 @@ osem_updated_x_t = osem_layer0(x_t)
 # %%
 
 # show the input and output of the OSEM update layer
-fig, ax = plt.subplots(1,3,figsize = (12,4), tight_layout = True)
-ax[0].imshow(x_t.cpu().numpy()[0,0,71,...], cmap = 'Greys')
-ax[1].imshow(osem_updated_x_t.cpu().numpy()[0,0,71,...], cmap = 'Greys')
-ax[2].imshow(osem_updated_x_t.cpu().numpy()[0,0,71,...] - x_t.cpu().numpy()[0,0,71,...], cmap = 'seismic', vmin=-0.01,vmax=0.01)
-ax[0].set_title('input image')
-ax[1].set_title('OSEM updated image')
-ax[2].set_title('diffence image')
+fig, ax = plt.subplots(1, 3, figsize=(12, 4), tight_layout=True)
+ax[0].imshow(x_t.cpu().numpy()[0, 0, 71, ...], cmap="Greys")
+ax[1].imshow(osem_updated_x_t.cpu().numpy()[0, 0, 71, ...], cmap="Greys")
+ax[2].imshow(
+    osem_updated_x_t.cpu().numpy()[0, 0, 71, ...] - x_t.cpu().numpy()[0, 0, 71, ...],
+    cmap="seismic",
+    vmin=-0.01,
+    vmax=0.01,
+)
+ax[0].set_title("input image")
+ax[1].set_title("OSEM updated image")
+ax[2].set_title("diffence image")
 fig.show()

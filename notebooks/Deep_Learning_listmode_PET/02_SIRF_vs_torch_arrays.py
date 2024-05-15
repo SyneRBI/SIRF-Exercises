@@ -10,19 +10,20 @@
 # SIRF.STIR ImageData objects vs numpy arrays
 # -------------------------------------------
 
-# %% 
-# create a SIRF image template 
+# %%
+# create a SIRF image template
 
 import sirf.STIR
 from sirf.Utilities import examples_data_path
 
 # read an example PET acquisition data set that we can use
 # to set up a compatible image data set
-acq_data: sirf.STIR.AcquisitionData = sirf.STIR.AcquisitionData(examples_data_path('PET')\
-                                        + '/brain/template_sinogram.hs')
+acq_data: sirf.STIR.AcquisitionData = sirf.STIR.AcquisitionData(
+    examples_data_path("PET") + "/brain/template_sinogram.hs"
+)
 
 # create a SIRF image compatible with the acquisition data
-# uses default voxel sizes and dimensions 
+# uses default voxel sizes and dimensions
 sirf_image_1: sirf.STIR.ImageData = acq_data.create_uniform_image(1.0)
 sirf_image_2: sirf.STIR.ImageData = acq_data.create_uniform_image(2.0)
 
@@ -45,8 +46,8 @@ numpy_image_1: np.ndarray = sirf_image_1.as_array()
 numpy_image_2: np.ndarray = sirf_image_2.as_array()
 
 numpy_image_2_modified = numpy_image_2.copy()
-numpy_image_2_modified[0,0,0] = 5.0
-numpy_image_2_modified[-1,-1,-1] = -4.0
+numpy_image_2_modified[0, 0, 0] = 5.0
+numpy_image_2_modified[-1, -1, -1] = -4.0
 
 print()
 print(f"numpy_image_1 shape   .: {numpy_image_1.shape}")
@@ -76,12 +77,12 @@ print(f"sirf_image_2 max     .: {sirf_image_2.max()}")
 # ------------
 #
 # Create a SIRF.STIR image that is compatible with the acquisition data
-# where every image "plane" contains the "plane number squared". 
+# where every image "plane" contains the "plane number squared".
 
 
-# %% 
+# %%
 # uncomment the next line and run this cell to see the solution
-#load snippets/solution_2_1.py
+# load snippets/solution_2_1.py
 
 # %% [markdown]
 # torch tensors vs numpy arrays
@@ -98,7 +99,7 @@ else:
     # otherwise we select the CPU as device
     dev = torch.device("cpu")
 
-torch_image_1: torch.Tensor = torch.ones(image_shape, dtype = torch.float32, device = dev)
+torch_image_1: torch.Tensor = torch.ones(image_shape, dtype=torch.float32, device=dev)
 
 print()
 print(f"torch_image_1 shape  .: {torch_image_1.shape}")
@@ -108,7 +109,7 @@ print(f"torch_image_1 devive .: {torch_image_1.device}")
 
 # %%
 # you can convert torch (GPU or CPU) tensors to numpy arrays using numpy() method
-numpy_image_from_torch_1: np.ndarray = torch_image_1.numpy(force = True)
+numpy_image_from_torch_1: np.ndarray = torch_image_1.numpy(force=True)
 # force = True make sure that the tensor is first transfered to CPU (and compatible with numpy)
 # see here: https://pytorch.org/docs/stable/generated/torch.Tensor.numpy.html
 
@@ -119,9 +120,9 @@ print(f"numpy data pointer {numpy_image_from_torch_1.ctypes.data}")
 print(f"torch data pointer {torch_image_1.data_ptr()}")
 
 if torch_image_1.data_ptr() == numpy_image_from_torch_1.ctypes.data:
-    print("numpy array and torch tensor share same data") 
+    print("numpy array and torch tensor share same data")
 else:
-    print("numpy array and torch tensor don't share same data") 
+    print("numpy array and torch tensor don't share same data")
 
 # %%
 # You can create torch tensors from numpy array using torch.from_numpy()
@@ -146,10 +147,9 @@ print(f"device of torch tensor from numpy {torch_image_from_numpy_1.device}")
 #
 # Now that we know how to convert between SIRF.STIR images and numpy arrays,
 # and between numpy arrays and torch tensors do the following:
-# 1. convert a torch tensor full of "3s" into SIRF.STIR ImageData object compatible 
+# 1. convert a torch tensor full of "3s" into SIRF.STIR ImageData object compatible
 #    with the acquisition data
 # 2. convert a SIRF.STIR ImageData object "sirf_image_1" into a torch tensor on the
 #    device "dev"
 # 3. Predict whether the different image objects should share data and test your
 #    hypothesis
-
