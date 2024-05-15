@@ -2,9 +2,10 @@
 # Learning objectives
 # ===================
 #
-# 1. Exercise 1: Implement a custom layer that calculates the Poisson log-likelihood.
-#                How to define the backward pass?
-# 2. Exercise 2: Using the custom layer gradient logL layer, define EM step layer.
+# 1. Implement the forward and backward pass of a custom (pytorch autograd compatible) layer that 
+#    calculates the gradient Poisson log-likelihood.
+# 2. Understand how to test whether the (backward pass) of the custom layer is implemented correctly,
+#    such that gradient backpropagation works as expected.
 
 # %%
 import sirf.STIR
@@ -12,7 +13,6 @@ import torch
 import numpy as np
 from pathlib import Path
 from sirf.Utilities import examples_data_path
-from scipy.ndimage import gaussian_filter
 
 data_path: Path = Path(examples_data_path("PET")) / "mMR"
 output_path: Path = Path("recons")
@@ -74,6 +74,9 @@ acq_model.set_background_term(randoms + scatter_estimate)
 # setup an initial (template) image based on the acquisition data template 
 initial_image = acq_data_template.create_uniform_image(value=1, xy=nxny)
 
+# load the reconstructed image from notebook 01
+lm_ref_recon = sirf.STIR.ImageData(f"{lm_recon_output_file}.hv")
+
 # %% [markdown]
 # Setup of the Poisson log likelihood listmode objective function
 # ---------------------------------------------------------------
@@ -102,127 +105,119 @@ lm_obj_fun.set_up(initial_image)
 # For the implementation we subclass `torch.autograd.Function` and implement the `forward()` and
 # `backward()` methods.
 
+# %% [markdown]
+# Exercise 4.1
+# ------------
+#
+# Using your knowledge of the Poisson log likelihood gradient (exercise 0.1) and the content of the notebook 03
+# on custom layers, implement the forward and backward pass of a custom layer that calculates the gradient of the
+# Poisson log likelihood using a SIRF objective function.
+# The next cell contains the skeleton of the custom layer. You need to fill in the missing parts in the forward and
+# backward pass.
+
+# %%
 class SIRFPoissonlogLGradLayer(torch.autograd.Function):
     @staticmethod
     def forward(ctx, x: torch.Tensor, objective_function, sirf_template_image: sirf.STIR.ImageData, subset: int) -> torch.Tensor:
+        """(listmode) Poisson loglikelihood gradient layer forward pass
 
-        # we use the context object ctx to store the matrix and other variables that we need in the backward pass
+        Parameters
+        ----------
+        ctx : context object
+            used to store objects that we need in the backward pass
+        x : torch.Tensor
+            minibatch tensor of shape [1,1,spatial_dimensions] containing the image
+        objective_function : sirf (listmode) objective function
+            the objective function that we use to calculate the gradient
+        sirf_template_image : sirf.STIR.ImageData
+            image template that we use to convert between torch tensors and sirf images
+        subset : int
+            subset number used for the gradient calculation
+
+        Returns
+        -------
+        torch.Tensor
+            minibatch tensor of shape [1,1,spatial_dimensions] containing the image
+            containing the gradient of the (listmode) Poisson log likelihood at x
+        """
+        # we use the context object ctx to store objects that we need in the backward pass
         ctx.device = x.device
         ctx.objective_function = objective_function
         ctx.dtype = x.dtype 
         ctx.subset = subset
         ctx.sirf_template_image = sirf_template_image
 
-        # setup a new sirf.STIR ImageData object 
-        x_sirf = sirf_template_image.clone()
-        # convert torch tensor to sirf image via numpy
-        x_sirf.fill(x.cpu().numpy()[0,0,...]) 
+        #==============================================================
+        #==============================================================
+        # YOUR CODE HERE
+        #==============================================================
+        #==============================================================
 
-        # save the input sirf.STIR ImageData for the backward pass
-        ctx.x_sirf = x_sirf
-
-        # calculate the gradient of the Poisson log likelihood using SIRF
-        g_np = objective_function.gradient(x_sirf, subset).as_array()
-
-        # convert back to torch tensor
-        y = torch.tensor(g_np, device=ctx.device, dtype = ctx.dtype).unsqueeze(0).unsqueeze(0)
-
-        return y
 
     @staticmethod
     def backward(ctx, grad_output: torch.Tensor | None) -> tuple[torch.Tensor | None, None, None, None]:
+        """(listmode) Poisson loglikelihood gradient layer backward pass
+
+        Parameters
+        ----------
+        ctx : context object
+            used to store objects that we need in the backward pass
+        grad_output : torch.Tensor | None
+            minibatch tensor of shape [1,1,spatial_dimensions] containing the gradient (called v in the autograd tutorial)
+            https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html#optional-reading-vector-calculus-using-autograd
+
+        Returns
+        -------
+        tuple[torch.Tensor | None, None, None, None]
+            the Jacobian-vector product of the Poisson log likelihood gradient layer
+        """        
+
+
         if grad_output is None:
             return None, None, None, None
         else:
-            # convert torch tensor to sirf image via numpy
             ctx.sirf_template_image.fill(grad_output.cpu().numpy()[0,0,...])
 
-            # calculate the Jacobian vector product (the Hessian applied to an image) using SIRF
-            back_sirf = ctx.objective_function.accumulate_Hessian_times_input(ctx.x_sirf, ctx.sirf_template_image, ctx.subset)
+            #==============================================================
+            #==============================================================
+            # YOUR CODE HERE
+            # --------------
+            #
+            # calculate the Jacobian-vector product of the Poisson log likelihood gradient layer
+            # Hints: (1) try to derive the Jacobian of the gradient of the Poisson log likelihood gradient first
+            #        (2) the sirf.STIR objective function has a method called `accumulate_Hessian_times_input`
+            #
+            #==============================================================
+            #==============================================================
 
-            # convert back to torch tensor via numpy
-            back = torch.tensor(back_sirf.as_array(), device=ctx.device, dtype=ctx.dtype).unsqueeze(0).unsqueeze(0)
-
-            return back, None, None, None
-
-
-
-# %%
-class SIRFOSEMStepLayer(torch.nn.Module):
-    def __init__(self, objective_function, sirf_template_image: sirf.STIR.ImageData, subset: int, device: str) -> None:
-        super().__init__()
-        self._objective_function = objective_function
-        self._sirf_template_image = sirf_template_image
-        self._subset = subset
-
-        self._poisson_logL_grad_layer = SIRFPoissonlogLGradLayer.apply
-
-        self._inv_sens_image = 1. / torch.tensor(objective_function.get_subset_sensitivity(subset).as_array(), dtype = torch.float32, device = device).unsqueeze(0).unsqueeze(0)
-        torch.nan_to_num(self._inv_sens_image, posinf = 0, out = self._inv_sens_image)
-
-    
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        grad_x = self._poisson_logL_grad_layer(x, self._objective_function, self._sirf_template_image, self._subset)
-
-        return x + x * self._inv_sens_image * grad_x
-
-        
-# %%
-class UnrolledOSEMVarNet(torch.nn.Module):
-    def __init__(self, objective_function, sirf_template_image: sirf.STIR.ImageData, convnet: torch.nn.Module, device: str) -> None:
-        super().__init__()
-        self._osem_step_layer0 = SIRFOSEMStepLayer(objective_function, sirf_template_image, 0, device)
-        self._osem_step_layer1 = SIRFOSEMStepLayer(objective_function, sirf_template_image, 1, device)
-        self._osem_step_layer2 = SIRFOSEMStepLayer(objective_function, sirf_template_image, 2, device)
-        self._osem_step_layer3 = SIRFOSEMStepLayer(objective_function, sirf_template_image, 3, device)
-        self._convnet = convnet
-        self._relu = torch.nn.ReLU()
-    
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x1 = self._relu(self._convnet(x) + self._osem_step_layer0(x))
-        x2 = self._relu(self._convnet(x1) + self._osem_step_layer1(x1))
-        x3 = self._relu(self._convnet(x2) + self._osem_step_layer2(x2))
-        x4 = self._relu(self._convnet(x3) + self._osem_step_layer2(x3))
-
-        return x4
+# %% [markdown]
+# To view the solution to the exercise, execute the next cell.
 
 # %%
+# %load snippets/solution_4_1.py 
 
-lm_ref_recon = sirf.STIR.ImageData(f"{lm_recon_output_file}.hv")
+# %%
+# convert to torch tensor and add the minibatch and channel dimensions
 x_t = torch.tensor(lm_ref_recon.as_array(), device=dev, dtype=torch.float32, requires_grad=False).unsqueeze(0).unsqueeze(0)
 
-cnn = torch.nn.Sequential(
-    torch.nn.Conv3d(1, 5, 5, padding = "same", bias=False),
-    torch.nn.Conv3d(5, 5, 5, padding = "same", bias=False),
-    torch.nn.ReLU(),
-    torch.nn.Conv3d(5, 5, 5, padding = "same", bias=False),
-    torch.nn.Conv3d(5, 5, 5, padding = "same", bias=False),
-    torch.nn.ReLU(),
-    torch.nn.Conv3d(5, 1, 5, padding = "same", bias=False),
-).to(dev)
+# setup our custom Poisson log likelihood gradient layer
+poisson_logL_grad_layer = SIRFPoissonlogLGradLayer.apply
+# perform the forward pass (calcuate the gradient of the Poisson log likelihood at x_t)
+grad_x = poisson_logL_grad_layer(x_t, lm_obj_fun, initial_image, 0)
 
-
-varnet = UnrolledOSEMVarNet(lm_obj_fun, initial_image, cnn, dev)
-
-# define a high quality traget image
-target = torch.tensor(gaussian_filter(x_t.cpu().numpy()[0,0,...],0.7), dtype = torch.float32, device = dev).unsqueeze(0).unsqueeze(0)
-
-optimizer = torch.optim.Adam(varnet._convnet.parameters(), lr = 1e-3)
-# define the loss function
-loss_fct = torch.nn.MSELoss()
+# %% [markdown]
+# Testing gradient backpropagation through the layer
+# --------------------------------------------------
+#
+# When defining new custom layers, it is crucial to test whether the backward pass is implemented correctly.
+# Otherwise the gradient backpropagation though the layer will be incorrect, and optimizing the model parameters will not work.
+# To test the gradient backpropagation, we can use the `torch.autograd.gradcheck` function.
+# **Note**, that this will take very long time to run. Running it on smaller images is recommended.
 
 # %%
-for i in range(1):
-    # pass the input mini-batch through the network
-    prediction = varnet(x_t)
-    # calculate the MSE loss between the prediction and the target
-    loss = loss_fct(prediction, target)
-    # backpropagate the gradient of the loss through the network
-    # (needed to update the trainable parameters of the network with an optimizer)
-    optimizer.zero_grad()
-    loss.backward()
-    # update the trainable parameters of the network with the optimizer
-    optimizer.step()
-    print(i, loss.item())
+# setup a test input tensor - requires grad must be True!
+t_t = torch.tensor(lm_ref_recon.as_array(), device=dev, dtype=torch.float32, requires_grad=True).unsqueeze(0).unsqueeze(0)
 
-
+# this will take a few minutes to run
+#res = torch.autograd.gradcheck(poisson_logL_grad_layer, (t_t, lm_obj_fun, initial_image, 0), 
+#                               eps=1e-3, atol=1e-2, rtol = 1e-2, fast_mode=True)
