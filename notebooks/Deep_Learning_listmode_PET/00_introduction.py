@@ -7,7 +7,7 @@
 # we will focus on unrolled Variational networks that can be trained in a supervised manner.
 # The general architecture of such network is shown below.
 #
-# ![](figs/varnet.drawio.svg)
+# ![](figs/osem_varnet.drawio.svg)
 #
 # The aim of an unrolled variational PET listmode network is to create "high quality" PET reconstructions
 # from "low-quality" input listmode data.

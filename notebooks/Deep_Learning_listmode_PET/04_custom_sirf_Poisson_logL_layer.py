@@ -10,7 +10,7 @@
 # %%
 import sirf.STIR
 import torch
-import numpy as np
+import matplotlib.pyplot as plt
 from pathlib import Path
 from sirf.Utilities import examples_data_path
 
@@ -291,3 +291,15 @@ class OSEMUpdateLayer(torch.nn.Module):
 osem_layer0 = OSEMUpdateLayer(lm_obj_fun, initial_image, 0, dev)
 # perform the forward pass
 osem_updated_x_t = osem_layer0(x_t)
+
+# %%
+
+# show the input and output of the OSEM update layer
+fig, ax = plt.subplots(1,3,figsize = (12,4), tight_layout = True)
+ax[0].imshow(x_t.cpu().numpy()[0,0,71,...], cmap = 'Greys')
+ax[1].imshow(osem_updated_x_t.cpu().numpy()[0,0,71,...], cmap = 'Greys')
+ax[2].imshow(osem_updated_x_t.cpu().numpy()[0,0,71,...] - x_t.cpu().numpy()[0,0,71,...], cmap = 'seismic', vmin=-0.01,vmax=0.01)
+ax[0].set_title('input image')
+ax[1].set_title('OSEM updated image')
+ax[2].set_title('diffence image')
+fig.show()
