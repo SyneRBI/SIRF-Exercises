@@ -71,15 +71,10 @@
 #
 # (bonus question) How does the update formula change if we use listmode data instead of sinogram data?
 
-# %% [markdown]
-# Solution 0.1
-# ------------
-#
 # YOUR SOLUTION GOES IN HERE
 
 # %%
-# DO SHOW THE SOLUTION, UNCOMMENT AND RUN THE FOLLOWING LINES
-#
+# #TO SHOW THE SOLUTION, UNCOMMENT THE NEXT TO LINES AND RUN THE CELL
 # from IPython.display import Markdown, display
 # display(Markdown("snippets/solution_0_1.md"))
 

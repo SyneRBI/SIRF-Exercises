@@ -305,7 +305,7 @@ recon.fill(obj_fun.get_subset_sensitivity(0).as_array() > 0)
 
 
 # %% [markdown]
-# Setup of the Poisson loglikelihood objective function ($logL(y,x)$) in listmode
+# Setup of the Poisson loglikelihood objective function logL(y,x) in listmode
 # -------------------------------------------------------------------------------
 
 # %%

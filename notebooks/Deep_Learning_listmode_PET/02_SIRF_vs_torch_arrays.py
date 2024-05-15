@@ -3,8 +3,8 @@
 # ============================================================
 
 # %% [markdown]
-# Learning objectives
-# -------------------
+# Learning objectives of this notebook
+# ------------------------------------
 #
 # 1. Understanding the differences between SIRF ImageData, numpy arrays and torch tensors.
 # 2. Learn how to convert between these different data types.

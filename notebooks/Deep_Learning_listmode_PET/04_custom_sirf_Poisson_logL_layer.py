@@ -1,6 +1,9 @@
 # %% [markdown]
+# Creating custom Poisson log likelihood gradient step and OSEM update layers
+# ===========================================================================
+#
 # Learning objectives
-# ===================
+# -------------------
 #
 # 1. Implement the forward and backward pass of a custom (pytorch autograd compatible) layer that
 #    calculates the gradient Poisson log-likelihood.
