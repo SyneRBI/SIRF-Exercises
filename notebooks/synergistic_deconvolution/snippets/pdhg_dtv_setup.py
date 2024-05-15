@@ -16,7 +16,7 @@ sigma = 1./normK
 tau = 1./normK
 
 pdhg_dtv = alg.PDHG(f = f, g = g, operator = Kd, tau = 0.99*tau, sigma = 0.99*sigma, initial=image_dict['OSEM'],
-                    update_objective_interval = 50, check_convergence=False)
+                    update_objective_interval = 10)
 
 pdhg_dtv.run(verbose=1, iterations=500)
 
