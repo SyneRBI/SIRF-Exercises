@@ -211,7 +211,8 @@ optimizer = torch.optim.Adam(varnet._convnet.parameters(), lr = 1e-3)
 # define the loss function
 loss_fct = torch.nn.MSELoss()
 
-for i in range(1000):
+# %%
+for i in range(1):
     # pass the input mini-batch through the network
     prediction = varnet(x_t)
     # calculate the MSE loss between the prediction and the target
