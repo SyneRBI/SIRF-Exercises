@@ -213,3 +213,27 @@ print([p.grad for p in net2._cnn.parameters()])
 
 # %% [markdown]
 # In contrast to the naive approach, the backpropagation of the gradients works fine now, meaning that this network is ready for training.
+
+# %% [markdown]
+# Testing gradient backpropagation through the layer
+# --------------------------------------------------
+#
+# When defining new custom layers, it is crucial to test whether the backward pass is implemented correctly.
+# Otherwise the gradient backpropagation though the layer will be incorrect, and optimizing the model parameters will not work.
+# To test the gradient backpropagation, we can use the `torch.autograd.gradcheck` function.
+
+# %%
+# setup a test input tensor - requires grad must be True!
+t_t = torch.rand(x_t.shape, device=dev, dtype=torch.float64, requires_grad=True)
+
+# test the gradient backpropagation through the custom numpy matrix multiplication layer
+matrix_layer = NPSquareMatrixMultiplicationLayer.apply
+gradcheck = torch.autograd.gradcheck(matrix_layer, (t_t, A),  fast_mode=True)
+
+print(f"gradient check of NPSquareMatrixMultiplicationLayer: {gradcheck}")
+
+# %% [markdown]
+# Exercise 3.2
+# ------------
+# Temporarily change the backward pass of the custom layer such that is is not correct anymore
+# (e.g. by multiplying the output with 0.95) and rerun the gradient check. What do you observe?

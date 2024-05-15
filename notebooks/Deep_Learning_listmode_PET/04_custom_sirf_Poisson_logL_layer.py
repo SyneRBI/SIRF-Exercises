@@ -111,7 +111,10 @@ lm_obj_fun.set_up(initial_image)
 #
 # Using your knowledge of the Poisson log likelihood gradient (exercise 0.1) and the content of the notebook 03
 # on custom layers, implement the forward and backward pass of a custom layer that calculates the gradient of the
-# Poisson log likelihood using a SIRF objective function.
+# Poisson log likelihood using a SIRF objective function as shown in the figure below.
+#
+# # ![](figs/poisson_logL_grad_layer.drawio.svg)
+#
 # The next cell contains the skeleton of the custom layer. You need to fill in the missing parts in the forward and
 # backward pass.
 
@@ -205,19 +208,86 @@ poisson_logL_grad_layer = SIRFPoissonlogLGradLayer.apply
 # perform the forward pass (calcuate the gradient of the Poisson log likelihood at x_t)
 grad_x = poisson_logL_grad_layer(x_t, lm_obj_fun, initial_image, 0)
 
+
 # %% [markdown]
-# Testing gradient backpropagation through the layer
-# --------------------------------------------------
+# Implementing a OSEM update layer using our custom Poisson log likelihood gradient layer
+# =======================================================================================
 #
-# When defining new custom layers, it is crucial to test whether the backward pass is implemented correctly.
-# Otherwise the gradient backpropagation though the layer will be incorrect, and optimizing the model parameters will not work.
-# To test the gradient backpropagation, we can use the `torch.autograd.gradcheck` function.
-# **Note**, that this will take very long time to run. Running it on smaller images is recommended.
+# Using our custom Poisson log likelihood gradient layer, we can now implement a custom OSEM update layer.
+# Note that the OSEM update can be decomposed into a simple feedforward network consisting of basic arithmetic
+# operations that are implemented in pytorch (pointwise multiplication and addition) as shown in the figure below.
+#
+# # ![](figs/osem_layer.drawio.svg)
+
+# %% [markdown]
+# Exercise 4.2
+# ------------
+# Implement the forward pass of a OSEM update layer using the Poisson log likelihood gradient layer that we implemented
+# above.
 
 # %%
-# setup a test input tensor - requires grad must be True!
-t_t = torch.tensor(lm_ref_recon.as_array(), device=dev, dtype=torch.float32, requires_grad=True).unsqueeze(0).unsqueeze(0)
+class OSEMUpdateLayer(torch.nn.Module):
+    def __init__(self, objective_function, sirf_template_image: sirf.STIR.ImageData, subset: int, device: str) -> None:
+        """OSEM update layer
 
-# this will take a few minutes to run
-#res = torch.autograd.gradcheck(poisson_logL_grad_layer, (t_t, lm_obj_fun, initial_image, 0), 
-#                               eps=1e-3, atol=1e-2, rtol = 1e-2, fast_mode=True)
+        Parameters
+        ----------
+        objective_function : sirf (listmode) objective function
+            the objective function that we use to calculate the gradient
+        sirf_template_image : sirf.STIR.ImageData
+            image template that we use to convert between torch tensors and sirf images
+        subset : int
+            subset number used for the gradient calculation
+        device : str
+            device used for the calculations
+
+        Returns
+        -------
+        torch.Tensor
+            minibatch tensor of shape [1,1,spatial_dimensions] containing the OSEM
+            update of the input image using the Poisson log likelihood objective function
+        """        
+        super().__init__()
+        self._objective_function = objective_function
+        self._sirf_template_image: sirf.STIR.ImageData = sirf_template_image
+        self._subset: int = subset
+
+        self._poisson_logL_grad_layer = SIRFPoissonlogLGradLayer.apply
+
+        # setup a tensor containng the inverse of the subset sensitivity image adding the minibatch and channel dimensions
+        self._inv_sens_image: torch.Tensor = 1. / torch.tensor(objective_function.get_subset_sensitivity(subset).as_array(), dtype = torch.float32, device = device).unsqueeze(0).unsqueeze(0)
+        # replace positive infinity values with 0 (voxels with 0 sensitivity)
+        torch.nan_to_num(self._inv_sens_image, posinf = 0, out = self._inv_sens_image)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """forward pass of the OSEM update layer
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            minibatch tensor of shape [1,1,spatial_dimensions] containing the image
+
+        Returns
+        -------
+        torch.Tensor
+            OSEM update image
+        """        
+
+        #=======================================================================
+        #=======================================================================
+        # YOUR CODE HERE
+        # USE ONLY BASIC ARITHMETIC OPERATIONS BETWEEN TORCH TENSORS!
+        #=======================================================================
+        #=======================================================================
+
+# %% [markdown]
+# To view the solution to the exercise, execute the next cell.
+
+# %%
+# %load snippets/solution_4_2.py
+
+# %%
+# define the OSEM update layer for subset 0
+osem_layer0 = OSEMUpdateLayer(lm_obj_fun, initial_image, 0, dev)
+# perform the forward pass
+osem_updated_x_t = osem_layer0(x_t)
