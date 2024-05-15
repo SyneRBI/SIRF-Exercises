@@ -2,8 +2,17 @@
 # Creating custom layers in pytorch
 # =================================
 #
-# In this notebook, we will learn how to create custom layers in pytorch that use functions outside the pytorch framework. We will create a custom layer that multiplies the input tensor with a square matrix.
-# For demonostration purposes, we will create a simple layer that multiplies a 1D input vector with a square matrix, where the matrix multiplication is done using numpy functions.
+# In this notebook, we will learn how to create custom layers in pytorch that use functions outside the pytorch framework. 
+# We will create a custom layer that multiplies the input tensor with a square matrix.
+# For demonostration purposes, we will create a simple layer that multiplies a 1D torch input vector with a square matrix, 
+# where the matrix multiplication is done using numpy functions.
+#
+# Learning objectives of this notebook
+# ------------------------------------
+#
+# 1. Learn how to create custom layers in pytorch that are compatible with the autograd framework.
+# 2. Understand the importance of implementing the backward pass of the custom layer correctly.
+# 3. Learn how to test the gradient backpropagation through the custom layer using the `torch.autograd.gradcheck` function.
 
 # %%
 # import modules

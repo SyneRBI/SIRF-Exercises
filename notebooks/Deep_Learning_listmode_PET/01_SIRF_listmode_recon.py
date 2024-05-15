@@ -2,15 +2,21 @@
 # Sinogram and Listmode OSEM using sirf.STIR
 # ==========================================
 #
-# Using the theory learnings from the previous "theory" notebook, we will now learn how to perform
+# Using the learnings from the previous "theory" notebook, we will now learn how to perform
 # PET reconstruction of emission data in listmode and sinogram format using (sinogram and listmode)
 # objective function objects of the sirf.STIR library.
 #
-# We will see that standard OSEM reconstruction can be seen as a sequence of image update block,
+# We will see that standard OSEM reconstruction can be seen as a sequence of image update "blocks",
 # where the update in each block is related to the gradient of the Poisson loglikelihood objective function.
 #
 # Understanding these OSEM update blocks is the first key step for implementing a pytorch-based feed-forward
 # neural network for PET image reconstruction also containing OSEM-like update blocks.
+#
+# Learning objectives of this notebook
+# ------------------------------------
+# 1. Understanding how to setup a Poisson loglikelihood objective functions in sinogram and listmode mode.
+# 2. Understanding how to perform sinogram / listmode OSEM reconstruction using sirf.STIR high-level API.
+# 3. Implementing a simple DIY OSEM reconstruction using the gradient of the Poisson loglikelihood.
 
 # %% [markdown]
 # Import modules and define file names
@@ -194,8 +200,8 @@ else:
 acq_model.set_background_term(randoms + scatter_estimate)
 
 # %% [markdown]
-# Setup of the Poisson loglikelihood objective function ($logL(y,x)$) in sinogram mode
-# ------------------------------------------------------------------------------------
+# Setup of the Poisson loglikelihood objective function in sinogram mode
+# ----------------------------------------------------------------------
 
 # %%
 initial_image = acq_data.create_uniform_image(value=1, xy=nxny)
@@ -249,8 +255,8 @@ fig.show()
 #
 
 # %%
-# to view the solution, uncomment the line below
-# #%load snippets/solution_1_1.py
+# to view the solution, execute the this cell
+# %load snippets/solution_1_1.py
 
 # %% [markdown]
 # Exercise 1.2
@@ -272,8 +278,8 @@ fig.show()
 #
 
 # %%
-# to view the solution, uncomment the line below
-# #%load snippets/solution_1_2.py
+# to view the solution, execute the this cell
+# %load snippets/solution_1_2.py
 
 # %% [markdown]
 # Exercise 1.3
@@ -294,15 +300,15 @@ recon.fill(obj_fun.get_subset_sensitivity(0).as_array() > 0)
 #
 
 # %%
-# to view the solution, uncomment the line below
-# #%load snippets/solution_1_3.py
+# to view the solution, execute the this cell
+# %load snippets/solution_1_3.py
 
 
-# %%
-
+# %% [markdown]
 # Setup of the Poisson loglikelihood objective function ($logL(y,x)$) in listmode
 # -------------------------------------------------------------------------------
 
+# %%
 # define objective function to be maximized as
 # Poisson logarithmic likelihood (with linear model for mean)
 lm_obj_fun = (
@@ -348,5 +354,5 @@ fig3.show()
 # ==============
 
 # %%
-# to view the solution, uncomment the line below
-# #%load snippets/solution_1_4.py
+# to view the solution, execute the cell below
+# %load snippets/solution_1_4.py

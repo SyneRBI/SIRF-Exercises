@@ -1,6 +1,6 @@
 # %% [markdown]
-# Introduction
-# ============
+# Introduction & Motivation
+# =========================
 #
 # In this series of SIRF exercises, we will learn how to build and train a deep neural
 # network for listmode PET reconstruction. As a concrete example,
@@ -10,7 +10,7 @@
 # ![](figs/osem_varnet.drawio.svg)
 #
 # The aim of an unrolled variational PET listmode network is to create "high quality" PET reconstructions
-# from "low-quality" input listmode data.
+# from "low-quality" input listmode data using supervised training.
 
 # %% [markdown]
 # Question

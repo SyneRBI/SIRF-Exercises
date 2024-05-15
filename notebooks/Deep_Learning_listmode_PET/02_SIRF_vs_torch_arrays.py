@@ -1,9 +1,13 @@
 # %% [markdown]
+# SIRF.STIR ImageData objects vs numpy arrays vs torch tensors
+# ============================================================
+
+# %% [markdown]
 # Learning objectives
-# ===================
+# -------------------
 #
-# 1. Differences between SIRF image arrays and torch tensors.
-# 2. How to convert between them.
+# 1. Understanding the differences between SIRF ImageData, numpy arrays and torch tensors.
+# 2. Learn how to convert between these different data types.
 
 
 # %% [markdown]
@@ -81,8 +85,8 @@ print(f"sirf_image_2 max     .: {sirf_image_2.max()}")
 
 
 # %%
-# uncomment the next line and run this cell to see the solution
-# load snippets/solution_2_1.py
+# uncomment the next line and run this cell
+# %load snippets/solution_2_1.py
 
 # %% [markdown]
 # torch tensors vs numpy arrays
@@ -109,8 +113,7 @@ print(f"torch_image_1 devive .: {torch_image_1.device}")
 
 # %%
 # you can convert torch (GPU or CPU) tensors to numpy arrays using numpy() method
-numpy_image_from_torch_1: np.ndarray = torch_image_1.numpy(force=True)
-# force = True make sure that the tensor is first transfered to CPU (and compatible with numpy)
+numpy_image_from_torch_1: np.ndarray = torch_image_1.cpu().numpy()
 # see here: https://pytorch.org/docs/stable/generated/torch.Tensor.numpy.html
 
 # Attention: If the torch tensor lives on the CPU, the underlying array is not copied
@@ -153,3 +156,5 @@ print(f"device of torch tensor from numpy {torch_image_from_numpy_1.device}")
 #    device "dev"
 # 3. Predict whether the different image objects should share data and test your
 #    hypothesis
+# 4. Try to convert the torch tensor `torch.ones(image_shape, dtype=torch.float32, device=dev, requires_grad=True)`
+#    into a numpy array. What do you observe?

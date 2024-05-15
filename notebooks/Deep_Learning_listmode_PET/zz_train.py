@@ -265,13 +265,6 @@ class OSEMUpdateLayer(torch.nn.Module):
         return x + x * self._inv_sens_image * grad_x
 
 
-# %% [markdown]
-# Exercise 5.1
-# ------------
-#
-# Implement the forward pass of the unrolled OSEM Variational Network with 2 blocks shown below.
-# Start from the code below and fill in the missing parts.
-
 # %%
 class UnrolledOSEMVarNet(torch.nn.Module):
     def __init__(
@@ -281,74 +274,36 @@ class UnrolledOSEMVarNet(torch.nn.Module):
         convnet: torch.nn.Module,
         device: str,
     ) -> None:
-        """Unrolled OSEM Variational Network with 2 blocks
-
-        Parameters
-        ----------
-        objective_function : sirf.STIR objetive function
-            (listmode) Poisson logL objective function
-            that we use for the OSEM updates
-        sirf_template_image : sirf.STIR.ImageData
-            used for the conversion between torch tensors and sirf images
-        convnet : torch.nn.Module
-            a (convolutional) neural network that maps a minibatch tensor 
-            of shape [1,1,spatial_dimensions] onto a minibatch tensor of the same shape
-        device : str
-            device used for the calculations
-        """
         super().__init__()
-
-        # OSEM update layer using the 1st subset of the listmode data
         self._osem_step_layer0 = OSEMUpdateLayer(
             objective_function, sirf_template_image, 0, device
         )
-
-        # OSEM update layer using the 2nd subset of the listmode data
         self._osem_step_layer1 = OSEMUpdateLayer(
             objective_function, sirf_template_image, 1, device
         )
         self._convnet = convnet
         self._relu = torch.nn.ReLU()
 
-        # trainable parameters for the fusion of the OSEM update and the CNN output in the two blocks
         self._fusion_weight0 = torch.nn.Parameter(
-            torch.ones(1, device=device, dtype=torch.float32)
+            5 * torch.ones(1, device=device, dtype=torch.float32)
         )
         self._fusion_weight1 = torch.nn.Parameter(
-            torch.ones(1, device=device, dtype=torch.float32)
+            5 * torch.ones(1, device=device, dtype=torch.float32)
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """forward pass of the Unrolled OSEM Variational Network
+        x1 = self._relu(
+            self._fusion_weight0 * self._convnet(x) + self._osem_step_layer0(x)
+        )
+        x2 = self._relu(
+            self._fusion_weight1 * self._convnet(x1) + self._osem_step_layer1(x1)
+        )
 
-        Parameters
-        ----------
-        x : torch.Tensor
-            minibatch tensor of shape [1,1,spatial_dimensions] containing the image
-
-        Returns
-        -------
-        torch.Tensor
-            minibatch tensor of shape [1,1,spatial_dimensions] containing the output of the network
-        """
-
-        # =============================================================
-        # =============================================================
-        # YOUR CODE HERE
-        #
-        # forward pass contains two blocks where each block
-        # consists of a fusion of the OSEM update and the CNN output
-        #
-        # the fusion is a weighted sum of the OSEM update and the CNN output
-        # using the respective fusion weights
-        #
-        # =============================================================
-        # =============================================================
+        return x2
 
 
 # %%
 
-# load the reference OSEM reconstruction that we use a input our network
 lm_ref_recon = sirf.STIR.ImageData(f"{lm_recon_output_file}.hv")
 x_t = (
     torch.tensor(
@@ -358,38 +313,21 @@ x_t = (
     .unsqueeze(0)
 )
 
-# define a minimal CNN
 cnn = torch.nn.Sequential(
     torch.nn.Conv3d(1, 5, 5, padding="same", bias=False),
     torch.nn.Conv3d(5, 5, 5, padding="same", bias=False),
+    torch.nn.Conv3d(5, 5, 5, padding="same", bias=False),
     torch.nn.ReLU(),
+    torch.nn.Conv3d(5, 5, 5, padding="same", bias=False),
     torch.nn.Conv3d(5, 5, 5, padding="same", bias=False),
     torch.nn.ReLU(),
     torch.nn.Conv3d(5, 1, 5, padding="same", bias=False),
 ).to(dev)
 
 
-# setup the unrolled OSEM Variational Network using the sirf.STIR listmode objective function
-# and the CNN
 varnet = UnrolledOSEMVarNet(lm_obj_fun, initial_image, cnn, dev)
 
-# %% [markdown]
-#
-# Supervised optimization the network parameters
-# ----------------------------------------------
-#
-# The following cells demonstrate how to optimize the network parameters
-# using a high quality target image (supervised learning).
-# In the absence of a target image, we use a Gaussian filtered version of the
-# reference OSEM reconstruction. **Note that this is for demonstration purposes only.**
-#
-# In real life, the target image would be a reconstruction from a data set with more counts,
-# or a reconstruction from a scanner with better image quality or higher sensitivity.
-# Note that in real life, you would also use more than one data sets and probably a batch
-# size larger than 1 (which requires minor refactoring of the code).
-
-# %%
-# define a fake "high-quality" target image for supervised training
+# define a high quality traget image
 target = (
     torch.tensor(
         gaussian_filter(x_t.cpu().numpy()[0, 0, ...], 0.7),
@@ -400,11 +338,6 @@ target = (
     .unsqueeze(0)
 )
 
-# %% [markdown]
-# To train the network weights, we need to define an optimizer and a loss function.
-# Here we use the Adam optimizer with a learning rate of 1e-3 and the Mean Squared Error (MSE) loss function.
-
-# %%
 optimizer = torch.optim.Adam(varnet._convnet.parameters(), lr=1e-3)
 # define the loss function
 loss_fct = torch.nn.MSELoss()
@@ -413,7 +346,7 @@ loss_fct = torch.nn.MSELoss()
 # run 10 updates of the model parameters using backpropagation of the
 # gradient of the loss function and the Adam optimizer
 
-num_epochs = 10
+num_epochs = 200
 training_loss = torch.zeros(num_epochs)
 
 for i in range(num_epochs):
@@ -430,6 +363,7 @@ for i in range(num_epochs):
     print(i, loss.item())
     # save the training loss
     training_loss[i] = loss.item()
+
 
 # %%
 # visualize the results
@@ -462,7 +396,6 @@ ax1[1, 0].set_title("network input - target")
 ax1[1, 1].set_title("network output - target")
 fig1.show()
 
-# plot the training loss
 fig2, ax2 = plt.subplots()
 ax2.plot(training_loss)
 ax2.set_xlabel("epoch")
