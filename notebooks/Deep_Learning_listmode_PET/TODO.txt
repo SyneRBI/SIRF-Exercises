@@ -1,1 +1,4 @@
-- outlook
+- outlook notebook
+- create PR
+- download + reconstruct full NEMA data
+- set_max_cache_size / cache_dir for LM data
