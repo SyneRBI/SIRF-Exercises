@@ -1,0 +1,40 @@
+<mxfile host="Electron" modified="2024-05-15T07:57:35.796Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.4.0 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="wDdmFlZnVmwMKciKLiDt" version="24.4.0" type="device">
+  <diagram name="Page-1" id="8Qw_1hSMklgCle8Wcz-8">
+    <mxGraphModel dx="1026" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="1" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="LVMC560kpPJ9mfJXyLy--1" value="&lt;b style=&quot;font-size: 18px;&quot;&gt;custom pytorch&lt;br&gt;Poisson logL &lt;br&gt;gradient layer&lt;br&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=0;glass=0;sketch=1;curveFitting=1;jiggle=2;arcSize=8;" parent="1" vertex="1">
+          <mxGeometry x="370" y="130" width="250" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--16" value="&lt;div&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;pytorch input image tensor&lt;br&gt;(mini batch)&lt;br&gt;x&lt;sub&gt;in&lt;/sub&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;shape (1,1,n&lt;sub&gt;z&lt;/sub&gt;,n&lt;sub&gt;y&lt;/sub&gt;,n&lt;sub&gt;x&lt;/sub&gt;)&lt;/b&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#666666;fillColor=#f5f5f5;fontColor=#333333;sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
+          <mxGeometry x="140" y="150" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--21" value="&lt;div&gt;&lt;b&gt;sirf.STIR (listmode) objective function&lt;/b&gt;&lt;font color=&quot;#000000&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;including&lt;/b&gt;&lt;/div&gt;&lt;font color=&quot;#000000&quot;&gt;&lt;b&gt;sirf.STIR acquired (listmode) PET data&amp;nbsp;&lt;br&gt;sirf.STIR acquisition model&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
+          <mxGeometry x="377.5" y="290" width="235" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="LVMC560kpPJ9mfJXyLy--36" value="&lt;div&gt;&lt;b&gt;pytorch output image tensor&amp;nbsp;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;(mini batch)&lt;/b&gt;&lt;/div&gt;&lt;b&gt;x&lt;sub&gt;out&lt;/sub&gt; = (`\nabla_x`&lt;/b&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;&amp;nbsp;logL)(x&lt;sub&gt;in&lt;/sub&gt;)&lt;/b&gt;&lt;div&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;shape (1,1,n&lt;sub&gt;z&lt;/sub&gt;,n&lt;sub&gt;y&lt;/sub&gt;,n&lt;sub&gt;x&lt;/sub&gt;)&lt;/b&gt;&lt;b style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
+          <mxGeometry x="680" y="145" width="190" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gO14tqI6qxzoFVm-JLHP-1" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="LVMC560kpPJ9mfJXyLy--21" target="LVMC560kpPJ9mfJXyLy--1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="570" y="240" as="sourcePoint" />
+            <mxPoint x="620" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gO14tqI6qxzoFVm-JLHP-2" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.989;exitY=0.506;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="LVMC560kpPJ9mfJXyLy--16" target="LVMC560kpPJ9mfJXyLy--1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="230" as="sourcePoint" />
+            <mxPoint x="510" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gO14tqI6qxzoFVm-JLHP-3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=-0.011;entryY=0.569;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="LVMC560kpPJ9mfJXyLy--1" target="LVMC560kpPJ9mfJXyLy--36">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="230" as="sourcePoint" />
+            <mxPoint x="670" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
