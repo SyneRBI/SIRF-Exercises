@@ -404,7 +404,10 @@ lm_60min_ref_recon *= scale_factor
 
 target = (
     torch.tensor(
-        lm_60min_ref_recon.as_array(), device=dev, dtype=torch.float32, requires_grad=False
+        lm_60min_ref_recon.as_array(),
+        device=dev,
+        dtype=torch.float32,
+        requires_grad=False,
     )
     .unsqueeze(0)
     .unsqueeze(0)

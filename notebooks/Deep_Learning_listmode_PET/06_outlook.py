@@ -2,7 +2,7 @@
 # Outlook
 # =======
 #
-# Congratulations, you made through all the notebooks and should 
+# Congratulations, you made through all the notebooks and should
 # now be able to understand the basics of deep learning for (listmode) PET reconstruction.
 #
 # Follow-up questions / proposals to think about
@@ -20,5 +20,5 @@
 # - the listmode projections are currently performed on the CPU
 # - there is a lot of memory transfer between CPU and GPU during training (OSEM block on CPU, CNN on GPU)
 #
-# **However,** SIRF and STIR are community projects that are constantly being improved. 
-# So, it is likely that the training speed will increase in the future. 
+# **However,** SIRF and STIR are community projects that are constantly being improved.
+# So, it is likely that the training speed will increase in the future.

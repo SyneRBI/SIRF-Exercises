@@ -34,8 +34,16 @@ from sirf.Utilities import examples_data_path
 # Download the 60min mMR NEMA data, if not present
 # ------------------------------------------------
 
-# %% 
-if not (Path("..") / ".." / "data" / "PET" / "mMR" / "NEMA_IQ" / "20170809_NEMA_60min_UCL.l.hdr").exists():
+# %%
+if not (
+    Path("..")
+    / ".."
+    / "data"
+    / "PET"
+    / "mMR"
+    / "NEMA_IQ"
+    / "20170809_NEMA_60min_UCL.l.hdr"
+).exists():
     retval = subprocess.call("../../scripts/download_PET_data.sh", shell=True)
 
 # %% [markdown]
@@ -53,7 +61,15 @@ if acq_time == "1min":
     list_file: str = str(data_path / "list.l.hdr")
 elif acq_time == "60min":
     # you need to run the "download_data.sh" script to get the data of the long 60min acq.
-    list_file: str = str(Path("..") / ".." / "data" / "PET" / "mMR" / "NEMA_IQ" / "20170809_NEMA_60min_UCL.l.hdr")
+    list_file: str = str(
+        Path("..")
+        / ".."
+        / "data"
+        / "PET"
+        / "mMR"
+        / "NEMA_IQ"
+        / "20170809_NEMA_60min_UCL.l.hdr"
+    )
 else:
     raise ValueError("Please choose acq_time to be either '1min' or '60min'")
 

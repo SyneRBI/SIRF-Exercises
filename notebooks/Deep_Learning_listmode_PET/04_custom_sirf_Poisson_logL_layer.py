@@ -352,7 +352,7 @@ fig.show()
 # Testing the backward pass of the custom layers
 # ----------------------------------------------
 #
-# As mentioned in the previous notebook, it is important to test whether the backward pass 
+# As mentioned in the previous notebook, it is important to test whether the backward pass
 # of the custom layer is implemented correctly using the `torch.autograd.gradcheck` function.
 # **However, we won't do this here** - but rather disuss the implementation - because:
 # - it can take long time
