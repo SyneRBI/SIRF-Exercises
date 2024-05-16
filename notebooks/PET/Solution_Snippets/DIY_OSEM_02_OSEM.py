@@ -15,9 +15,7 @@ def OSEM(acquired_data, acq_model, initial_image, num_iterations):
             
             estimated_image *= mult_update                                                        # update (in place)
 
-            est_img_arr = estimated_image.as_array()
-            est_img_arr[est_img_arr<0] = 0
-            estimated_image.fill(numpy.nan_to_num(est_img_arr))
+            estimated_image.maximum(0)
     
     #  some stuff here
     return estimated_image
