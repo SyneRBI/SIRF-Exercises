@@ -1,4 +1,9 @@
 # ChangeLog
+## v3.7.0
+* New notebooks on Deep Learning with PET List-mode data
+* New notebooks on Synergistic Deconvolution
+* Provide answers via snippets for some PET exercises
+
 ## v3.6.0
 * moved gradient_descent_mr_pet_ct.ipynb to Introductory folder and fixed some issues such that it does gradient descent for all modalities.
 * updated devcontainer to pull docker images from ghcr.io
