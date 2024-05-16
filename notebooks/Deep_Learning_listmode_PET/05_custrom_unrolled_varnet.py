@@ -390,6 +390,9 @@ varnet = UnrolledOSEMVarNet(lm_obj_fun, initial_image, cnn, dev)
 # The following cells demonstrate how to optimize the network parameters
 # using a high quality target image (supervised learning).
 # Here, we use the reconstruction of the 60min listmode data as the target image.
+#
+# **The purpose of the following cells is to demonstrate how the training of a network,
+# works in principle. The aim is not to train a network that is actually useful!**
 
 # %%
 # define the high quality target image (mini-batch)
@@ -410,8 +413,6 @@ target = (
 # %% [markdown]
 # To train the network weights, we need to define an optimizer and a loss function.
 # Here we use the Adam optimizer with a learning rate of 1e-3 and the Mean Squared Error (MSE) loss function.
-
-
 
 # %%
 optimizer = torch.optim.Adam(varnet._convnet.parameters(), lr=1e-3)

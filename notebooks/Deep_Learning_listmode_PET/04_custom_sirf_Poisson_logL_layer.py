@@ -347,3 +347,17 @@ ax[0].set_title("input image")
 ax[1].set_title("OSEM updated image")
 ax[2].set_title("diffence image")
 fig.show()
+
+# %% [markdown]
+# Testing the backward pass of the custom layers
+# ----------------------------------------------
+#
+# As mentioned in the previous notebook, it is important to test whether the backward pass 
+# of the custom layer is implemented correctly using the `torch.autograd.gradcheck` function.
+# **However, we won't do this here** - but rather disuss the implementation - because:
+# - it can take long time
+# - because we are using float32, we have to adapt the tolerances
+# - the sirf.STIR gradient calculation is not exactly deterministic, due to parallelization and numerical precision
+#   which also requires to adapt the tolerances for non-deterministic functions
+#
+# **If you implement a new layer, and you are not 100% sure that the backward pass is correct, you should always test it!**

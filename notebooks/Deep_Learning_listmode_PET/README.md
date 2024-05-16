@@ -1,37 +1,31 @@
 # STIR listmode (LM) Deep learning (DL) reconstruction notebooks
 
-## converting .py files to .ipynb
+## Structure of the exercises
 
-All notebooks are orignally writted and stored as plain python files using the "percent" format.
-You can convert them to jupyer notebooks by running
-```
-jupytext --to ipynb *.py
-```
-See [here](https://jupytext.readthedocs.io/en/latest/) for more details on jupytext.
+- Intro / motivation: `00_introduction.ipynb`
+   - problem setting (DL recon network to maps from "low quality" to "higher quality" images)
+   - Why listmode and not sinograms?
 
-## Notebooks
+- Running sinogram and listmode OSEM reconstruction in sirf.STIR: `01_SIRF_listmode_recon.ipynb`
+   - learn how to run (listmode) OSEM in sirf.STIR
+   - understand the relation between the OSEM update and the gradient of the Poisson logL
 
-0. Intro / motivation
-   -> problem setting (DL recon network to maps from "low quality" to "higher quality" images)
-   -> Why listmode and not sinograms?
+- A deep dive into differenet (image) array classes (SIRF images vs numpy arrays vs torch tensors): `02_SIRF_vs_torch_arrays.ipynb`
+   - differences between sirf.STIR.ImageData, numpy arrays and pytorch tensors
+   - how to convert from SIRF images to torch tensors and back
 
-1. A deep dive into differenet (image) array classes (SIRF images vs numpy arrays vs torch tensors)
-   -> differences between the array classes
-   -> how to convert from SIRF images to torch tensors and back
-   -> 3D images vs 5D mini batches of 3D images
+- Defining custom (non-pytorch) layers that are compatible with pytorch's autograd functionality: `03_custom_torch_layers.ipynb`
+   - basic of gradient backpropagation
+   - understand what needs to be implemented in the backward pass based on a simply numpy matrix
+     multiplication layer
 
-2. Defining a custom LM Poisson log likelihood gradient step layer
-   -> how to use gradient and "hessian_applied" to define a custom layer
-      that calculates a gradient ascent step w.r.t. to Poisson logL in LM
-   -> how to implement backprop? why hessian applied?
+- Defining a custom (listmode) Poisson logL gradient step layer using sirf.STIR and pytorch: `04_custom_sirf_Poisson_logL_layer.ipynb`
+   - use of sirf.STIR for a step in the direction of the gradient of the Poisson logL
+   - understanding of the respective Jacobian vector product for the backward pass
+   - combining the Poisson logL gradient step layer into a OSEM update layer
 
-3. Defining a custom  LM Poisson log likelihood EM network
-   -> use layer of 3 to setup torch.nn.Module that does LM-MLEM using layers + simple arith. of 2.
+- Demo training of a minimal unrolled variational network: `05_custrom_unrolled_varnet.ipynb`
+   - combination of OSEM update layers and a CNN into an unrolled variational network
+   - demo supervised training based on a single low count data set + high count reference image 
 
-4. Defining a network that combines LM EM steps and a learned regularizer
-   -> combine network of 3. with learned regularizer
-
-5. How to train on "real" data?
-   -> data loader
-   -> current timings and bottle necks
-
+- Outlook: `06_outlook.ipynb`

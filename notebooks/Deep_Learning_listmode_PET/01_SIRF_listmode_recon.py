@@ -19,18 +19,32 @@
 # 3. Implementing a simple DIY OSEM reconstruction using the gradient of the Poisson loglikelihood.
 
 # %% [markdown]
-# Import modules and define file names
-# ------------------------------------
+# Import modules
+# --------------
 
 # %%
 import sirf.STIR
 import numpy as np
+import subprocess
 import matplotlib.pyplot as plt
 from pathlib import Path
 from sirf.Utilities import examples_data_path
 
+# %% [markdown]
+# Download the 60min mMR NEMA data, if not present
+# ------------------------------------------------
+
+# %% 
+if not (Path("..") / ".." / "data" / "PET" / "mMR" / "NEMA_IQ" / "20170809_NEMA_60min_UCL.l.hdr").exists():
+    retval = subprocess.call("../../scripts/download_PET_data.sh", shell=True)
+
+# %% [markdown]
+# Define variables and file names
+# -------------------------------
+
 # %%
-# choose data set ("1min" or "60min" acquisition)
+# we have a 1min and 60min acquisition of the NEMA IQ phantom acquired on a Siemens mMR
+# choose the acquisition time "1min" or "60min" - start with "1min"
 acq_time: str = "1min"
 
 data_path: Path = Path(examples_data_path("PET")) / "mMR"
@@ -318,11 +332,10 @@ recon.fill(obj_fun.get_subset_sensitivity(0).as_array() > 0)
 
 # %% [markdown]
 # Setup of the Poisson loglikelihood objective function logL(y,x) in listmode
-# -------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
 # %%
-# define objective function to be maximized as
-# Poisson logarithmic likelihood (with linear model for mean)
+# define the listmode objective function
 lm_obj_fun = (
     sirf.STIR.PoissonLogLikelihoodWithLinearModelForMeanAndListModeDataWithProjMatrixByBin()
 )
@@ -335,7 +348,6 @@ lm_obj_fun.set_cache_path(str(output_path))
 # %% [markdown]
 # Reconstruction (optimization of the Poisson logL objective function) using listmode OSEM
 # ----------------------------------------------------------------------------------------
-
 
 # %%
 if not Path(f"{lm_recon_output_file}.hv").exists():
@@ -359,7 +371,7 @@ fig3.show()
 # Exercise 1.4
 # ------------
 # Repeat exercise 1.3 (OSEM reconstruction) using the listmode objective function to
-# learn how to do a listmode OSEM reconstruction.
+# learn how to do a listmode OSEM update step.
 
 # %%
 #
