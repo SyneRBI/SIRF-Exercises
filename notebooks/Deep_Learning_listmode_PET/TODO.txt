@@ -1,1 +1,3 @@
 - outlook
+- use single norm / mu file for 1/60min
+- rescale 60min ref

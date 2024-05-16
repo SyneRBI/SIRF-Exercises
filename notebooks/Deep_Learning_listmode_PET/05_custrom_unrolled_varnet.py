@@ -17,15 +17,28 @@ from pathlib import Path
 from sirf.Utilities import examples_data_path
 from scipy.ndimage import gaussian_filter
 
-data_path: Path = Path(examples_data_path("PET")) / "mMR"
-output_path: Path = Path("recons")
-list_file: str = str(data_path / "list.l.hdr")
-norm_file: str = str(data_path / "norm.n.hdr")
-attn_file: str = str(data_path / "mu_map.hv")
+# choose data set ("1min" or "60min" acquisition)
+acq_time: str = "1min"
+
+if acq_time == "1min":
+    data_path: Path = Path(examples_data_path("PET")) / "mMR"
+    list_file: str = str(data_path / "list.l.hdr")
+    norm_file: str = str(data_path / "norm.n.hdr")
+    attn_file: str = str(data_path / "mu_map.hv")
+elif acq_time == "60min":
+    data_path: Path = Path("..") / ".." / "data" / "PET" / "mMR" / "NEMA_IQ"
+    list_file: str = str(data_path / "20170809_NEMA_60min_UCL.l.hdr")
+    norm_file: str = str(data_path / "20170809_NEMA_UCL.n.hdr")
+    attn_file: str = str(data_path / "20170809_NEMA_MUMAP_UCL.v.hdr")
+else:
+    raise ValueError("Please choose acq_time to be either '1min' or '60min'")
+
+output_path: Path = Path(f"recons_{acq_time}")
 emission_sinogram_output_prefix: str = str(output_path / "emission_sinogram")
 scatter_sinogram_output_prefix: str = str(output_path / "scatter_sinogram")
 randoms_sinogram_output_prefix: str = str(output_path / "randoms_sinogram")
 attenuation_sinogram_output_prefix: str = str(output_path / "acf_sinogram")
+
 num_scatter_iter: int = 3
 
 lm_recon_output_file: str = str(output_path / "lm_recon")
@@ -96,6 +109,8 @@ lm_obj_fun = (
 lm_obj_fun.set_acquisition_model(acq_model)
 lm_obj_fun.set_acquisition_data(listmode_data)
 lm_obj_fun.set_num_subsets(num_subsets)
+lm_obj_fun.set_cache_max_size(1000000000)
+lm_obj_fun.set_cache_path(str(output_path))
 print("setting up listmode objective function ...")
 lm_obj_fun.set_up(initial_image)
 
