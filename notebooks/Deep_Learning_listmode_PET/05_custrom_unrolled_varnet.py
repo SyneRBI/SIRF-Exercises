@@ -17,21 +17,13 @@ from pathlib import Path
 from sirf.Utilities import examples_data_path
 from scipy.ndimage import gaussian_filter
 
-# choose data set ("1min" or "60min" acquisition)
+# acq_time must be 1min
 acq_time: str = "1min"
 
-if acq_time == "1min":
-    data_path: Path = Path(examples_data_path("PET")) / "mMR"
-    list_file: str = str(data_path / "list.l.hdr")
-    norm_file: str = str(data_path / "norm.n.hdr")
-    attn_file: str = str(data_path / "mu_map.hv")
-elif acq_time == "60min":
-    data_path: Path = Path("..") / ".." / "data" / "PET" / "mMR" / "NEMA_IQ"
-    list_file: str = str(data_path / "20170809_NEMA_60min_UCL.l.hdr")
-    norm_file: str = str(data_path / "20170809_NEMA_UCL.n.hdr")
-    attn_file: str = str(data_path / "20170809_NEMA_MUMAP_UCL.v.hdr")
-else:
-    raise ValueError("Please choose acq_time to be either '1min' or '60min'")
+data_path: Path = Path(examples_data_path("PET")) / "mMR"
+list_file: str = str(data_path / "list.l.hdr")
+norm_file: str = str(data_path / "norm.n.hdr")
+attn_file: str = str(data_path / "mu_map.hv")
 
 output_path: Path = Path(f"recons_{acq_time}")
 emission_sinogram_output_prefix: str = str(output_path / "emission_sinogram")
@@ -42,6 +34,7 @@ attenuation_sinogram_output_prefix: str = str(output_path / "acf_sinogram")
 num_scatter_iter: int = 3
 
 lm_recon_output_file: str = str(output_path / "lm_recon")
+lm_60min_recon_output_file: str = str(Path(f"recons_60min") / "lm_recon")
 nxny: tuple[int, int] = (127, 127)
 num_subsets: int = 21
 
@@ -398,21 +391,19 @@ varnet = UnrolledOSEMVarNet(lm_obj_fun, initial_image, cnn, dev)
 #
 # The following cells demonstrate how to optimize the network parameters
 # using a high quality target image (supervised learning).
-# In the absence of a target image, we use a Gaussian filtered version of the
-# reference OSEM reconstruction. **Note that this is for demonstration purposes only.**
-#
-# In real life, the target image would be a reconstruction from a data set with more counts,
-# or a reconstruction from a scanner with better image quality or higher sensitivity.
-# Note that in real life, you would also use more than one data sets and probably a batch
-# size larger than 1 (which requires minor refactoring of the code).
+# Here, we use the reconstruction of the 60min listmode data as the target image.
 
 # %%
-# define a fake "high-quality" target image for supervised training
+# define the high quality target image (mini-batch)
+lm_60min_ref_recon = sirf.STIR.ImageData(f"{lm_60min_recon_output_file}.hv")
+
+# we have to scale the 60min reconstruction, since it is not reconcstructed in kBq/ml
+scale_factor = lm_ref_recon.as_array().mean() / lm_60min_ref_recon.as_array().mean()
+lm_60min_ref_recon *= scale_factor
+
 target = (
     torch.tensor(
-        gaussian_filter(x_t.cpu().numpy()[0, 0, ...], 0.7),
-        dtype=torch.float32,
-        device=dev,
+        lm_60min_ref_recon.as_array(), device=dev, dtype=torch.float32, requires_grad=False
     )
     .unsqueeze(0)
     .unsqueeze(0)
@@ -421,6 +412,8 @@ target = (
 # %% [markdown]
 # To train the network weights, we need to define an optimizer and a loss function.
 # Here we use the Adam optimizer with a learning rate of 1e-3 and the Mean Squared Error (MSE) loss function.
+
+
 
 # %%
 optimizer = torch.optim.Adam(varnet._convnet.parameters(), lr=1e-3)
