@@ -1,9 +1,10 @@
+# %load './snippets/DirectionalOperator.py'
 class DirectionalOperator(op.LinearOperator):
 
     def __init__(self, anatomical_gradient, gamma = 1, eta=1e-6):
 
         self.anatomical_gradient = anatomical_gradient
-        geometry = cil.BlockGeometry(*[x for x in anatomical_gradient.containers])
+        geometry = cil.BlockGeometry(*anatomical_gradient.containers)
         self.tmp = self.anatomical_gradient.containers[0].clone()
 
         self.gamma = gamma
@@ -30,7 +31,6 @@ class DirectionalOperator(op.LinearOperator):
             self.tmp += el_x * el_y
         return self.tmp
     
-
 grad_ref = grad.direct(image_dict['T1'])
 d_op = DirectionalOperator(grad_ref)
 

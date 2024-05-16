@@ -19,6 +19,7 @@ g = 0.1
 sigma = [g*0.99/k.norm() for k in spdhg_K]
 tau = min([0.99/k.norm()/g for k in spdhg_K])
 
-spdhg = alg.SPDHG(f = spdhg_F, g = spdhg_G, operator = spdhg_K, tau = tau, sigma = sigma, initial=initial_estimate, update_objective_interval = 10, )
+spdhg = alg.SPDHG(f = spdhg_F, g = spdhg_G, operator = spdhg_K, tau = tau, sigma = sigma, 
+                  initial=initial_estimate, update_objective_interval = 10, )
 
 spdhg.run(verbose=2, iterations=500)
