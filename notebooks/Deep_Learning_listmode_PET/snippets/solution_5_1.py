@@ -36,11 +36,13 @@ class UnrolledOSEMVarNet(torch.nn.Module):
         self._relu = torch.nn.ReLU()
 
         # trainable parameters for the fusion of the OSEM update and the CNN output in the two blocks
+        # we start with a weight of 10 for the fusion
+        # a good starting value depends on the scale of the input image
         self._fusion_weight0 = torch.nn.Parameter(
-            15 * torch.ones(1, device=device, dtype=torch.float32)
+            10 * torch.ones(1, device=device, dtype=torch.float32)
         )
         self._fusion_weight1 = torch.nn.Parameter(
-            15 * torch.ones(1, device=device, dtype=torch.float32)
+            10 * torch.ones(1, device=device, dtype=torch.float32)
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:

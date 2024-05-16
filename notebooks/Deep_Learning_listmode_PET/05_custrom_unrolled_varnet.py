@@ -5,9 +5,8 @@
 # Learning objectives
 # -------------------
 #
-# 1. Implement a custom layer that calculates the Poisson log-likelihood.
-#    How to define the backward pass?
-# 2. Using the custom layer gradient logL layer, define EM step layer.
+# 1. Learn how to implement and train a custom unrolled variational network fusing updates
+#    from listmode OSEM blocks and CNN blocks
 
 # %%
 import sirf.STIR
@@ -15,7 +14,6 @@ import torch
 import matplotlib.pyplot as plt
 from pathlib import Path
 from sirf.Utilities import examples_data_path
-from scipy.ndimage import gaussian_filter
 
 # acq_time must be 1min
 acq_time: str = "1min"
@@ -358,7 +356,6 @@ class UnrolledOSEMVarNet(torch.nn.Module):
 
 
 # %%
-
 # load the reference OSEM reconstruction that we use a input our network
 lm_ref_recon = sirf.STIR.ImageData(f"{lm_recon_output_file}.hv")
 x_t = (
@@ -369,14 +366,15 @@ x_t = (
     .unsqueeze(0)
 )
 
-# define a minimal CNN
+# define a minimal CNN that we use within the unrolled OSEM Variational Network
 cnn = torch.nn.Sequential(
     torch.nn.Conv3d(1, 5, 5, padding="same", bias=False),
     torch.nn.Conv3d(5, 5, 5, padding="same", bias=False),
-    torch.nn.ReLU(),
+    torch.nn.PReLU(device=dev),
     torch.nn.Conv3d(5, 5, 5, padding="same", bias=False),
-    torch.nn.ReLU(),
-    torch.nn.Conv3d(5, 1, 5, padding="same", bias=False),
+    torch.nn.Conv3d(5, 5, 5, padding="same", bias=False),
+    torch.nn.PReLU(device=dev),
+    torch.nn.Conv3d(5, 1, 1, padding="same", bias=False),
 ).to(dev)
 
 
@@ -424,7 +422,7 @@ loss_fct = torch.nn.MSELoss()
 # run 10 updates of the model parameters using backpropagation of the
 # gradient of the loss function and the Adam optimizer
 
-num_epochs = 20
+num_epochs = 50
 training_loss = torch.zeros(num_epochs)
 
 for i in range(num_epochs):

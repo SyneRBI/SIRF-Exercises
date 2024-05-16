@@ -298,10 +298,10 @@ class UnrolledOSEMVarNet(torch.nn.Module):
         self._relu = torch.nn.ReLU()
 
         self._fusion_weight0 = torch.nn.Parameter(
-            5 * torch.ones(1, device=device, dtype=torch.float32)
+            10*torch.ones(1, device=device, dtype=torch.float32)
         )
         self._fusion_weight1 = torch.nn.Parameter(
-            5 * torch.ones(1, device=device, dtype=torch.float32)
+            10*torch.ones(1, device=device, dtype=torch.float32)
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -329,23 +329,27 @@ x_t = (
 cnn = torch.nn.Sequential(
     torch.nn.Conv3d(1, 5, 5, padding="same", bias=False),
     torch.nn.Conv3d(5, 5, 5, padding="same", bias=False),
+    torch.nn.PReLU(device=dev),
     torch.nn.Conv3d(5, 5, 5, padding="same", bias=False),
-    torch.nn.ReLU(),
     torch.nn.Conv3d(5, 5, 5, padding="same", bias=False),
-    torch.nn.Conv3d(5, 5, 5, padding="same", bias=False),
-    torch.nn.ReLU(),
-    torch.nn.Conv3d(5, 1, 5, padding="same", bias=False),
+    torch.nn.PReLU(device=dev),
+    torch.nn.Conv3d(5, 1, 1, padding="same", bias=False),
 ).to(dev)
 
 
 varnet = UnrolledOSEMVarNet(lm_obj_fun, initial_image, cnn, dev)
 
-# define a high quality traget image
+# define the high quality target image (mini-batch)
+lm_60min_recon_output_file: str = str(Path(f"recons_60min") / "lm_recon")
+lm_60min_ref_recon = sirf.STIR.ImageData(f"{lm_60min_recon_output_file}.hv")
+
+# we have to scale the 60min reconstruction, since it is not reconcstructed in kBq/ml
+scale_factor = lm_ref_recon.as_array().mean() / lm_60min_ref_recon.as_array().mean()
+lm_60min_ref_recon *= scale_factor
+
 target = (
     torch.tensor(
-        gaussian_filter(x_t.cpu().numpy()[0, 0, ...], 0.7),
-        dtype=torch.float32,
-        device=dev,
+        lm_60min_ref_recon.as_array(), device=dev, dtype=torch.float32, requires_grad=False
     )
     .unsqueeze(0)
     .unsqueeze(0)
