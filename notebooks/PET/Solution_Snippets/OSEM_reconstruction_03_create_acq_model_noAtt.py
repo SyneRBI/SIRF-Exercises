@@ -3,7 +3,7 @@ def create_acq_model(attn_image, background_term, AC = False):
     
     Arguments:
     attn_image: the mu-map
-    background_term: bakcground-term as an sirf.STIR.AcquisitionData
+    background_term: background-term as a sirf.STIR.AcquisitionData
     '''
     # create attenuation
     if AC:

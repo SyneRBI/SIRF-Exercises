@@ -7,10 +7,10 @@ def OSEM(acquired_data, acq_model, initial_image, num_iterations):
 
             subs_sensitivity = acq_model.backward(acquired_data.get_uniform_copy(1), subset_num=s)
 
-            quotient = acquired_data/acq_model.forward(estimated_image.clone(), subset_num=s)     # y / (Ax + b)
+            quotient = acquired_data/acq_model.forward(estimated_image, subset_num=s)     # y / (Ax + b)
             quotient.fill(numpy.nan_to_num(quotient.as_array()))
                 
-            mult_update = acq_model.backward(quotient.clone(), subset_num=s)/subs_sensitivity     # A^t * quotient / A^t1
+            mult_update = acq_model.backward(quotient, subset_num=s)/subs_sensitivity     # A^t * quotient / A^t1
             mult_update.fill(numpy.nan_to_num(mult_update.as_array()))
             
             estimated_image *= mult_update                                                        # update (in place)
