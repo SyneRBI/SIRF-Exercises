@@ -43,6 +43,8 @@ $RECYCLE.BIN/
 # backup files
 ~$*
 *~
+*.bak
+*.bak2
 
 .ipynb_checkpoints
 __pycache__
@@ -50,9 +52,12 @@ __pycache__
 # STIR output files
 info.txt
 warn.txt
-errr.txt
+err*.txt
 
 *_out.txt
+
+scatter_estimate*s
+*f*g1d0b0.*s
 
 # no data in this rep
 *.h5
