@@ -1,0 +1,17 @@
+*.s
+*.hs
+
+!*template_sinogram.s
+!*template_sinogram.hs
+
+*.ahv
+*.hv
+*.v
+
+*.npz
+*.gz
+
+__pycache__/
+
+test.ipynb
+deconvolution_soln.ipynb
