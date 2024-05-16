@@ -2,6 +2,7 @@
 ## v3.6.0
 * moved gradient_descent_mr_pet_ct.ipynb to Introductory folder and fixed some issues such that it does gradient descent for all modalities.
 * updated devcontainer to pull docker images from ghcr.io
+* small updates to DL notebooks [#222](https://github.com/SyneRBI/SIRF-Exercises/pull/222)
 
 ## v3.5.0
 * added `environment.yml` for `conda` users. This also installs CIL.
