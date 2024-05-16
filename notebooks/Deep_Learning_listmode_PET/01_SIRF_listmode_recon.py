@@ -284,7 +284,7 @@ fig.show()
 # ------------
 #
 # Perform the gradient ascent step
-# $$ x^+ = x + \alpha \nabla_x logL(y,x) $$
+# $$ x^+ = x + \alpha \nabla_x logL(y|x) $$
 # on the initial image x using a constant scalar step size $\alpha=0.001$ by calling
 # the `gradient()` method of the objective function.
 # Use the first (0th) subset of the data for the gradient calculation.
@@ -305,7 +305,7 @@ fig.show()
 # ------------
 #
 # Given the fact that the OSEM update can be written as
-# $$ x^+ = x + t \nabla_x logL(y,x) $$
+# $$ x^+ = x + t \nabla_x logL(y|x) $$
 # with the non-scalar step size
 # $$ t = \frac{x}{s} $$
 # where $s$ is the (subset) "sensitivity image", perform an OSEM update on the initial image
@@ -347,7 +347,7 @@ recon.fill(obj_fun.get_subset_sensitivity(0).as_array() > 0)
 
 
 # %% [markdown]
-# Setup of the Poisson loglikelihood objective function logL(y,x) in listmode
+# Setup of the Poisson loglikelihood objective function logL(y|x) in listmode
 # ---------------------------------------------------------------------------
 
 # %%
