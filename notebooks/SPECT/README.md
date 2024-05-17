@@ -3,7 +3,7 @@
 Jupyter notebooks for the SPECT exercises. Recommended order:
 
 ## Week 1
-1. [SPECT\_acquisition\_model](SPECT_acquisition_model.ipynb) shows how to run a `sirf.STIR` using a spect projection matrix `SPECTUB`.
+1. [SPECT\_acquisition\_model](SPECT_acquisition_model.ipynb) shows how to use `sirf.STIR` with a SPECT projection matrix `SPECTUB` (suitable for parallel beam collimators).
 2. [SPECT\_OSEM](SPECT_OSEM.ipynb) shows how to use `sirf.STIR` to run a OSEM reconstruction from simulated data.
 
 ## Week 2
