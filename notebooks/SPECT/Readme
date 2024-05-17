@@ -1,0 +1,4 @@
+The suggested order is the following:
+1) SPECT_acquisition_model
+2) SPECT_OSEM
+3) SPECT_OSEM_measured_data
