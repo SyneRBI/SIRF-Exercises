@@ -29,7 +29,7 @@ elif acq_time == "60min":
 else:
     raise ValueError("Please choose acq_time to be either '1min' or '60min'")
 
-output_path: Path = Path(f"recons_{acq_time}")
+output_path: Path = data_path / f"lm_recons_{acq_time}"
 emission_sinogram_output_prefix: str = str(output_path / "emission_sinogram")
 scatter_sinogram_output_prefix: str = str(output_path / "scatter_sinogram")
 randoms_sinogram_output_prefix: str = str(output_path / "randoms_sinogram")

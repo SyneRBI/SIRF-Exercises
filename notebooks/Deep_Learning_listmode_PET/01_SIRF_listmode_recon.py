@@ -52,7 +52,7 @@ if not (
 
 # %%
 # we have a 1min and 60min acquisition of the NEMA IQ phantom acquired on a Siemens mMR
-# choose the acquisition time "1min" or "60min" - start with "1min"
+# choose the acquisition time "1min" - stick to "1min" for now
 acq_time: str = "1min"
 
 data_path: Path = Path(examples_data_path("PET")) / "mMR"
@@ -75,7 +75,7 @@ else:
 
 attn_file: str = str(data_path / "mu_map.hv")
 norm_file: str = str(data_path / "norm.n.hdr")
-output_path: Path = Path(f"recons_{acq_time}")
+output_path: Path = data_path / f"lm_recons_{acq_time}"
 emission_sinogram_output_prefix: str = str(output_path / "emission_sinogram")
 scatter_sinogram_output_prefix: str = str(output_path / "scatter_sinogram")
 randoms_sinogram_output_prefix: str = str(output_path / "randoms_sinogram")
@@ -298,7 +298,7 @@ fig.show()
 
 # %%
 # to view the solution, execute the this cell
-# %load snippets/solution_1_1.py
+# #%load snippets/solution_1_1.py
 
 # %% [markdown]
 # Exercise 1.2
@@ -321,7 +321,7 @@ fig.show()
 
 # %%
 # to view the solution, execute the this cell
-# %load snippets/solution_1_2.py
+# #%load snippets/solution_1_2.py
 
 # %% [markdown]
 # Exercise 1.3
@@ -343,7 +343,7 @@ recon.fill(obj_fun.get_subset_sensitivity(0).as_array() > 0)
 
 # %%
 # to view the solution, execute the this cell
-# %load snippets/solution_1_3.py
+# #%load snippets/solution_1_3.py
 
 
 # %% [markdown]
@@ -397,13 +397,4 @@ fig3.show()
 
 # %%
 # to view the solution, execute the cell below
-# %load snippets/solution_1_4.py
-
-# %% [markdown]
-# Exercise 1.5
-# ------------
-# Rerun the sinogram and listmode reconstruction (first cells of the notebook)
-# using the 60min acquisition data by adapting the `acq_time` variable.
-# Make sure that you restart the kernel before running the cells and to rerun
-# the all cells (including scatter and random estimation).
-# We wil use the 60min reconstruction in our last notebook.
+# #%load snippets/solution_1_4.py

@@ -86,7 +86,7 @@ print(f"sirf_image_2 max     .: {sirf_image_2.max()}")
 
 # %%
 # uncomment the next line and run this cell
-# %load snippets/solution_2_1.py
+# #%load snippets/solution_2_1.py
 
 # %% [markdown]
 # torch tensors vs numpy arrays

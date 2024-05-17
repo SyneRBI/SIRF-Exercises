@@ -25,7 +25,7 @@ list_file: str = str(data_path / "list.l.hdr")
 norm_file: str = str(data_path / "norm.n.hdr")
 attn_file: str = str(data_path / "mu_map.hv")
 
-output_path: Path = Path(f"recons_{acq_time}")
+output_path: Path = data_path / f"lm_recons_{acq_time}"
 emission_sinogram_output_prefix: str = str(output_path / "emission_sinogram")
 scatter_sinogram_output_prefix: str = str(output_path / "scatter_sinogram")
 randoms_sinogram_output_prefix: str = str(output_path / "randoms_sinogram")
@@ -219,7 +219,7 @@ class SIRFPoissonlogLGradLayer(torch.autograd.Function):
 # To view the solution to the exercise, execute the next cell.
 
 # %%
-# %load snippets/solution_4_1.py
+# #%load snippets/solution_4_1.py
 
 # %%
 # convert to torch tensor and add the minibatch and channel dimensions
@@ -323,7 +323,7 @@ class OSEMUpdateLayer(torch.nn.Module):
 # To view the solution to the exercise, execute the next cell.
 
 # %%
-# %load snippets/solution_4_2.py
+# #%load snippets/solution_4_2.py
 
 # %%
 # define the OSEM update layer for subset 0

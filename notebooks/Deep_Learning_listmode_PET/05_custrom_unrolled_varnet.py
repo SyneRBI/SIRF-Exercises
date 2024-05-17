@@ -23,7 +23,7 @@ list_file: str = str(data_path / "list.l.hdr")
 norm_file: str = str(data_path / "norm.n.hdr")
 attn_file: str = str(data_path / "mu_map.hv")
 
-output_path: Path = Path(f"recons_{acq_time}")
+output_path: Path = data_path / f"lm_recons_{acq_time}"
 emission_sinogram_output_prefix: str = str(output_path / "emission_sinogram")
 scatter_sinogram_output_prefix: str = str(output_path / "scatter_sinogram")
 randoms_sinogram_output_prefix: str = str(output_path / "randoms_sinogram")
@@ -32,7 +32,6 @@ attenuation_sinogram_output_prefix: str = str(output_path / "acf_sinogram")
 num_scatter_iter: int = 3
 
 lm_recon_output_file: str = str(output_path / "lm_recon")
-lm_60min_recon_output_file: str = str(Path(f"recons_60min") / "lm_recon")
 nxny: tuple[int, int] = (127, 127)
 num_subsets: int = 21
 
@@ -354,6 +353,9 @@ class UnrolledOSEMVarNet(torch.nn.Module):
         # =============================================================
         # =============================================================
 
+# %%
+# to view the solution, uncomment the line below and run the cell
+# ##%load snippets/solution_5_1
 
 # %%
 # load the reference OSEM reconstruction that we use a input our network
@@ -395,13 +397,15 @@ varnet = UnrolledOSEMVarNet(lm_obj_fun, initial_image, cnn, dev)
 # works in principle. The aim is not to train a network that is actually useful!**
 
 # %%
-# define the high quality target image (mini-batch)
-lm_60min_ref_recon = sirf.STIR.ImageData(f"{lm_60min_recon_output_file}.hv")
+# load the 60min reference reconstruction
+# if you get an error loading this file, talk to your tutor
+lm_60min_ref_recon = sirf.STIR.ImageData(str(data_path / f"lm_recons_60min" / "lm_recon.hv"))
 
 # we have to scale the 60min reconstruction, since it is not reconcstructed in kBq/ml
 scale_factor = lm_ref_recon.as_array().mean() / lm_60min_ref_recon.as_array().mean()
 lm_60min_ref_recon *= scale_factor
 
+# define the high quality target image (mini-batch)
 target = (
     torch.tensor(
         lm_60min_ref_recon.as_array(),
@@ -412,6 +416,22 @@ target = (
     .unsqueeze(0)
     .unsqueeze(0)
 )
+
+# %%
+# let's show the network input and the target image
+# remember that the network also takes listmode data, a listmode acq. model and the listmode objective function
+# as "input" (not shown here)
+
+vmax = float(target.max())
+sl = 71
+
+fig, ax = plt.subplots(1, 2, figsize=(6, 3), tight_layout=True)
+ax[0].imshow(x_t.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
+ax[1].imshow(target.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
+ax[0].set_title("network input (1min recon)")
+ax[1].set_title("target (60min recon)")
+fig.show()
+
 
 # %% [markdown]
 # To train the network weights, we need to define an optimizer and a loss function.
