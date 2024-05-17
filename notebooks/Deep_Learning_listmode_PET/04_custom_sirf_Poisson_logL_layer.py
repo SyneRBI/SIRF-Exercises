@@ -349,7 +349,7 @@ ax[2].imshow(
 )
 ax[0].set_title("input image")
 ax[1].set_title("OSEM updated image")
-ax[2].set_title("diffence image")
+ax[2].set_title("difference image")
 fig.show()
 
 # %% [markdown]

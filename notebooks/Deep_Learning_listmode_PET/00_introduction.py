@@ -87,50 +87,51 @@
 # [here](https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html#optimizing-the-model-parameters) for more details.
 
 
-# %%
-# DO NOT RUN THIS CELL - CODE SNIPPET ONLY
-import torch
-
-
-def train(
-    dataloader: torch.utils.data.DataLoader,
-    model: torch.nn.Module,
-    loss_fn: torch.nn.Module,
-    optimizer: torch.optim.Optimizer,
-    device: torch.device,
-):
-    model.train()
-    # loop over the dataset and sample mini-batches
-    for batch_num, (input_data_batch, target_image_batch) in enumerate(dataloader):
-        # move input and target data to device
-        input_data_batch = input_data_batch.to(device)
-        target_image_batch = target_image_batch.to(device)
-
-        # Compute prediction error
-        predicted_image_batch = model(input_data_batch)
-        loss = loss_fn(predicted_image_batch, target_image_batch)
-
-        # calculate gradients using backpropagation
-        loss.backward()
-        # update model parameters
-        optimizer.step()
-        # reset gradients
-        optimizer.zero_grad()
-
-
-# model and data loader to be defined
-my_model = myModel()
-my_data_loader = myDataLoader()
-
-# compute device - use cuda GPU if available
-dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# the loss function we optimize during training
-my_loss_fn = torch.nn.MSELoss()
-# the optimizer we use to update the model parameters
-my_optimizer = torch.optim.Adam(my_model.parameters(), lr=1e-3)
-
-# run a single epoch of training
-train(my_data_loader, my_model, my_loss_fn, my_optimizer, dev)
+# %% [markdown]
+# ```python
+# import torch
+# 
+# 
+# def train(
+#     dataloader: torch.utils.data.DataLoader,
+#     model: torch.nn.Module,
+#     loss_fn: torch.nn.Module,
+#     optimizer: torch.optim.Optimizer,
+#     device: torch.device,
+# ):
+#     model.train()
+#     # loop over the dataset and sample mini-batches
+#     for batch_num, (input_data_batch, target_image_batch) in enumerate(dataloader):
+#         # move input and target data to device
+#         input_data_batch = input_data_batch.to(device)
+#         target_image_batch = target_image_batch.to(device)
+# 
+#         # Compute prediction error
+#         predicted_image_batch = model(input_data_batch)
+#         loss = loss_fn(predicted_image_batch, target_image_batch)
+# 
+#         # calculate gradients using backpropagation
+#         loss.backward()
+#         # update model parameters
+#         optimizer.step()
+#         # reset gradients
+#         optimizer.zero_grad()
+# 
+# 
+# # model and data loader to be defined
+# my_model = myModel()
+# my_data_loader = myDataLoader()
+# 
+# # compute device - use cuda GPU if available
+# dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# # the loss function we optimize during training
+# my_loss_fn = torch.nn.MSELoss()
+# # the optimizer we use to update the model parameters
+# my_optimizer = torch.optim.Adam(my_model.parameters(), lr=1e-3)
+# 
+# # run a single epoch of training
+# train(my_data_loader, my_model, my_loss_fn, my_optimizer, dev)
+# ```
 
 
 # %% [markdown]
