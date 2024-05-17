@@ -2,6 +2,10 @@
 # Creating custom Poisson log likelihood gradient step and OSEM update layers
 # ===========================================================================
 #
+# Now that we know how to perform an listmode OSEM update in sirf.STIR and we 
+# know how to implement custom layers in pytorch, we can combine both to create
+# a custom Poisson log likelihood gradient step and OSEM update layer.
+#
 # Learning objectives
 # -------------------
 #

@@ -1,8 +1,11 @@
 # %% [markdown]
 # SIRF.STIR ImageData objects vs numpy arrays vs torch tensors
 # ============================================================
-
-# %% [markdown]
+#
+# sirf.STIR, numpy and torch all provide containers for image (array) data.
+# In this notebook we will explore the differences between these different
+# containers and how to convert between them.
+#
 # Learning objectives of this notebook
 # ------------------------------------
 #
@@ -15,7 +18,8 @@
 # -------------------------------------------
 
 # %%
-# create a SIRF image template
+# create a SIRF image template and two sirf.STIR ImageData objects
+# filled with "1s" and "2s" respectively
 
 import sirf.STIR
 from sirf.Utilities import examples_data_path
@@ -43,13 +47,14 @@ print(f"sirf_image_2 spacing .: {sirf_image_2.spacing}")
 print(f"sirf_image_2 max     .: {sirf_image_2.max()}")
 
 # %%
-# you retrieve the data behind a SIRF.STIR image as numpy array using the as_array() method
+# you can retrieve the data (the array) behind a SIRF.STIR image as numpy array using the as_array() method
 import numpy as np
 
 numpy_image_1: np.ndarray = sirf_image_1.as_array()
 numpy_image_2: np.ndarray = sirf_image_2.as_array()
 
 numpy_image_2_modified = numpy_image_2.copy()
+# once we have the numpy array, we can modify it
 numpy_image_2_modified[0, 0, 0] = 5.0
 numpy_image_2_modified[-1, -1, -1] = -4.0
 
@@ -80,7 +85,7 @@ print(f"sirf_image_2 max     .: {sirf_image_2.max()}")
 # Exercise 2.1
 # ------------
 #
-# Create a SIRF.STIR image that is compatible with the acquisition data
+# Create a sirf.STIR image that is compatible with the acquisition data
 # where every image "plane" contains the "plane number squared".
 
 
@@ -103,6 +108,7 @@ else:
     # otherwise we select the CPU as device
     dev = torch.device("cpu")
 
+# create a torch tensor (image) filled with "1s"
 torch_image_1: torch.Tensor = torch.ones(image_shape, dtype=torch.float32, device=dev)
 
 print()
