@@ -4,8 +4,9 @@
 #
 # In this notebook, we will learn how to create custom layers in pytorch that use functions outside the pytorch framework.
 # We will create a custom layer that multiplies the input tensor with a square matrix.
+#
 # For demonostration purposes, we will create a simple layer that multiplies a 1D torch input vector with a square matrix,
-# where the matrix multiplication is done using numpy functions.
+# where the matrix multiplication is done using numpy (and not pytorch) functions.
 #
 # Learning objectives of this notebook
 # ------------------------------------
@@ -15,7 +16,6 @@
 # 3. Learn how to test the gradient backpropagation through the custom layer using the `torch.autograd.gradcheck` function.
 
 # %%
-# import modules
 import torch
 import numpy as np
 
@@ -61,7 +61,7 @@ class SquareMatrixMultiplicationLayer(torch.nn.Module):
 
 
 # %% [markdown]
-# We setup a simple feedforward network interlacing the 3 minimals convolutional layers and 3 square matrix multiplication layers.
+# We setup a simple feedforward network interlacing the 3 convolutional 3 square matrix multiplication layers.
 
 # %%
 class Net1(torch.nn.Module):
@@ -128,6 +128,7 @@ except RuntimeError:
 # We see that the backpropagation of the gradients fails with the naive approach.
 # Why is that?
 
+
 # %% [markdown]
 # Approach 2: Subclassing torch.autograd.Function
 # -----------------------------------------------
@@ -141,8 +142,6 @@ except RuntimeError:
 
 # %%
 # define the custom layer by subclassing torch.autograd.Function and implementing the forward and backward pass
-
-
 class NPSquareMatrixMultiplicationLayer(torch.autograd.Function):
     @staticmethod
     def forward(ctx, x: torch.Tensor, mat: np.ndarray) -> torch.Tensor:
@@ -186,8 +185,6 @@ class NPSquareMatrixMultiplicationLayer(torch.autograd.Function):
 # %%
 # define a new network incl. the custom matrix multiplication layer using the "correct" approach
 # To use our custom layer in the network, we have to use the apply method of the custom layer class.
-
-
 class Net2(torch.nn.Module):
     def __init__(self, mat, cnn) -> None:
         super().__init__()
@@ -204,7 +201,6 @@ class Net2(torch.nn.Module):
         x6 = self._matrix_layer(x5, self._mat)
 
         return x6
-
 
 # %%
 # setup the same CNN as above
@@ -261,3 +257,11 @@ print(f"gradient check of NPSquareMatrixMultiplicationLayer: {gradcheck}")
 # ------------
 # Temporarily change the backward pass of the custom layer such that is is not correct anymore
 # (e.g. by multiplying the output with 0.95) and rerun the gradient check. What do you observe?
+
+# %% [markdown]
+# WARNING
+# -------
+#
+# Depending on the implementation of your custom layer, pytorch might not raise an error even if
+# the backward pass is not implemented. This can lead to incorrect gradient backpropagation.
+# Make sure to always test the gradient backpropagation through your custom layer using the `torch.autograd.gradcheck` function.
