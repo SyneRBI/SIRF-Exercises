@@ -360,7 +360,7 @@ class UnrolledOSEMVarNet(torch.nn.Module):
 # %%
 # load the reference OSEM reconstruction that we use a input our network
 lm_ref_recon = sirf.STIR.ImageData(f"{lm_recon_output_file}.hv")
-x_t = (
+input_image_tensor = (
     torch.tensor(
         lm_ref_recon.as_array(), device=dev, dtype=torch.float32, requires_grad=False
     )
@@ -406,7 +406,7 @@ scale_factor = lm_ref_recon.as_array().mean() / lm_60min_ref_recon.as_array().me
 lm_60min_ref_recon *= scale_factor
 
 # define the high quality target image (mini-batch)
-target = (
+target_image_tensor = (
     torch.tensor(
         lm_60min_ref_recon.as_array(),
         device=dev,
@@ -422,12 +422,12 @@ target = (
 # remember that the network also takes listmode data, a listmode acq. model and the listmode objective function
 # as "input" (not shown here)
 
-vmax = float(target.max())
+vmax = float(target_image_tensor.max())
 sl = 71
 
 fig, ax = plt.subplots(1, 2, figsize=(6, 3), tight_layout=True)
-ax[0].imshow(x_t.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
-ax[1].imshow(target.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
+ax[0].imshow(input_image_tensor.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
+ax[1].imshow(target_image_tensor.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
 ax[0].set_title("network input (1min recon)")
 ax[1].set_title("target (60min recon)")
 fig.show()
@@ -451,9 +451,9 @@ training_loss = torch.zeros(num_epochs)
 
 for i in range(num_epochs):
     # pass the input mini-batch through the network
-    prediction = varnet(x_t)
+    prediction = varnet(input_image_tensor)
     # calculate the MSE loss between the prediction and the target
-    loss = loss_fct(prediction, target)
+    loss = loss_fct(prediction, target_image_tensor)
     # backpropagate the gradient of the loss through the network
     # (needed to update the trainable parameters of the network with an optimizer)
     optimizer.zero_grad()
@@ -466,24 +466,24 @@ for i in range(num_epochs):
 
 # %%
 # visualize the results
-vmax = float(target.max())
+vmax = float(target_image_tensor.max())
 sl = 71
 
 fig1, ax1 = plt.subplots(2, 3, figsize=(9, 6), tight_layout=True)
-ax1[0, 0].imshow(x_t.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
+ax1[0, 0].imshow(input_image_tensor.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
 ax1[0, 1].imshow(
     prediction.detach().cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax
 )
-ax1[0, 2].imshow(target.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
+ax1[0, 2].imshow(target_image_tensor.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
 ax1[1, 0].imshow(
-    x_t.cpu().numpy()[0, 0, sl, :, :] - target.cpu().numpy()[0, 0, sl, :, :],
+    input_image_tensor.cpu().numpy()[0, 0, sl, :, :] - target_image_tensor.cpu().numpy()[0, 0, sl, :, :],
     cmap="seismic",
     vmin=-0.01,
     vmax=0.01,
 )
 ax1[1, 1].imshow(
     prediction.detach().cpu().numpy()[0, 0, sl, :, :]
-    - target.cpu().numpy()[0, 0, sl, :, :],
+    - target_image_tensor.cpu().numpy()[0, 0, sl, :, :],
     cmap="seismic",
     vmin=-0.01,
     vmax=0.01,
