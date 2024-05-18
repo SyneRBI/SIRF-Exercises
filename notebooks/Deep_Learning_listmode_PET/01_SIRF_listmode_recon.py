@@ -35,16 +35,8 @@ from sirf.Utilities import examples_data_path
 # ------------------------------------------------
 
 # %%
-if not (
-    Path("..")
-    / ".."
-    / "data"
-    / "PET"
-    / "mMR"
-    / "NEMA_IQ"
-    / "20170809_NEMA_60min_UCL.l.hdr"
-).exists():
-    retval = subprocess.call("../../scripts/download_PET_data.sh", shell=True)
+# download the 60min mMR NEMA IQ raw data if not present
+retval = subprocess.call("../../scripts/download_data.sh -p", shell=True)
 
 # %% [markdown]
 # Define variables and file names
