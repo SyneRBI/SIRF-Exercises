@@ -2,7 +2,7 @@
 # Creating a custom unrolled variational network for listmode PET data
 # ====================================================================
 #
-# In this notebook, we will combine all things we learned so far (sirf.STIR LM OSEM updates, 
+# In this notebook, we will combine all things we learned so far (sirf.STIR LM OSEM updates,
 # custom pytorch OSEM blocks, ...) to create a custom unrolled variational network
 # We will also run a short training loop (50 epochs) using 1 training data set.
 # **Note**, the aim of this notebook is not to train a useful network, but to demonstrate
@@ -115,6 +115,7 @@ lm_obj_fun.set_up(initial_image)
 # --------------------------
 #
 # See notebook 04.
+
 
 # %%
 class SIRFPoissonlogLGradLayer(torch.autograd.Function):
@@ -286,6 +287,7 @@ class OSEMUpdateLayer(torch.nn.Module):
 # Implement the forward pass of the unrolled OSEM Variational Network with 2 blocks shown below.
 # Start from the code below and fill in the missing parts.
 
+
 # %%
 class UnrolledOSEMVarNet(torch.nn.Module):
     def __init__(
@@ -305,7 +307,7 @@ class UnrolledOSEMVarNet(torch.nn.Module):
         sirf_template_image : sirf.STIR.ImageData
             used for the conversion between torch tensors and sirf images
         convnet : torch.nn.Module
-            a (convolutional) neural network that maps a minibatch tensor 
+            a (convolutional) neural network that maps a minibatch tensor
             of shape [1,1,spatial_dimensions] onto a minibatch tensor of the same shape
         device : str
             device used for the calculations
@@ -359,6 +361,7 @@ class UnrolledOSEMVarNet(torch.nn.Module):
         # =============================================================
         # =============================================================
 
+
 # %%
 # to view the solution, uncomment the line below and run the cell
 # ##%load snippets/solution_5_1
@@ -403,11 +406,29 @@ varnet = UnrolledOSEMVarNet(lm_obj_fun, initial_image, cnn, dev)
 # works in principle. The aim is not to train a network that is actually useful!**
 
 # %%
-# load the 60min reference reconstruction
+# load the (pre-computed) 60min reference reconstruction
 # =========================================================
 # if you get an error loading this file, talk to your tutor
 # =========================================================
-lm_60min_recon = sirf.STIR.ImageData(str(data_path / f"lm_recons_60min" / "lm_recon.hv"))
+if Path(
+    "/mnt/materials/SIRF/PSMRTBP2024/mMR_NEMA_IQ_60min_recons/lm_recon.hv"
+).exists():
+    # get the pre-computed 60min listmode recon for the PSMR 2024 training school
+    # uploaded to the STFC cloud
+    lm_60min_recon = sirf.STIR.ImageData(
+        str(
+            Path("/mnt/materials/SIRF/PSMRTBP2024/mMR_NEMA_IQ_60min_recons/lm_recon.hv")
+        )
+    )
+elif (data_path / f"lm_recons_60min" / "lm_recon.hv").exists():
+    # get the pre-computed 60min listmode as output from notebook 01 (with acq_time = "60min")
+    lm_60min_recon = sirf.STIR.ImageData(
+        str(data_path / f"lm_recons_60min" / "lm_recon.hv")
+    )
+else:
+    raise FileNotFoundError(
+        "Cannot find 60min LM recon. Run 60min LM recon in notebook 01, or ask your tutor."
+    )
 
 # %%
 # we have to scale the 60min reconstruction, since it is not reconcstructed in kBq/ml
@@ -438,8 +459,12 @@ vmax = float(target_minibatch.max())
 sl = 71
 
 fig, ax = plt.subplots(1, 2, figsize=(6, 3), tight_layout=True)
-ax[0].imshow(input_image_minibatch.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
-ax[1].imshow(target_minibatch.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
+ax[0].imshow(
+    input_image_minibatch.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax
+)
+ax[1].imshow(
+    target_minibatch.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax
+)
 ax[0].set_title("network input (1min recon)")
 ax[1].set_title("target (60min recon)")
 fig.show()
@@ -484,13 +509,21 @@ vmax = float(target_minibatch.max())
 sl = 71
 
 fig1, ax1 = plt.subplots(2, 3, figsize=(9, 6), tight_layout=True)
-ax1[0, 0].imshow(input_image_minibatch.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
-ax1[0, 1].imshow(
-    prediction_minibatch.detach().cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax
+ax1[0, 0].imshow(
+    input_image_minibatch.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax
 )
-ax1[0, 2].imshow(target_minibatch.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax)
+ax1[0, 1].imshow(
+    prediction_minibatch.detach().cpu().numpy()[0, 0, sl, :, :],
+    cmap="Greys",
+    vmin=0,
+    vmax=vmax,
+)
+ax1[0, 2].imshow(
+    target_minibatch.cpu().numpy()[0, 0, sl, :, :], cmap="Greys", vmin=0, vmax=vmax
+)
 ax1[1, 0].imshow(
-    input_image_minibatch.cpu().numpy()[0, 0, sl, :, :] - target_minibatch.cpu().numpy()[0, 0, sl, :, :],
+    input_image_minibatch.cpu().numpy()[0, 0, sl, :, :]
+    - target_minibatch.cpu().numpy()[0, 0, sl, :, :],
     cmap="seismic",
     vmin=-0.01,
     vmax=0.01,
