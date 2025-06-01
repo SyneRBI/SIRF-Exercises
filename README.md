@@ -4,7 +4,8 @@ This material is intended to get you going with
 [SIRF](https://github.com/SyneRBI/SIRF/wiki/Software-Documentation),
 an open source framework for PET, SPECT and MR Image Reconstruction, including synergistic aspects.
 
-This repository also contains basic information on [CIL](https://www.ccpi.ac.uk/CIL) functionality to show similarities with SIRF and how use CIL's optimisation algorithms.
+This repository also contains some exercises using [CIL](https://www.ccpi.ac.uk/CIL), including basic functionality
+to show similarities with SIRF and how to use CIL's optimisation algorithms for synergistic reconstruction.
 
 This software is distributed under an open source license, see [LICENSE.txt](LICENSE.txt)
 for details.
@@ -26,17 +27,22 @@ You can run the SIRF-Exercises in GitHub Codespaces, see [the section in the doc
 
 # Authors
 
-- Kris Thielemans (this document and PET exercises)
+- Kris Thielemans (this document and PET and synergistic exercises, overall QA)
 - Christoph Kolbitsch (MR exercises and Introductory exercises)
-- Johannes Mayer (MR exercises)
-- David Atkinson (MR and geometry exercises)
+- David Atkinson (MR and geometry exercises, overall QA)
 - Evgueni Ovtchinnikov (PET and MR exercises)
-- Edoardo Pasca (overall check and clean-up)
+- Johannes Mayer (MR exercises)
 - Richard Brown (PET and registration exercises)
+- Nicole Jurjew (updating, answers and checks of PET exercises)
 - Daniel Deidda and Palak Wadhwa (HKEM exercise)
-- Ashley Gillman (overall check, scripts and clean-up)
-- Imraj Singh (Deep Learning for PET exercise)
 - Daniel Deidda and Sam Porter (Synergistic SPECT/PET Reconstruction Exercises)
+- Margaret Duff and Sam Porter (Synergistic deconvolution exercise)
+- Georg Schramm (Deep Learning for listmode PET exercise)
+- Imraj Singh (Deep Learning for PET (projection data) exercise)
+- Nikolaos Efthymiou (Long Axial FOV exercise)
+- Ashley Gillman (overall checks, scripts and clean-up)
+- Casper da Costa-Luis (overall checks, devcontainer and clean-up)
+- Edoardo Pasca (overall checks and clean-up)
 
 
 
