@@ -24,7 +24,7 @@ This instruction contain documentation and links to get started with the exercis
 - [Appendix of useful info](#appendix)
 
 The SIRF documentation can be found [here](https://github.com/SyneRBI/SIRF/wiki/Software-Documentation).
-***The current version of these exercises needs SIRF v3.6.0.*** Some exercises could still work on SIRF v3.4.0 (SPECT needs v3.3.0).
+***The current version of these exercises needs SIRF v3.7.0***, but a more recent version is recommended. Some exercises could still work on SIRF v3.6.0, or even older.
 
 Documentation is in the form of MarkDown files (`*.md`), which are simple text files which you open from the Jupyter notebook, but they look nicer when browsing to [GitHub](https://github.com/SyneRBI/SIRF-Exercises/tree/master/).
 
@@ -57,7 +57,7 @@ Once you have SIRF and the exercises on your system, or access to a server with 
 
 The next sections contain instructions to start the Jupyter notebook server with the SIRF exercises for all the different installation options. In following steps, we will start a Gadgetron server and download data.
 
-***Warning:** these instructions are when using JupyterLab as opposed to the "classic" notebook
+***Warning:*** these instructions are when using JupyterLab as opposed to the "classic" notebook
 interface. If you choose to use the classic interface, you will have to modify the notebooks
 marginally by replacing `%matplotlib widget` with `%matplotlib notebook`.
 See also the [iPython section](#ipython) below.
@@ -85,7 +85,7 @@ otherwise GitHub will stop it for you after a certain time-out. You can then res
 
 #### Using an Azure client (if available)
 
-The web-address should be something like https://sirf1....cloudapp.azure.com:9999/. See local instructions of your training sessoin.
+The web-address should be something like https://sirf1....cloudapp.azure.com:9999/. See local instructions of your training session.
 *Do not forget the `https`*. You will need to accept the secure exception. The Jupyter notebook password is `virtual`.
 
 If the instructors tell you, you might have to create a terminal via the jupyter notebook and type `update_VM.sh`.
@@ -153,9 +153,9 @@ You can kill the server at the end by going back to the terminal and pressing `C
 
 ## Getting the Data
 
-Some exercises use data that you will need. In the cloud (GitHub Codespaces, STFC cloude, Azure),
+Some exercises use data that you will need. In the cloud (GitHub Codespaces, STFC cloud, Azure),
 we provide the data you need for the exercises, but otherwise, you will need to download it.
-There are download scripts available for that, available in the `SIRF-Exercises/scripts` folder. The introductory notebooks contain
+There are download scripts available for that, available in the `SIRF-Exercises/scripts` folder. The notebooks contain
 cells for running the script, but you can also do this from the command line (see above on how to start a terminal from Jupyter).
 
 - Get example data
@@ -189,7 +189,12 @@ All notebooks are located in several subdirectories of [`notebooks`](./notebooks
 - [SPECT](./notebooks/SPECT/) notebooks contain lessons on using SIRF for SPECT reconstruction and simulation.
 - [MR](./notebooks/MR/) notebooks contain lessons on using SIRF for MR reconstruction and simulation.
 - [Reg](./notebooks/Reg/) notebooks contain lessons on using SIRF's image registration and resampling tools.
-- [Synergistic](./notebooks/Synergistic/) notebooks contain lessons demonstrating more advanced features of SIRF for synergistic image reconstruction.
+- Synergistic (multi-acquisitoin or multi-modality data)
+  - [Synergistic](./notebooks/Synergistic/) notebooks demonstrating more advanced features of SIRF and CIL for synergistic image reconstruction.
+  - [Synergistic deconvolution](./notebooks/synergistic_deconvolution/) notebooks demonstrating deconvolution with guidance using CIL, which could be a starting point for more advanced synergistic reconstruction.
+- Basics of Deep Learning in image reconstruction
+  - [Learned Primal Dual reconstruction of projection data](./notebooks/Deep_Learning_PET/)
+  - [DL reconstruction of listmode data](./notebooks/Deep_Learning_listmode_PET/)
 
 Start with the [introductory notebooks](notebooks/Introductory/) and the associated [README.md](notebooks/Introductory/README.md).
 
@@ -211,11 +216,11 @@ Start with the [introductory notebooks](notebooks/Introductory/) and the associa
 
 Here is some suggested material on Python (ordered from easy to quite time-consuming).
 
--   The official Python tutorial. Just read Section 1, 3, a bit of 4 and a tiny bit of 6.
-    <https://docs.python.org/2/tutorial/>
+-   The official Python tutorial. Read at least Section 1, 3, a bit of 4 and a bit of 6.
+    <https://docs.python.org/3.8/tutorial/>
 
 -   Examples for matplotlib, the python module that allows you to make plots almost like in MATLAB
-    <https://github.com/patvarilly/dihub-python-for-data-scientists-2015/blob/master/notebooks/02_Matplotlib.ipynb>
+    <https://matplotlib.org/stable/users/>
 
 -   You could read bits and pieces of Python the Hard Way
     <http://learnpythonthehardway.org/book/index.html>
@@ -231,9 +236,6 @@ for z in range(0,image.shape[0]):
    plt.imshow(image[z,:,:])
 # now do something else
 ```
-
-We use [matplotlib](https://matplotlib.org/), a python module that allows you to make plots almost like in MATLAB.
-Check [here](https://github.com/patvarilly/dsghent-python-for-data-scientists-2016/blob/master/notebooks/02_MatplotlibAndSeaborn.ipynb) for some examples.
 
 ## iPython
 
@@ -309,7 +311,7 @@ shortcuts:
 -    In "command" mode, press `A` to create a new cell Above, or `B` below your current cell. You can also use `C`, `X`, `V`.
 -    Other keyboard shortcuts:
      - When using Jupyter "classic" mode, pressing `H` in "command" mode gives you a useful list of shortcuts.
-     - When using JupyterLab, you need to go to the Advanced Settings Editor item in the Settings menu, then select Keyboard Shortcuts in the Settings tab. You probably want to check the `notebook` category. See the [JupyterLab doc](https://jupyterlab.readthedocs.io/en/stable/user/interface.html#keyboard-shortcuts)/
+     - When using JupyterLab, you need to go to the Advanced Settings Editor item in the Settings menu, then select Keyboard Shortcuts in the Settings tab. You probably want to check the `notebook` category. See the [JupyterLab doc](https://jupyterlab.readthedocs.io/en/stable/user/interface.html#keyboard-shortcuts).
 
 Jupyter notebooks (normally) run iPython, [see the section below](#iPython) for some useful commands.
 
