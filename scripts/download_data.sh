@@ -168,7 +168,7 @@ then
     pushd "$DOWNLOAD_DIR"
         echo Downloading MR data
 
-        # Get Zenodo dataset
+        # Get Zenodo datasets
         URL=https://zenodo.org/record/2633785/files/
         filenameGRAPPA=PTB_ACRPhantom_GRAPPA.zip
         # (re)download md5 checksum
@@ -180,6 +180,17 @@ then
     pushd "${DATA_PATH}/MR"
         echo "Unpacking ${filenameGRAPPA}"
         unzip -o "${DOWNLOAD_DIR}/${filenameGRAPPA}"
+
+        URL=https://zenodo.org/record/7903282/files/
+        filenameGRPE=3D_GRPE_no_motion.h5
+        # (re)download md5 checksum
+        echo "82aa7000fb6c1d42f138f81473aa671e ${filenameGRPE}" > "${filenameGRPE}.md5"
+        download "$filenameGRPE" "$URL"
+
+        filenameGRPE_motion=3D_GRPE_motion.h5
+        # (re)download md5 checksum
+        echo "111cfdb05c2e9d1ef75f69ebe58931ed ${filenameGRPE_motion}" > "${filenameGRPE_motion}.md5"
+        download "$filenameGRPE_motion" "$URL"
     popd
 else
     echo "MR data NOT downloaded. If you need it, rerun this script with the -h option to get help."
