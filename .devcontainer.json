@@ -6,6 +6,7 @@
 	"storage": "32gb",
 	"gpu": "optional"
 },
+"runArgs": ["--gpus=all"],
 "name": "SIRF-Exercises",
 //"initializeCommand": "docker system prune --all --force",
 "image": "ghcr.io/synerbi/sirf:petric-base",
