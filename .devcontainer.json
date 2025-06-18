@@ -3,7 +3,8 @@
 "hostRequirements": {
 	"cpus": 2,
 	"memory": "8gb",
-	"storage": "32gb"
+	"storage": "32gb",
+	"gpu": "optional"
 },
 "name": "SIRF-Exercises",
 //"initializeCommand": "docker system prune --all --force",
