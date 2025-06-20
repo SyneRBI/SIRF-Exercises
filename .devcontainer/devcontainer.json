@@ -3,13 +3,11 @@
 "hostRequirements": {
 	"cpus": 2,
 	"memory": "8gb",
-	"storage": "32gb",
-	"gpu": "optional"
+	"storage": "32gb"
 },
-"runArgs": ["--gpus=all"],
 "name": "SIRF-Exercises",
 //"initializeCommand": "docker system prune --all --force",
-"image": "ghcr.io/synerbi/sirf:petric",
+"image": "ghcr.io/synerbi/sirf:petric-base",
 /// use image's entrypoint & user
 "overrideCommand": false,
 //"postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'" // already done in image

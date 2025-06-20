@@ -1,0 +1,24 @@
+/// format: https://aka.ms/devcontainer.json
+{
+"hostRequirements": {
+	"cpus": 2,
+	"memory": "8gb",
+	"storage": "32gb",
+	"gpu": {"cores": 100, "storage": "2gb"}
+},
+"runArgs": ["--gpus=all"],
+"name": "SIRF-Exercises",
+//"initializeCommand": "docker system prune --all --force",
+"image": "ghcr.io/synerbi/sirf:petric",
+/// use image's entrypoint & user
+"overrideCommand": false,
+//"postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'" // already done in image
+"remoteUser": "jovyan",
+"portsAttributes": {"8888": {"label": "Jupyter", "onAutoForward": "ignore"}},
+"postCreateCommand": "bash ./scripts/download_data.sh -m -p && sed -i /astra-toolbox/d environment.yml && mamba env update",
+// "features": {}, // https://containers.dev/features
+"customizations": {"vscode": {"extensions": [
+	"ms-python.python",
+	"ms-toolsai.jupyter",
+	"ms-python.vscode-pylance"]}}
+}

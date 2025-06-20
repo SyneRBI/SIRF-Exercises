@@ -75,7 +75,9 @@ The free allocation should be enough to get you familiar with SIRF.
 Note that the creation of the codespace will take around 5 minutes. This includes creation of the container,
 installation of all dependencies and downloading the example data.
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/SyneRBI/SIRF-Exercises)
+[![CPU Codespace](https://img.shields.io/badge/Codespaces-CPU-blue?logo=github)](https://codespaces.new/SyneRBI/SIRF-Exercises)
+
+[![GPU Codespace](https://img.shields.io/badge/Codespaces-GPU-green?logo=github)](https://codespaces.new/casperdcl/SIRF-Exercises?devcontainer_path=.devcontainer%2Fgpu%2Fdevcontainer.json&geo=UsEast&machine=standardLinuxNcv3)
 
 Some notes:
 - You will have to select a Python kernel for each notebook (top-right). Please use the existing `conda` python kernel (**not** `/usr/bin/python3`) listed in "Python environments". Alternatively, you can access the jupyter server running in the codespace via [port forwarding](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace).
