@@ -38,9 +38,10 @@ def exercises_data_path(*data_type):
     return os.path.join(data_path, *data_type)
 
 
-def cd_to_working_dir(*subfolders):
+
+def exercises_working_path(*subfolders):
     '''
-    Creates and changes the current directory to a working directory for the
+    Creates and returns the working directory for the
     current exercise, based on the argument(s). If multiple
     strings are given, they will be treated as subdirectories.
 
@@ -56,5 +57,9 @@ def cd_to_working_dir(*subfolders):
     except ImportError:
         working_dir = exercises_data_path('working_folder', *subfolders)
     os.makedirs(working_dir, exist_ok=True)
-    os.chdir(working_dir)
+    return working_dir
 
+
+def cd_to_working_dir(*subfolders):
+    '''Same as os.chdir(exercises_working_path(*subfolders))'''
+    os.chdir(exercises_working_path(*subfolders))
