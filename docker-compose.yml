@@ -1,0 +1,4 @@
+services:
+  petric:
+    build: .
+    image: harbor.stfc.ac.uk/imaging-tomography/sirfcil:petric
