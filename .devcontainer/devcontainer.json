@@ -5,7 +5,7 @@
 	"memory": "8gb",
 	"storage": "32gb"
 },
-"name": "SIRF-Exercises",
+"name": "SIRF-Exercises (CPU)",
 //"initializeCommand": "docker system prune --all --force",
 "image": "ghcr.io/synerbi/sirf:petric-base",
 /// use image's entrypoint & user

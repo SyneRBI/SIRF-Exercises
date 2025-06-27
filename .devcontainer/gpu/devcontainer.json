@@ -7,7 +7,7 @@
 	"gpu": {"cores": 100, "storage": "2gb"}
 },
 "runArgs": ["--gpus=all"],
-"name": "SIRF-Exercises",
+"name": "SIRF-Exercises (GPU)",
 //"initializeCommand": "docker system prune --all --force",
 "image": "ghcr.io/synerbi/sirf:petric",
 /// use image's entrypoint & user
