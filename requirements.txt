@@ -9,7 +9,7 @@ widgetsnbextension
 deprecation
 nodejs
 numpy
-scipy
+scipy>=1.16
 matplotlib
 numba
 llvmlite  # numba dependency
