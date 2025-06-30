@@ -25,7 +25,7 @@ print_usage() {
     echo "  -D DOWNLOAD_DIR  Optional download directory. Useful if you have the files already downloaded."
     echo "                   If not supplied, DEST_DIR will be used."
     echo "  -w WORKING_DIR  Optional working directory."
-    echo "               If not supplied, check the environment variable \"SIRF_EXERCISES_DATA_PATH\"."
+    echo "               If not supplied, check the environment variable \"SIRF_EXERCISES_WORKING_PATH\"."
     echo "               If that does not exist, use DEST_DIR/working_folder"
     echo ""
     echo "Please note that if you run the script multiple times with different values"
