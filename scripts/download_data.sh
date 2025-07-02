@@ -165,7 +165,7 @@ then
     mkdir -p "${DATA_PATH}/PET/mMR"
     pushd "${DATA_PATH}/PET/mMR"
         echo "Unpacking ${filename}"
-        unzip -o "${DOWNLOAD_DIR}/${filename}"
+        unzip -n "${DOWNLOAD_DIR}/${filename}"
     popd
 else
     echo "PET data NOT downloaded. If you need it, rerun this script with the -h option to get help."
@@ -193,7 +193,7 @@ then
     mkdir -p "${DATA_PATH}/MR"
     pushd "${DATA_PATH}/MR"
         echo "Unpacking ${filenameGRAPPA}"
-        unzip -o "${DOWNLOAD_DIR}/${filenameGRAPPA}"
+        unzip -n "${DOWNLOAD_DIR}/${filenameGRAPPA}"
     popd
 else
     echo "MR data NOT downloaded. If you need it, rerun this script with the -h option to get help."
