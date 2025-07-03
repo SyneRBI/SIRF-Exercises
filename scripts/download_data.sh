@@ -166,6 +166,10 @@ then
     pushd "${DATA_PATH}/PET/mMR"
         echo "Unpacking ${filename}"
         unzip -n "${DOWNLOAD_DIR}/${filename}"
+        if test $? -ne 0; then
+            echo "unzip failed. Please check the downloaded file."
+            exit 1
+        fi
     popd
 else
     echo "PET data NOT downloaded. If you need it, rerun this script with the -h option to get help."
@@ -194,6 +198,10 @@ then
     pushd "${DATA_PATH}/MR"
         echo "Unpacking ${filenameGRAPPA}"
         unzip -n "${DOWNLOAD_DIR}/${filenameGRAPPA}"
+        if test $? -ne 0; then
+            echo "unzip failed. Please check the downloaded file."
+            exit 1
+        fi
     popd
 else
     echo "MR data NOT downloaded. If you need it, rerun this script with the -h option to get help."
