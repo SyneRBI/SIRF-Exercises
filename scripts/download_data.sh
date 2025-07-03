@@ -88,11 +88,8 @@ function check_md5 {
         md5sum -c "${filename}.md5" > /dev/null  2>&1
     elif command -v md5 > /dev/null  2>&1
     then
-        md5 -r "${filename}" > "${filename}.tmp.md5"
-        diff -q "${filename}.tmp.md5" "${filename}.md5"
-        retval=$?
-        rm "${filename}.tmp.md5"
-        return $retval
+        diff -q <(md5 -r "${filename}") "${filename}.md5"
+        return $?
     else
         echo "Unable to check md5. Please install md5sum or md5"
         return 0
@@ -129,6 +126,18 @@ function download {
     fi
 }
 
+function ensure_md5 {
+    expected_md5="$1"
+    filename="$2"
+    if test -r "${filename}.md5"; then
+        if grep -q "${expected_md5} ${filename}" "${filename}.md5"; then
+            echo "Already up-to-date md5 file ${filename}.md5"
+            return 0
+        fi
+    fi
+    echo "Creating md5 file ${filename}.md5"
+    echo "${expected_md5} ${filename}" > "${filename}.md5"
+}
 
 #
 # PET
@@ -146,10 +155,9 @@ then
 
         filename=NEMA_IQ.zip
         # (re)download md5 checksum
-        rm -f "${filename}.md5"
+        # curl -OL ${URL}${filename}.md5
         # hard-wired md5 for now
-        #curl -OL ${URL}${filename}.md5
-        echo "ef848b8f6d5fd57b072a953b374ba4da ${filename}" > "${filename}.md5"
+        ensure_md5 "ef848b8f6d5fd57b072a953b374ba4da" "${filename}"
 
         download "$filename" "$URL"
     popd
@@ -157,7 +165,11 @@ then
     mkdir -p "${DATA_PATH}/PET/mMR"
     pushd "${DATA_PATH}/PET/mMR"
         echo "Unpacking ${filename}"
-        unzip -o "${DOWNLOAD_DIR}/${filename}"
+        unzip -n "${DOWNLOAD_DIR}/${filename}"
+        if test $? -ne 0; then
+            echo "unzip failed. Please check the downloaded file."
+            exit 1
+        fi
     popd
 else
     echo "PET data NOT downloaded. If you need it, rerun this script with the -h option to get help."
@@ -178,15 +190,18 @@ then
         # Get Zenodo dataset
         URL=https://zenodo.org/record/2633785/files/
         filenameGRAPPA=PTB_ACRPhantom_GRAPPA.zip
-        # (re)download md5 checksum
-        echo "a7e0b72a964b1e84d37f9609acd77ef2 ${filenameGRAPPA}" > "${filenameGRAPPA}.md5"
+        ensure_md5 "a7e0b72a964b1e84d37f9609acd77ef2" "${filenameGRAPPA}"
         download "$filenameGRAPPA" "$URL"
     popd
 
     mkdir -p "${DATA_PATH}/MR"
     pushd "${DATA_PATH}/MR"
         echo "Unpacking ${filenameGRAPPA}"
-        unzip -o "${DOWNLOAD_DIR}/${filenameGRAPPA}"
+        unzip -n "${DOWNLOAD_DIR}/${filenameGRAPPA}"
+        if test $? -ne 0; then
+            echo "unzip failed. Please check the downloaded file."
+            exit 1
+        fi
     popd
 else
     echo "MR data NOT downloaded. If you need it, rerun this script with the -h option to get help."
@@ -207,8 +222,7 @@ then
         URL=https://www.dropbox.com/s/cazoi5l7oljtwsy/
         filename1=meas_MID00108_FID57249_test_2D_2x.dat
         suffix=?dl=0
-        rm -f "${filename1}.md5" # (re)create md5 checksum
-        echo "8f06cacf6b3f4b46435bf8e970e1fe3f ${filename1}" > "${filename1}.md5"
+        ensure_md5 "8f06cacf6b3f4b46435bf8e970e1fe3f" "${filename1}"
         download "$filename1" "$URL" "$suffix"
 
         # meas_MID00103_FID57244_test.dat -> ${DATA_PATH}/MR
@@ -216,8 +230,7 @@ then
         URL=https://www.dropbox.com/s/tz7q02fziskq9u7/
         filename2=meas_MID00103_FID57244_test.dat
         suffix=?dl=0
-        rm -f "${filename2}.md5" # (re)create md5 checksum
-        echo "44d9766ddbbf2a082d07ddba74a769c9 ${filename2}" > "${filename2}.md5"
+        ensure_md5 "44d9766ddbbf2a082d07ddba74a769c9" "${filename2}"
         download "$filename2" "$URL" "$suffix"
     popd
 
