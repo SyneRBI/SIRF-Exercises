@@ -1,6 +1,4 @@
-# source: https://mybinder.readthedocs.io/en/latest/tutorials/dockerfile.html
-# result: https://mybinder.org/v2/gh/SyneRBI/SIRF-Exercises/jupyterhub
-FROM ghcr.io/synerbi/sirf:petric-base
+FROM ghcr.io/synerbi/sirf:petric
 
 # hardcoded from env_sirf.sh
 ENV SIRF_PATH=/opt/SIRF-SuperBuild/sources/SIRF
@@ -11,11 +9,10 @@ ENV PYTHONPATH="/opt/SIRF-SuperBuild/INSTALL/python${PYTHONPATH:+:${PYTHONPATH}}
 ENV SIRF_PYTHON_EXECUTABLE=/opt/conda/bin/python3
 ENV PATH=/opt/SIRF-SuperBuild/INSTALL/bin:$PATH
 ENV STIR_PATH=/opt/SIRF-SuperBuild/sources/STIR
+ENV SIRF_EXERCISES_WORKING_PATH=~/SIRF-Exercises/workdir
+ENV SIRF_EXERCISES_DATA_PATH=/mnt/materials/SIRF/Fully3D/SIRF
 
-# Make sure the contents of our repo are in ${HOME}
-COPY . ${HOME}
-USER root
-RUN chown -R ${NB_UID} ${HOME}
-USER ${NB_USER}
-
-RUN ./scripts/download_data.sh -p -m
+RUN cat <<EOF | tee -a /opt/conda/etc/conda/activate.d/env_sirf.sh /opt/SIRF-SuperBuild/INSTALL/bin/env_sirf.sh
+export SIRF_EXERCISES_WORKING_PATH=$SIRF_EXERCISES_WORKING_PATH
+export SIRF_EXERCISES_DATA_PATH=$SIRF_EXERCISES_DATA_PATH
+EOF

@@ -1,4 +1,6 @@
 services:
   petric:
-    build: .
+    build:
+      context: .
+      dockerfile: stfc.Dockerfile
     image: harbor.stfc.ac.uk/imaging-tomography/sirfcil:petric
