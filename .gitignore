@@ -72,6 +72,7 @@ scatter_estimate*s
 tmp*
 # Auto-generated data path scripts
 lib/sirf_exercises/data_path.py
+lib/sirf_exercises/working_path.py
 
 # Nix temp
 _build
