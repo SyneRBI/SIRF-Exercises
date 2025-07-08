@@ -78,6 +78,7 @@ installation of all dependencies and downloading the example data.
 [![CPU Codespace](https://img.shields.io/badge/Codespaces-CPU-blue?logo=github)](https://codespaces.new/SyneRBI/SIRF-Exercises) [![GPU Codespace](https://img.shields.io/badge/Codespaces-GPU-green?logo=github)](https://codespaces.new/SyneRBI/SIRF-Exercises?devcontainer_path=.devcontainer%2Fgpu%2Fdevcontainer.json&geo=UsEast&machine=standardLinuxNcv3)
 
 Some notes:
+- Please select a GPU-node to run the GPU Codespace (you might have to try look in different "regions", and availability varies).
 - You will have to select a Python kernel for each notebook (top-right). Please use the existing `conda` python kernel (**not** `/usr/bin/python3`) listed in "Python environments". Alternatively, you can access the jupyter server running in the codespace via [port forwarding](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace).
 - You might want to conserve some resources by manually
 [stopping a code space](https://docs.github.com/en/codespaces/developing-in-codespaces/stopping-and-starting-a-codespace),
@@ -95,6 +96,8 @@ Later in the course, you can use this terminal to start `gadgetron`.
 Follow instructions given elsewhere.
 
 ### Using the VM
+
+See our [VM instructions](https://github.com/SyneRBI/SIRF-SuperBuild/blob/master/VirtualBox/README.md) for information.
 
 1. start the VM from VirtualBox (user `sirfuser`, password `virtual`)
 2. Open terminal (either via `Activities` or pressing `ctrl-alt-T`) and type
@@ -163,7 +166,7 @@ cells for running the script, but you can also do this from the command line (se
   cd /wherever/you/installed/it/SIRF-Exercises
   scripts/download_data.sh -m -p
   ```
-  On the VM and Azure, the exercises are installed in `~/devel`, in docker in `/devel`, and in the STFC Cloud in `~`. (Apologies for that!).
+  On the VM and Azure, the exercises are installed in `~/devel`, in docker in `~/work/devel`, and in the STFC Cloud in `~`. (Apologies for that!).
   
   This will be a ~3 GB download.
 
