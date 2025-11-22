@@ -7,7 +7,7 @@
 },
 "name": "SIRF-Exercises (CPU)",
 //"initializeCommand": "docker system prune --all --force",
-"image": "ghcr.io/synerbi/sirf:petric-base",
+"image": "ghcr.io/synerbi/sirf:petric2-base",
 /// use image's entrypoint & user
 "overrideCommand": false,
 //"postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'" // already done in image
