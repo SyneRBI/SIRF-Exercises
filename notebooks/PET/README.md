@@ -13,3 +13,4 @@ Jupyter notebooks for the PET exercises. Recommended order:
 1. [ML\_reconstruction](ML_reconstruction.ipynb) illustrates Maximum Likelihood Estimation via OSEM and gradient ascent.
 2. [DIY_OSEM](DIY_OSEM.ipynb) invites you to write MLEM and OSEM yourself using SIRF functionality (optional).
 3. [MAPEM](MAPEM.ipynb) is an exercise to implement the MAP-EM algorithm for the regularised objective function where a quadratic prior is added to the Poisson log-likelihood.
+4. [MCIR](MCIR_CIL.ipynb) Demonstrates how to run a motion corrected image reconstruction (MCIR) with SIRF and CIL.
