@@ -5,7 +5,10 @@ This instruction contain documentation and links to get started with the exercis
 - [Start Here](#start-here)
 
 - [Start a jupyter notebook server for the SIRF exercises](#Start-a-jupyter-notebook-server-for-the-SIRF-exercises)
-    - [Using an Azure Client](#using-and-azure-client-(if-available))
+    - [Using the Cloud](#using-the-cloud)
+        - [Using GitHub Codespaces](#using-github-codespaces)
+        - [Using an Azure Client](#using-an-azure-client-if-available)
+        - [Using the STFC cloud](#using-an-stfc-cloud-instance-if-available)
     - [Using the VM](#using-the-vm)
     - [Using Docker](#using-docker)
     - [Using your own installed SIRF and SIRF-exercises](#using-your-own-installed-sirf-and-sirf-exercises )
@@ -21,7 +24,7 @@ This instruction contain documentation and links to get started with the exercis
 - [Appendix of useful info](#appendix)
 
 The SIRF documentation can be found [here](https://github.com/SyneRBI/SIRF/wiki/Software-Documentation).
-***The current version of these exercises needs SIRF v3.2.0 (SPECT needs v3.3.0 (pre-)release)***
+***The current version of these exercises needs SIRF v3.7.0***, but a more recent version is recommended. Some exercises could still work on SIRF v3.6.0, or even older.
 
 Documentation is in the form of MarkDown files (`*.md`), which are simple text files which you open from the Jupyter notebook, but they look nicer when browsing to [GitHub](https://github.com/SyneRBI/SIRF-Exercises/tree/master/).
 
@@ -39,13 +42,13 @@ A useful introduction to the notebook interface [can be found here](http://jupyt
 
 There are several ways to get SIRF and its exercises running for the training course. 
 
-1. Accessing a remote server prepared for the training course (could be Azure, STFC cloud or others). This is specific for organized training courses. Please check with your instructors. 
+1. Accessing a remote server with everything prepared. This is currently continuously available via GitHub Codespaces. However,if you are attending  organized training courses, this will be organised for you(could be Azure, STFC cloud or something else). Please check with your instructors.
 2. Installing and running the SIRF Virtual Machine (VM).
 3. Installing and running the SIRF Docker image.
 4. Installing and building SIRF and the SIRF-Exercises on your machine from source.
 
-We recommend that if you are installing this for a training course, you use any of the first three options, as installing SIRF from source is harder than the rest.
-The VM works well in any operating system, Docker works well in Linux and MacOS, (Windows support for our Docker images is currently untested).
+We recommend that initially you use one of the first three options, as installing SIRF from source is harder than the rest.
+The VM works well in any operating system, Docker works well in Linux and MacOS, or on Windows in a Linux installation under WSL (native Windows support for our Docker images is currently untested).
 
 Instructions for all (except the training course specific server, as this will be given in the training course) can be found at https://github.com/SyneRBI/SIRF/wiki/How-to-obtain-SIRF.
 Instructions to self-build the exercises (once you have SIRF built from source) can be found in this repository at [the installation instructions page](INSTALL.md).
@@ -54,26 +57,47 @@ Once you have SIRF and the exercises on your system, or access to a server with 
 
 The next sections contain instructions to start the Jupyter notebook server with the SIRF exercises for all the different installation options. In following steps, we will start a Gadgetron server and download data.
 
-## Start a jupyter notebook server for the SIRF exercises
-
-***Warning:** these instructions are when using JupyterLab as opposed to the "classic" notebook
+***Warning:*** these instructions are when using JupyterLab as opposed to the "classic" notebook
 interface. If you choose to use the classic interface, you will have to modify the notebooks
 marginally by replacing `%matplotlib widget` with `%matplotlib notebook`.
 See also the [iPython section](#ipython) below.
 
+## Start a jupyter notebook server for the SIRF exercises
 
-### Using an Azure client (if available)
+### Using the Cloud
 
-The web-address should be something like https://sirf1....cloudapp.azure.com:9999/. See local instructions of your training sessoin.
+#### Using GitHub Codespaces
+
+GitHub allows creating a container in the cloud which you can access via your web browser, see the
+[GitHub Codespaces documentation](https://docs.github.com/en/codespaces/overview) for full information.
+The free allocation should be enough to get you familiar with SIRF.
+
+Note that the creation of the codespace will take around 5 minutes. This includes creation of the container,
+installation of all dependencies and downloading the example data.
+
+[![CPU Codespace](https://img.shields.io/badge/Codespaces-CPU-blue?logo=github)](https://codespaces.new/SyneRBI/SIRF-Exercises) [![GPU Codespace](https://img.shields.io/badge/Codespaces-GPU-green?logo=github)](https://codespaces.new/SyneRBI/SIRF-Exercises?devcontainer_path=.devcontainer%2Fgpu%2Fdevcontainer.json&geo=UsEast&machine=standardLinuxNcv3)
+
+Some notes:
+- Please select a GPU-node to run the GPU Codespace (you might have to try look in different "regions", and availability varies).
+- You will have to select a Python kernel for each notebook (top-right). Please use the existing `conda` python kernel (**not** `/usr/bin/python3`) listed in "Python environments". Alternatively, you can access the jupyter server running in the codespace via [port forwarding](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace).
+- You might want to conserve some resources by manually
+[stopping a code space](https://docs.github.com/en/codespaces/developing-in-codespaces/stopping-and-starting-a-codespace),
+otherwise GitHub will stop it for you after a certain time-out. You can then restart the codespace to resume your work.
+
+#### Using an Azure client (if available)
+
+The web-address should be something like https://sirf1....cloudapp.azure.com:9999/. See local instructions of your training session.
 *Do not forget the `https`*. You will need to accept the secure exception. The Jupyter notebook password is `virtual`.
 
 If the instructors tell you, you might have to create a terminal via the jupyter notebook and type `update_VM.sh`.
 Later in the course, you can use this terminal to start `gadgetron`.
 
-### Using an STFC Cloud instance (if available)
+#### Using an STFC Cloud instance (if available)
 Follow instructions given elsewhere.
 
 ### Using the VM
+
+See our [VM instructions](https://github.com/SyneRBI/SIRF-SuperBuild/blob/master/VirtualBox/README.md) for information.
 
 1. start the VM from VirtualBox (user `sirfuser`, password `virtual`)
 2. Open terminal (either via `Activities` or pressing `ctrl-alt-T`) and type
@@ -94,14 +118,15 @@ If this fails, you could try to use web browser in the VM instead.
 
 ### Using Docker
 
-The instructions to start Docker and SIRF are documented in the [Docker instructions at SIRF](https://github.com/SyneRBI/SIRF-SuperBuild/blob/master/docker/README.md), please follow those to start it. 
-Docker is easiest in Linux, so if you are not familiar with Docker and are running on Windows, we suggest using the VM instead. 
+The instructions to start Docker and SIRF are documented in the [Docker instructions at SIRF-Superbuild](https://github.com/SyneRBI/SIRF-SuperBuild/blob/master/docker/README.md), please follow those to start it. 
+Docker is easiest in Linux, MacOS or Windows+WSL. If you are not familiar with Docker, you could use the VM instead. 
 
-Please note that for at present (at least up to SIRF 3.4), you need to point your (host) web-browser to http://localhost:9999 (fill in the `virtual` password).
+Please note that for at present (at least up to SIRF 3.6), you need to point your (host) web-browser to http://localhost:9999 (fill in the 
+`virtual` password).
 
 ### Using your own installed SIRF and SIRF-exercises 
 
-You have a jupyter server (as you followed the [installation instructions](INSTALL.md)) so just use
+In this case, you should have followed the [installation instructions](INSTALL.md)), so just use
    ```bash
    cd /wherever/you/installed/it/SIRF-Exercises
    jupyter lab
@@ -113,11 +138,12 @@ It is often useful to run commands in a shell where the Python kernels run (i.e.
 - Jupyter "classic": on the "Home" tab, click on `New` on the right, and choose `Terminal`
 - JupyterLab: go to the Launcher (click on the `+` sign top-left), and choose `Terminal`.
 
-Copy-paste in the terminal window can be tricky. Normally, you can shift+right click in the terminal and then select from th epop-up menu. See also the [JupyterLab doc](https://jupyterlab.readthedocs.io/en/stable/user/terminal.html#copy-paste).
+Copy-paste in the terminal window can be tricky. Normally, you can shift+right click in the terminal and then select from the pop-up menu. See also the [JupyterLab doc](https://jupyterlab.readthedocs.io/en/stable/user/terminal.html#copy-paste).
 
 ## Start a Gadgetron server
 
-SIRF uses Gadgetron for MR reconstruction. You will need to start a "server" such that SIRF can communicate to it. Docker already starts this automatically, but if you are using anything else you need to start Gadgetron yourself.
+SIRF uses Gadgetron for MR reconstruction. You will need to start a "server" such that SIRF can communicate to it.
+Docker and GitHub Codespaces already start this automatically, but if you are using anything else you need to start Gadgetron yourself.
 
 Open a new terminal (for the Jupyter interface, see above) and type
 ```bash
@@ -130,8 +156,9 @@ You can kill the server at the end by going back to the terminal and pressing `C
 
 ## Getting the Data
 
-Some exercises use data that you will need. In the cloud and in Azure, we provide the data you need for the tests, but otherwise, you will need to download it.
-There are download scripts available for that, available in the `SIRF-Exercises/scripts` folder. The introductory notebooks contain
+Some exercises use data that you will need. In the cloud (GitHub Codespaces, STFC cloud, Azure),
+we provide the data you need for the exercises, but otherwise, you will need to download it.
+There are download scripts available for that, available in the `SIRF-Exercises/scripts` folder. The notebooks contain
 cells for running the script, but you can also do this from the command line (see above on how to start a terminal from Jupyter).
 
 - Get example data
@@ -139,7 +166,7 @@ cells for running the script, but you can also do this from the command line (se
   cd /wherever/you/installed/it/SIRF-Exercises
   scripts/download_data.sh -m -p
   ```
-  On the VM and Azure, the exercises are installed in `~/devel`, in docker in `/devel`, and in the STFC Cloud in `~`. (Apologies for that!).
+  On the VM and Azure, the exercises are installed in `~/devel`, in docker in `~/work/devel`, and in the STFC Cloud in `~`. (Apologies for that!).
   
   This will be a ~3 GB download.
 
@@ -165,7 +192,12 @@ All notebooks are located in several subdirectories of [`notebooks`](./notebooks
 - [SPECT](./notebooks/SPECT/) notebooks contain lessons on using SIRF for SPECT reconstruction and simulation.
 - [MR](./notebooks/MR/) notebooks contain lessons on using SIRF for MR reconstruction and simulation.
 - [Reg](./notebooks/Reg/) notebooks contain lessons on using SIRF's image registration and resampling tools.
-- [Synergistic](./notebooks/Synergistic/) notebooks contain lessons demonstrating more advanced features of SIRF for synergistic image reconstruction.
+- Synergistic (multi-acquisitoin or multi-modality data)
+  - [Synergistic](./notebooks/Synergistic/) notebooks demonstrating more advanced features of SIRF and CIL for synergistic image reconstruction.
+  - [Synergistic deconvolution](./notebooks/synergistic_deconvolution/) notebooks demonstrating deconvolution with guidance using CIL, which could be a starting point for more advanced synergistic reconstruction.
+- Basics of Deep Learning in image reconstruction
+  - [Learned Primal Dual reconstruction of projection data](./notebooks/Deep_Learning_PET/)
+  - [DL reconstruction of listmode data](./notebooks/Deep_Learning_listmode_PET/)
 
 Start with the [introductory notebooks](notebooks/Introductory/) and the associated [README.md](notebooks/Introductory/README.md).
 
@@ -187,11 +219,11 @@ Start with the [introductory notebooks](notebooks/Introductory/) and the associa
 
 Here is some suggested material on Python (ordered from easy to quite time-consuming).
 
--   The official Python tutorial. Just read Section 1, 3, a bit of 4 and a tiny bit of 6.
-    <https://docs.python.org/2/tutorial/>
+-   The official Python tutorial. Read at least Section 1, 3, a bit of 4 and a bit of 6.
+    <https://docs.python.org/3.8/tutorial/>
 
 -   Examples for matplotlib, the python module that allows you to make plots almost like in MATLAB
-    <https://github.com/patvarilly/dihub-python-for-data-scientists-2015/blob/master/notebooks/02_Matplotlib.ipynb>
+    <https://matplotlib.org/stable/users/>
 
 -   You could read bits and pieces of Python the Hard Way
     <http://learnpythonthehardway.org/book/index.html>
@@ -207,9 +239,6 @@ for z in range(0,image.shape[0]):
    plt.imshow(image[z,:,:])
 # now do something else
 ```
-
-We use [matplotlib](https://matplotlib.org/), a python module that allows you to make plots almost like in MATLAB.
-Check [here](https://github.com/patvarilly/dsghent-python-for-data-scientists-2016/blob/master/notebooks/02_MatplotlibAndSeaborn.ipynb) for some examples.
 
 ## iPython
 
@@ -285,7 +314,7 @@ shortcuts:
 -    In "command" mode, press `A` to create a new cell Above, or `B` below your current cell. You can also use `C`, `X`, `V`.
 -    Other keyboard shortcuts:
      - When using Jupyter "classic" mode, pressing `H` in "command" mode gives you a useful list of shortcuts.
-     - When using JupyterLab, you need to go to the Advanced Settings Editor item in the Settings menu, then select Keyboard Shortcuts in the Settings tab. You probably want to check the `notebook` category. See the [JupyterLab doc](https://jupyterlab.readthedocs.io/en/stable/user/interface.html#keyboard-shortcuts)/
+     - When using JupyterLab, you need to go to the Advanced Settings Editor item in the Settings menu, then select Keyboard Shortcuts in the Settings tab. You probably want to check the `notebook` category. See the [JupyterLab doc](https://jupyterlab.readthedocs.io/en/stable/user/interface.html#keyboard-shortcuts).
 
 Jupyter notebooks (normally) run iPython, [see the section below](#iPython) for some useful commands.
 

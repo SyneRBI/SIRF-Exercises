@@ -1,9 +1,12 @@
-# Notebook dependencies
+# jupyter Notebook dependencies
 jupyter
 jupyterlab
 ipywidgets
 ipympl
 widgetsnbextension
+
+# SIRF and notebook dependences
+deprecation
 nodejs
 numpy
 scipy

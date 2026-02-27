@@ -24,11 +24,9 @@ def exercises_data_path(*data_type):
     subdirectories like exercises_data_path('PET', 'mMR', 'NEMA_IQ').
     '''
     try:
-        # from installer?
         from .data_path import data_path
     except ImportError:
-        # from ENV variable?
-        data_path = os.environ.get('SIRF_EXERCISES_DATA_PATH')
+        data_path = os.getenv('SIRF_EXERCISES_DATA_PATH')
 
     if data_path is None or not os.path.exists(data_path):
         raise RuntimeError(
@@ -38,9 +36,10 @@ def exercises_data_path(*data_type):
     return os.path.join(data_path, *data_type)
 
 
-def cd_to_working_dir(*subfolders):
+
+def exercises_working_path(*subfolders):
     '''
-    Creates and changes the current directory to a working directory for the
+    Creates and returns the working directory for the
     current exercise, based on the argument(s). If multiple
     strings are given, they will be treated as subdirectories.
 
@@ -52,9 +51,13 @@ def cd_to_working_dir(*subfolders):
     '''
     try:
         from .working_path import working_dir
-        working_dir = os.path.join(working_dir, *subfolders)
     except ImportError:
-        working_dir = exercises_data_path('working_folder', *subfolders)
-    os.makedirs(working_dir, exist_ok=True)
-    os.chdir(working_dir)
+        working_dir = os.getenv('SIRF_EXERCISES_WORKING_PATH', exercises_data_path('working_folder'))
+    wkdir = os.path.join(working_dir, *subfolders)
+    os.makedirs(wkdir, exist_ok=True)
+    return wkdir
 
+
+def cd_to_working_dir(*subfolders):
+    '''Same as os.chdir(exercises_working_path(*subfolders))'''
+    os.chdir(exercises_working_path(*subfolders))

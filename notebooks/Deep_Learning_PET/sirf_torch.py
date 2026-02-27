@@ -24,7 +24,7 @@ class _primal_op(torch.autograd.Function):
         x_np = x.detach().cpu().numpy()
         x_np = ctx.image_template.fill(x_np)
         proj_sinogram_np = ctx.sirf_obj.forward(x_np).as_array()
-        proj_sinogram = torch.from_numpy(proj_sinogram_np).requires_grad_().to(x.device)
+        proj_sinogram = torch.from_numpy(proj_sinogram_np).to(x.device)
         return proj_sinogram.float()
 
     @staticmethod
@@ -32,7 +32,7 @@ class _primal_op(torch.autograd.Function):
         sinogram_np = sinogram.detach().cpu().numpy()
         sinogram_np = ctx.sinogram_template.fill(sinogram_np)
         grads_np = ctx.sirf_obj.backward(sinogram_np).as_array()
-        grads = torch.from_numpy(grads_np).requires_grad_().to(sinogram.device)
+        grads = torch.from_numpy(grads_np).to(sinogram.device)
         return grads.float(), None, None, None, None
 
 class primal_op(torch.nn.Module):
@@ -62,7 +62,7 @@ class _dual_op(torch.autograd.Function):
         sinogram_np = sinogram.detach().cpu().numpy()
         sinogram_np = ctx.sinogram_template.fill(sinogram_np)
         grads_np = ctx.sirf_obj.backward(sinogram_np).as_array()
-        grads = torch.from_numpy(grads_np).requires_grad_().to(sinogram.device)
+        grads = torch.from_numpy(grads_np).to(sinogram.device)
         return grads.float()
         
     @staticmethod
@@ -70,7 +70,7 @@ class _dual_op(torch.autograd.Function):
         x_np = x.detach().cpu().numpy()
         x_np = ctx.image_template.fill(x_np)
         proj_sinogram_np = ctx.sirf_obj.forward(x_np).as_array()
-        proj_sinogram = torch.from_numpy(proj_sinogram_np).requires_grad_().to(x.device)
+        proj_sinogram = torch.from_numpy(proj_sinogram_np).to(x.device)
         return proj_sinogram.float(), None, None, None, None
 
 class dual_op(torch.nn.Module):
