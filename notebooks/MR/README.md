@@ -19,6 +19,12 @@ Jupyter notebooks for the MR exercises. Recommended order:
 
 3. [f_create_undersampled_kspace](f_create_undersampled_kspace.ipynb) demonstrates a retrospective data under-sampling.
 
+## Advanced topics
+
+1. [g_non_cartesian_reconstruction](g_non_cartesian_reconstruction.ipynb) shows how to using optimisation approaches from CIL to reconstruct a 3D non-Cartesian dataset acquired with a Golden radial phase encoding trajectory.
+
+2. [h_mr_mcir_grpe](h_mr_mcir_grpe.ipynb) gives an overview of all necessary steps for a motion corrected MR image reconstruction: obtaingin a motion surrogate to identify which k-space point was acquired in which motion state, reconstructing motion resolved images, estimating non-rigid motion fields describing the spatial transformation between the different motion states and finally utilising these motion fields and motion surrogates to carry out a motion corrected image reconstruction.
+
 
 ## Feel free to ignore
 
