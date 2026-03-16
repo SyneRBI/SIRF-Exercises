@@ -84,16 +84,10 @@ Some notes:
 [stopping a code space](https://docs.github.com/en/codespaces/developing-in-codespaces/stopping-and-starting-a-codespace),
 otherwise GitHub will stop it for you after a certain time-out. You can then restart the codespace to resume your work.
 
-#### Using an Azure client (if available)
+#### Using an STFC or other Cloud instance (if available)
+We often use the STFC cloud during the delivery of training. This platform allows trainees to access the necessary software, data and hardware via the browser, without the need of local installation.
 
-The web-address should be something like https://sirf1....cloudapp.azure.com:9999/. See local instructions of your training session.
-*Do not forget the `https`*. You will need to accept the secure exception. The Jupyter notebook password is `virtual`.
-
-If the instructors tell you, you might have to create a terminal via the jupyter notebook and type `update_VM.sh`.
-Later in the course, you can use this terminal to start `gadgetron`.
-
-#### Using an STFC Cloud instance (if available)
-Follow instructions given elsewhere.
+Instructions to access the STFC cloud or other cloud instances will be provided for each course separately.
 
 ### Using the VM
 
