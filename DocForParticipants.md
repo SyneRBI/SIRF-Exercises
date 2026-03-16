@@ -85,7 +85,9 @@ Some notes:
 otherwise GitHub will stop it for you after a certain time-out. You can then restart the codespace to resume your work.
 
 #### Using an STFC or other Cloud instance (if available)
-Follow instructions given elsewhere.
+We often use the STFC cloud during the delivery of training. This platform allows trainees to access the necessary software, data and hardware via the browser, without the need of local installation.
+
+Instructions to access the STFC cloud or other cloud instances will be provided for each course separately.
 
 ### Using the VM
 
