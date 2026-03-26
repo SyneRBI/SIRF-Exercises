@@ -13,7 +13,8 @@ dependencies:
   - numpy
   - cil # make synergistic notebooks work
   - astra-toolbox # needed for ct examples
-  - scipy
+  - scipy>=1.16
+  - python>=3.12
   - matplotlib
   - numba
   - llvmlite  # numba dependency
