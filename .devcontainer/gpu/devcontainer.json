@@ -1,24 +1,31 @@
 /// format: https://aka.ms/devcontainer.json
+/// config: https://github.com/devcontainers/templates/tree/main/src/docker-existing-docker-compose
+/// example: https://github.com/devcontainers-community/templates-jupyter-datascience-notebooks/tree/main/.devcontainer
 {
 "hostRequirements": {
 	"cpus": 2,
 	"memory": "8gb",
 	"storage": "32gb",
-	"gpu": {"cores": 100, "storage": "2gb"}
-},
-"runArgs": ["--gpus=all"],
+	"gpu": {"cores": 100, "storage": "2gb"}},
 "name": "SIRF-Exercises (GPU)",
-//"initializeCommand": "docker system prune --all --force",
 "image": "ghcr.io/synerbi/sirf:latest-gpu",
-/// use image's entrypoint & user
-"overrideCommand": false,
-//"postStartCommand": "nohup bash -c 'gadgetron >& /tmp/gadgetron.log &'" // already done in image
-"remoteUser": "jovyan",
-"portsAttributes": {"8888": {"label": "Jupyter", "onAutoForward": "ignore"}},
+/// https://aka.ms/dev-containers-non-root
+"overrideCommand": false, // use docker-stacks command
+"runArgs": [
+	"--gpus=all",
+	"--user=1000:${localEnv:GROUPS}", // you may have to hardcode replace `${localEnv:GROUPS}` with your local group ID to fix workspace access permissions
+	"--group-add=users"],
+"forwardPorts": [8888, 9002],
+"portsAttributes": {
+	"8888": {"label": "Jupyter", "requireLocalPort": true, "onAutoForward": "ignore"},
+	"9002": {"label": "Gadgetron", "onAutoForward": "silent"}},
 "postCreateCommand": "bash ./scripts/download_data.sh -m -p",
 // "features": {}, // https://containers.dev/features
-"customizations": {"vscode": {"extensions": [
-	"ms-python.python",
-	"ms-toolsai.jupyter",
-	"ms-python.vscode-pylance"]}}
+"customizations": {"vscode": {
+	"settings": {
+		"python.defaultInterpreterPath": "/opt/conda/bin/python"},
+	"extensions": [
+		"ms-python.python",
+		"ms-toolsai.jupyter",
+		"ms-python.vscode-pylance"]}}
 }
