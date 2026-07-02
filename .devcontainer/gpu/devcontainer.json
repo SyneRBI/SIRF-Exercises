@@ -7,10 +7,14 @@
 	"memory": "8gb",
 	"storage": "32gb",
 	"gpu": {"cores": 100, "storage": "2gb"}},
-"runArgs": ["--gpus=all"],
 "name": "SIRF-Exercises (GPU)",
 "image": "ghcr.io/synerbi/sirf:latest-gpu",
-"overrideCommand": false, // use docker-stacks command, vis also https://aka.ms/dev-containers-non-root
+/// https://aka.ms/dev-containers-non-root
+"overrideCommand": false, // use docker-stacks command
+"runArgs": [
+	"--gpus=all",
+	"--user=1000:${localEnv:GROUPS}", // you may have to hardcode replace `${localEnv:GROUPS}` with your local group ID to fix workspace access permissions
+	"--group-add=users"],
 "forwardPorts": [8888, 9002],
 "portsAttributes": {
 	"8888": {"label": "Jupyter", "requireLocalPort": true, "onAutoForward": "ignore"},

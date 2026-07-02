@@ -8,7 +8,11 @@
 	"storage": "32gb"},
 "name": "SIRF-Exercises (CPU)",
 "image": "ghcr.io/synerbi/sirf:latest",
-"overrideCommand": false, // use docker-stacks command, vis also https://aka.ms/dev-containers-non-root
+/// https://aka.ms/dev-containers-non-root
+"overrideCommand": false, // use docker-stacks command
+"runArgs": [
+	"--user=1000:${localEnv:GROUPS}", // you may have to hardcode replace `${localEnv:GROUPS}` with your local group ID to fix workspace access permissions
+	"--group-add=users"],
 "forwardPorts": [8888, 9002],
 "portsAttributes": {
 	"8888": {"label": "Jupyter", "requireLocalPort": true, "onAutoForward": "ignore"},
